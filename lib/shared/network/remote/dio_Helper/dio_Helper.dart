@@ -45,23 +45,25 @@ class DioHelper {
     required String url,
     Map<String, dynamic>? queryParameters,
     ProgressCallback? onReceiveProgress,
-    required String? token,
+     String? token,
+    String lang='ar',
+
   }) async {
     dio.options.headers = {
-      'Authorization': 'Bearer ${token ?? ''}',
+      'lang':lang,
+      'Authorization': 'Bearer ${token ?? ''}'  ,
+      // 'Content-Type': 'application/json',
+
+      // 'Authorization': ' ${token ?? ''}',
     };
 
-    // dio.options.headers = {
-    //   'x-auth-token': token ?? '',
-    //   'Content-Type': 'application/json',
-    // };
-    // return await dio.get(
-    //   url,
-    // );
     try {
-      dio.options.headers = {
-        'Authorization': 'Bearer ${token ?? ''}',
-      };
+      // dio.options.headers = {
+      //   'Authorization':'Bearer ${token ?? ''}',
+      //   // 'Content-Type': 'application/json',
+      //   'lang':lang,
+      //
+      // };
       final Response response = await dio.get(
         url,
         queryParameters: queryParameters,
@@ -78,9 +80,11 @@ class DioHelper {
   static Future<Response> postsData({
     required String url,
     required Map<String, dynamic> data,
+    String lang='ar',
     String? token,
   }) async {
     dio.options.headers = {
+      'lang':lang,
       'Authorization': 'Bearer ${token ?? ''}',
     };
     try {

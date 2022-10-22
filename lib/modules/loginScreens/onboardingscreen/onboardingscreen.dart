@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/modules/loginScreens/onboardingscreen/start.dart';
 import 'package:shop/shared/components/components.dart';
+import 'package:shop/shared/components/constant.dart';
+import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
 import 'package:shop/shared/style/colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -16,12 +18,18 @@ class OnBoardingModel {
       {required this.image, required this.tittle1, required this.tittle2});
 }
 
-class OnBoardingScreen extends StatelessWidget {
+class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
 
   @override
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
+}
+
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
+  @override
   Widget build(BuildContext context) {
     var pageViewController = PageController(initialPage: 0);
+    bool isLast=false;
     List<OnBoardingModel> boarding = [
       OnBoardingModel(
           image: 'assets/images/Online shopping-pana.svg',
@@ -45,6 +53,21 @@ class OnBoardingScreen extends StatelessWidget {
               child: PageView.builder(
                 physics: BouncingScrollPhysics(),
                 itemCount: boarding.length,
+                onPageChanged: (int index){
+                  if(index ==boarding.length -1){
+
+                  }else{
+                    setState(() {
+                      isLast=true;
+
+                    });
+
+
+                    setState(() {
+                      isLast=false;
+                    });
+                  }
+                },
                 controller: pageViewController,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) =>
@@ -80,7 +103,13 @@ class OnBoardingScreen extends StatelessWidget {
                   Spacer(),
                   TextButton(
                     onPressed: () {
-                      navigateAndFinish(context, StartPage());
+                      CacheHelper.saveData(key: "onBoarding", value: true).then((value) {
+                        onBoarding=CacheHelper.get(key: "onBoarding");
+                        if(value==true){
+                          navigateAndFinish(context, StartPage());
+
+                        }
+                      });
                     },
                     child: Text(
                       "تخطى",

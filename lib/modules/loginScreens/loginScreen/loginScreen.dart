@@ -242,26 +242,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/layout/homeLayoutScreen.dart';
 import 'package:shop/modules/loginScreens/signup/signup.dart';
+import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/login_cubit/cubit.dart';
 import 'package:shop/shared/cubit/login_cubit/states.dart';
+import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
 
 import '../../../shared/components/components.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => LoginCubit(),
-      child: BlocConsumer<LoginCubit, LoginStates>(
-        listener: (context, state) {},
+      create: (BuildContext context) => AuthCubit(),
+      child: BlocConsumer<AuthCubit, AuthStates>(
+        listener: (context, state) {
+          if(state is LoginSuccessState){
+
+            if(state.loginModel.status == true){
+              CacheHelper.saveData(key: "token", value: state.loginModel.data!.token).then((value) {
+                token=CacheHelper.get(key: "token");
+                showToast(state: ToastStates.SUCCESS,text: state.loginModel.message);
+                navigateAndFinish(context, const HomeLayoutScreen());
+              });}
+            else{
+              showToast(
+                  state: ToastStates.ERROR,
+                  text: state.loginModel.message);
+            }
+
+
+          }
+        },
         builder: (context, state) {
-          var loginCubit = LoginCubit.get(context);
+          var loginCubit = AuthCubit.get(context);
           var formKey = GlobalKey<FormState>();
           var emailController = TextEditingController();
           var passwordController = TextEditingController();
@@ -284,12 +304,14 @@ class LoginScreen extends StatelessWidget {
               ),
               backgroundColor: Colors.transparent,
               body: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Form(
                   key: formKey,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.values[0],
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     // crossAxisAlignment: CrossAxisAlignment.stretch,
-                    // mainAxisSize: MainAxisSize.max,
+                    mainAxisSize: MainAxisSize.max,
+
                     children: [
                       SvgPicture.asset(
                           'assets/images/icons&logos/BrandLogo.svg'),
@@ -310,8 +332,10 @@ class LoginScreen extends StatelessWidget {
                         height: 30,
                       ),
                       Container(
-                        width: 300,
+                        // width: 300,
                         height: 50,
+                        width: double.infinity,
+
                         child: text(
                           controller: emailController,
                           input: TextInputType.emailAddress,
@@ -327,8 +351,10 @@ class LoginScreen extends StatelessWidget {
                           },
                           hint: "البريد الإلكترونى",
                           label: " البريد الإلكترونى",
-                          prifix: SvgPicture.asset(
-                              "assets/images/icons&logos/Mail.svg"),
+                          suffix: SvgPicture.asset(
+                              "assets/images/icons&logos/Mail.svg",
+                          fit: BoxFit.none,),
+                          prefix: null,
                           // Image.asset("assets/images/icons&logo/Mail.png")
                         ),
                       ),
@@ -336,40 +362,39 @@ class LoginScreen extends StatelessWidget {
                         height: 20,
                       ),
                       Container(
-                        width: 300,
+                        // width: 300,
+                        width: double.infinity,
                         height: 50,
                         child: text(
                           controller: passwordController,
                           input: TextInputType.visiblePassword,
-                          validate:(value) {
-                            // RegExp regEx = RegExp(r"(?=.*[a-z])(?=.*[A-Z])\w+");
-                            // if (value!.isEmpty) {
-                            //   return "Password must not be empty";
-                            // } else if (value != passwordController.text) {
-                            //   return "Password must be same";
-                            // } else if (value.length < 8) {
-                            //   return 'Should be more than 8 Characters';
-                            // } else if (!value.toString().contains(regEx)) {
-                            //   return 'Use Numbers and Capital and Small Characters at least 1';
-                            // } else {
-                            //   return null;
-                            // }
+                          validate:(String? value) {
+                            if (value!.isEmpty) {
+                              return "هذا الحقل مطلوب";
+                            }
+                            return null;
+
+
                           },
                           hint: "كلمة المرور",
                           label: " كلمة المرور",
-                          onsubmit:  (value) async {
+                          onSubmit:  (value) async {
                             if (formKey.currentState!.validate()) {
                               loginCubit.logIn(context,
                                   email: emailController.text,
                                   password: passwordController.text);
                             }
                           },
-                          prifix: Padding(
+                          password: loginCubit.isPassword,
+                          prefixPressed: (){loginCubit.changeEye();},
+                          prefix: Padding(
                             padding: EdgeInsets.only(top: 25),
-                            child: Icon(Icons.remove_red_eye_outlined),
+                            child: Icon(loginCubit.prefix),
                           ),
-                          suffixx: SvgPicture.asset(
-                              "assets/images/icons&logos/Lock.svg"),
+                          suffix: SvgPicture.asset(
+
+                              "assets/images/icons&logos/Lock.svg",
+                          fit: BoxFit.none,),
                         ),
                       ),
 
@@ -404,7 +429,7 @@ class LoginScreen extends StatelessWidget {
                       // "ابدا"
                       ConditionalBuilder(
                           condition: state is! LoginLoadingState,
-                          builder: (context) => startbutton(
+                          builder: (context) => startButton(
                               text: "ابدا",
                               ontap:  () async {
                                 if (formKey.currentState!.validate()) {

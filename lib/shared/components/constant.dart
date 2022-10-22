@@ -1,6 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:shop/models/categeory_models.dart';
 
 List<Map> tasks = [];
+String? token;
+bool? onBoarding;
+bool? start;
+
+BouncingScrollPhysics? physics = const BouncingScrollPhysics();
 
 List<CategeoryItemsModel> CategeoryItemsList = [
   CategeoryItemsModel(

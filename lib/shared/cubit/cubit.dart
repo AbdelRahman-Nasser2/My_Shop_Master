@@ -4,11 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shop/models/homeDataModel.dart';
 import 'package:shop/modules/homelayoutscreens/favourites/favourits.dart';
 import 'package:shop/modules/homelayoutscreens/home/homeScreen.dart';
 import 'package:shop/modules/search_screen/search_screen.dart';
 import 'package:shop/shared/components/components.dart';
+import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/states.dart';
+import 'package:shop/shared/network/remote/end_points.dart';
 
 import '../../modules/homelayoutscreens/notification/notification.dart';
 import '../../modules/homelayoutscreens/profile/profile.dart';
@@ -161,21 +164,27 @@ class AppCubit extends Cubit<AppStates> {
     emit(ChangeFavState());
   }
 
-  //Theme Mode
-  bool isDark = true;
-  // void themeChange() {
-  //   isDark = !isDark;
-  //   emit(AppChangeThemeState());
-  // }
-  void themeChange({String? mode}) {}
 
-//  Parts of APIs
-  List<dynamic> total = [];
 
-  // part Sports
-  List<dynamic> sports = [];
-  //
-  // void getDataSports() {
+  //Get Data
+
+HomeDataModel? homeDataModel;
+  void getHomeData() {
+    emit(HomeGetDataLoading());
+
+    DioHelper.getData(
+      url: HOME,
+      token: token,
+    ).then((value) {
+      homeDataModel = HomeDataModel.fromJson(value.data);
+      print(homeDataModel?.status);
+
+      emit(HomeGetDataSuccess());
+    }).catchError((error) {
+      emit(HomeGetDataError(error));
+    });
+  }
+  // void getHomeData() {
   //   emit(AppGetArticlesSportsLoadingState());
   //   if (sports.isEmpty) {
   //     DioHelper.getData(url: 'v2/top-headlines', query: {
