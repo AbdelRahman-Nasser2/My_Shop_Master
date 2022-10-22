@@ -2,7 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shop/models/HomeDataModel.dart';
 import 'package:shop/models/categeory_models.dart';
 import 'package:shop/shared/style/colors.dart';
 
@@ -16,14 +18,14 @@ Widget text({
   required TextInputType input,
   required String hint,
   String? label,
-  required Widget prifix,
-  IconData? suffix,
+ Widget? prefix,
+  // IconData? suffix,
   bool password = false,
   Function(String)? onchange,
-  Function(String)? onsubmit,
-  Function()? suffixpressed,
+  Function(String)? onSubmit,
+  Function()? prefixPressed,
   Function()? onTap,
-  Widget? suffixx,
+  Widget? suffix,
 }) =>
     TextFormField(
       textAlign: TextAlign.right,
@@ -41,10 +43,10 @@ Widget text({
       keyboardType: input,
       textCapitalization: TextCapitalization.words,
       onChanged: onchange,
-      onFieldSubmitted: onsubmit,
+      onFieldSubmitted: onSubmit,
       decoration: InputDecoration(
-        suffix: suffixx,
-
+        suffixIcon: suffix,
+// suffixIcon: suffixx,
         hintTextDirection: TextDirection.rtl,
 
         // isDense: true,
@@ -59,10 +61,11 @@ Widget text({
         //   label!,
         //   textDirection: TextDirection.rtl,
         // ),
-        prefix: Padding(
-          padding: EdgeInsets.only(right: 10.0),
-          child: prifix,
-        ),
+        // prefix: Padding(
+        //   padding: EdgeInsets.only(right: 10.0),
+        //   child: InkWell(onTap: (){}, child: prefix),
+        // ),
+        prefix: prefix !=null?InkWell(onTap: prefixPressed, child: prefix):null,
         // labelText: label,
         // labelStyle: const TextStyle(
         //   color: Color.fromRGBO(99, 99, 99, 100),
@@ -92,7 +95,7 @@ Widget text({
         //         onPressed: suffixpressed,
         //       )
         //     : null,
-        contentPadding: const EdgeInsetsDirectional.fromSTEB(20, 24, 20, 2),
+        // contentPadding: const EdgeInsetsDirectional.fromSTEB(20, 24, 20, 2),
       ),
     );
 
@@ -223,135 +226,134 @@ Widget AppBarShape({
 
 //Category Items
 
-Widget buildCategoryItem(CategeoryItemsModel model) => InkWell(
-      onTap: model.onTap,
+Widget buildHomeProductItem(CategeoryItemsModel model) => InkWell(
+  onTap: model.onTap,
+  child: Padding(
+    padding: EdgeInsets.symmetric(horizontal: 5),
+    child: Container(
+      width: 135,
+      height: 200,
+      decoration: BoxDecoration(
+        color: Colors.white54,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+              blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
+        ],
+      ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5),
-        child: Container(
-          width: 135,
-          height: 200,
-          decoration: BoxDecoration(
-            color: Colors.white54,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(28),
-            boxShadow: [
-              BoxShadow(
-                  blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
-            ],
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(top: 4, right: 2, left: 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 110,
-                  width: 130,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                        image: AssetImage(model.pathImage), fit: BoxFit.cover),
-                  ),
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 5,
-                        ),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 15,
-                            child: Icon(
-                              Icons.favorite,
-                              color: HexColor("#B8B8B8"),
-                            ),
-                          ),
+        padding: EdgeInsets.only(top: 4, right: 2, left: 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 110,
+              width: 130,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                    image: AssetImage(model.pathImage), fit: BoxFit.cover),
+              ),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
+                    ),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 15,
+                        child: Icon(
+                          Icons.favorite,
+                          color: HexColor("#B8B8B8"),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  model.nameProduct,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    InkWell(
-                        onTap: () {},
-                        child: Stack(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: defaultcolor,
-                              radius: 17,
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              model.nameProduct,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                InkWell(
+                    onTap: () {},
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: defaultcolor,
+                          radius: 17,
+                          child: Icon(
+                            Icons.shopping_cart_sharp,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 15, left: 20),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: CircleAvatar(
+                              backgroundColor: HexColor("#F99100"),
+                              radius: 8,
                               child: Icon(
-                                Icons.shopping_cart_sharp,
+                                Icons.add,
+                                size: 8,
                                 color: Colors.white,
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 15, left: 20),
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: CircleAvatar(
-                                  backgroundColor: HexColor("#F99100"),
-                                  radius: 8,
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 8,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        )),
-                    Spacer(),
-                    Text(
-                      "جنيه",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 2,
-                    ),
-                    Text(
-                      model.price,
-                      style: TextStyle(
-                          color: HexColor("#F99100"),
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
+                          ),
+                        )
+                      ],
+                    )),
+                Spacer(),
+                Text(
+                  "جنيه",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
                 ),
+                SizedBox(
+                  width: 2,
+                ),
+                Text(
+                  model.price,
+                  style: TextStyle(
+                      color: HexColor("#F99100"),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
+                )
               ],
             ),
-          ),
+          ],
         ),
       ),
-    );
-
+    ),
+  ),
+);
 //Build CategoryList
 
-Widget BuildCategoryList({
+Widget buildHomeProductList({
   required String type,
   required Function() allshow_ontap,
   required List list,
 }) =>
-    Container(
+    SizedBox(
       width: double.infinity,
       child: Column(
         children: [
@@ -382,13 +384,13 @@ Widget BuildCategoryList({
               ],
             ),
           ),
-          Container(
+          SizedBox(
             height: 220,
             child: ListView.separated(
                 physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                itemBuilder: (context, index) => buildCategoryItem(list[index]),
+                itemBuilder: (context, index) => buildHomeProductItem(list[index]),
                 separatorBuilder: (context, index) => SizedBox(
                       width: 30,
                     ),
@@ -417,14 +419,14 @@ Widget BuildCategoryList({
 
 //HomecategoryItem
 
-Widget MaincategoryItem(
-  CategeoryModel Model, {
+Widget categoryItem(
+  CategeoryModel model, {
   double? width,
   double? height,
-  double fonttittleSize = 14,
+  double fontTittleSize = 14,
 }) =>
     InkWell(
-      onTap: Model.onTap,
+      onTap: model.onTap,
       child: Container(
         height: height,
         width: width,
@@ -440,7 +442,7 @@ Widget MaincategoryItem(
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage(Model.pathImage),
+                  image: AssetImage(model.pathImage),
                 ),
               ),
             ),
@@ -451,9 +453,9 @@ Widget MaincategoryItem(
                   top: 100,
                 ),
                 child: Text(
-                  Model.nameType,
+                  model.nameType,
                   style: TextStyle(
-                    fontSize: fonttittleSize,
+                    fontSize: fontTittleSize,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -465,17 +467,17 @@ Widget MaincategoryItem(
       ),
     );
 
-Widget BuildMainCategoryList({
+Widget buildHomeCategoryList({
   required String type,
-  Function()? allshow_ontap,
+  Function()? allShow_OnTap,
   required List list,
   required Axis axis,
-  int listcount = 3,
+  int listCount = 3,
   double width = 150,
   double height = 150,
   double heightList = 150,
-  double sizedBoxwidth = 10,
-  double sizedBoxheight = 10,
+  double sizedBoxWidth = 10,
+  double sizedBoxHeight = 10,
   bool showTextAll = true,
 }) =>
     Column(
@@ -486,7 +488,7 @@ Widget BuildMainCategoryList({
             children: [
               (showTextAll == true)
                   ? TextButton(
-                      onPressed: allshow_ontap,
+                      onPressed: allShow_OnTap,
                       child: Text(
                         "عرض الكل",
                         style: TextStyle(
@@ -519,19 +521,19 @@ Widget BuildMainCategoryList({
             scrollDirection: axis,
             padding: EdgeInsets.symmetric(horizontal: 10),
             itemBuilder: (context, index) =>
-                MaincategoryItem(list[index], height: height, width: width),
+                categoryItem(list[index], height: height, width: width),
             separatorBuilder: (context, index) => SizedBox(
-              width: sizedBoxwidth,
-              height: sizedBoxheight,
+              width: sizedBoxWidth,
+              height: sizedBoxHeight,
             ),
-            itemCount: listcount,
+            itemCount: listCount,
           ),
         ),
       ],
     );
 
 //Start Button
-Widget startbutton({
+Widget startButton({
   @required String? text,
   @required Function()? ontap,
 }) =>
@@ -556,143 +558,143 @@ Widget startbutton({
       ),
     );
 
-Widget buildCategorywItemm(
-  // tittle=list["title"],
-
-  list,
-  context, {
-  bool color = false,
-  String? tittle,
-  ImageProvider? image,
-}) =>
-    InkWell(
-      onTap: () {
-        navigateTo(context, WebviewScrean(list["url"]));
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-        child: Container(
-          width: double.infinity,
-          height: 330,
-          decoration: BoxDecoration(
-              // color: Colors.red,
-              borderRadius: BorderRadius.circular(28),
-// color:Theme.of(context)?Colors.white :HexColor('333739'),
-// Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
-              ]),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              //image
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  image: DecorationImage(
-                    // title == null ? "jhsdljhg" : title = "${list['content']}",
-                    image: NetworkImage(
-                      (list["urlToImage"] == null)
-                          ? "https://cdn.elwatannews.com/watan/840x473/5956948381439567683.jpg"
-                          : "${list["urlToImage"]}",
-                      // "${list["urlToImage"]}",
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                // width: double.infinity,
-                height: 200,
-              ),
-
-              //title
-
-              Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Text(
-                  //"title"
-                  (list["title"] == null) ? "Fayoum News" : "${list["title"]}",
-                  textDirection: TextDirection.rtl,
-                  style: Theme.of(context).textTheme.displayMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-
-              //description
-              //لا لايمكن محاوطة الExpanded ب Padding
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 5,
-                  ),
-                  child: Text(
-                    (list["description"] == null)
-                        ? "اخبار الفيوم "
-                        : "${list["description"]}",
-                    // "${list['content']}",
-                    style: Theme.of(context).textTheme.displaySmall,
-                    textDirection: TextDirection.rtl,
-
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-
-              //Author
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 5,
-                ),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(
-                        (list["urlToImage"] == null)
-                            ? "https://cdn.elwatannews.com/watan/840x473/5956948381439567683.jpg"
-                            : "${list["urlToImage"]}",
-                        // "${list["urlToImage"]}",
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: Text(
-                        (list["author"] == null)
-                            ? "Fayoum News"
-                            : "${list["author"]}",
-                        textDirection: TextDirection.ltr,
-                        style: Theme.of(context).textTheme.displayMedium,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              //Time & Date
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 7,
-                ),
-                child: Text(
-                  "${list['publishedAt']}",
-                  textDirection: TextDirection.rtl,
-                  style: Theme.of(context).textTheme.labelSmall,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+// Widget buildCategorywItemm(
+//   // tittle=list["title"],
+//
+//   list,
+//   context, {
+//   bool color = false,
+//   String? tittle,
+//   ImageProvider? image,
+// }) =>
+//     InkWell(
+//       onTap: () {
+//         navigateTo(context, WebviewScrean(list["url"]));
+//       },
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+//         child: Container(
+//           width: double.infinity,
+//           height: 330,
+//           decoration: BoxDecoration(
+//               // color: Colors.red,
+//               borderRadius: BorderRadius.circular(28),
+// // color:Theme.of(context)?Colors.white :HexColor('333739'),
+// // Colors.white,
+//               boxShadow: [
+//                 BoxShadow(
+//                     blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
+//               ]),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               //image
+//               Container(
+//                 decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(28),
+//                   image: DecorationImage(
+//                     // title == null ? "jhsdljhg" : title = "${list['content']}",
+//                     image: NetworkImage(
+//                       (list["urlToImage"] == null)
+//                           ? "https://cdn.elwatannews.com/watan/840x473/5956948381439567683.jpg"
+//                           : "${list["urlToImage"]}",
+//                       // "${list["urlToImage"]}",
+//                     ),
+//                     fit: BoxFit.cover,
+//                   ),
+//                 ),
+//                 // width: double.infinity,
+//                 height: 200,
+//               ),
+//
+//               //title
+//
+//               Padding(
+//                 padding: EdgeInsets.only(left: 5),
+//                 child: Text(
+//                   //"title"
+//                   (list["title"] == null) ? "Fayoum News" : "${list["title"]}",
+//                   textDirection: TextDirection.rtl,
+//                   style: Theme.of(context).textTheme.displayMedium,
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               ),
+//
+//               //description
+//               //لا لايمكن محاوطة الExpanded ب Padding
+//               Expanded(
+//                 child: Padding(
+//                   padding: EdgeInsets.only(
+//                     left: 5,
+//                   ),
+//                   child: Text(
+//                     (list["description"] == null)
+//                         ? "اخبار الفيوم "
+//                         : "${list["description"]}",
+//                     // "${list['content']}",
+//                     style: Theme.of(context).textTheme.displaySmall,
+//                     textDirection: TextDirection.rtl,
+//
+//                     maxLines: 2,
+//                     overflow: TextOverflow.ellipsis,
+//                   ),
+//                 ),
+//               ),
+//
+//               //Author
+//               Padding(
+//                 padding: EdgeInsets.only(
+//                   left: 5,
+//                 ),
+//                 child: Row(
+//                   children: [
+//                     CircleAvatar(
+//                       radius: 20,
+//                       backgroundImage: NetworkImage(
+//                         (list["urlToImage"] == null)
+//                             ? "https://cdn.elwatannews.com/watan/840x473/5956948381439567683.jpg"
+//                             : "${list["urlToImage"]}",
+//                         // "${list["urlToImage"]}",
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       width: 5,
+//                     ),
+//                     Expanded(
+//                       child: Text(
+//                         (list["author"] == null)
+//                             ? "Fayoum News"
+//                             : "${list["author"]}",
+//                         textDirection: TextDirection.ltr,
+//                         style: Theme.of(context).textTheme.displayMedium,
+//                         maxLines: 1,
+//                         overflow: TextOverflow.ellipsis,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//
+//               //Time & Date
+//               Padding(
+//                 padding: EdgeInsets.only(
+//                   left: 7,
+//                 ),
+//                 child: Text(
+//                   "${list['publishedAt']}",
+//                   textDirection: TextDirection.rtl,
+//                   style: Theme.of(context).textTheme.labelSmall,
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
 
 //
 
@@ -707,4 +709,34 @@ void navigateAndFinish(context, widget) {
       MaterialPageRoute(builder: (context) => widget), (route) => false);
 }
 
-void dsd() {}
+void showToast({
+  String? text,
+  required ToastStates state,
+}) =>
+    Fluttertoast.showToast(
+      msg: text!,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 5,
+      backgroundColor: chooseToastColor(state),
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+
+enum ToastStates { ERROR, SUCCESS, WARNING }
+
+Color chooseToastColor(ToastStates state) {
+  Color color;
+  switch (state) {
+    case ToastStates.SUCCESS:
+      color = Colors.green;
+      break;
+    case ToastStates.ERROR:
+      color = Colors.red;
+      break;
+    case ToastStates.WARNING:
+      color = Colors.amber;
+      break;
+  }
+  return color;
+}

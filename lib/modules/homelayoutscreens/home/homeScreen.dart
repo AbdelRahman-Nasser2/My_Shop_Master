@@ -8,6 +8,7 @@ import 'package:shop/layout/category/maincategeory.dart';
 import 'package:shop/models/categeory_models.dart';
 import 'package:shop/modules/category/modelCategoryScreen.dart';
 import 'package:shop/shared/components/constant.dart';
+import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../shared/components/components.dart';
@@ -20,12 +21,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit(),
+      create: (BuildContext context) => AppCubit()..getHomeData(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (BuildContext context, AppStates states) {},
         builder: (BuildContext context, AppStates states) {
           AppCubit cubit = AppCubit.get(context);
-          var pageViewController = PageController(initialPage: 0);
+          var pageViewController = PageController(initialPage: 0,keepPage: false);
 
           List<Widget> homeOffers = [
             Image.asset(
@@ -725,6 +726,12 @@ class HomeScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20)),
                             child: PageView(
                               controller: pageViewController,
+                              allowImplicitScrolling: true,
+                              reverse: true,
+                              pageSnapping: false,
+                              physics: physics,
+                              // itemCount: ,
+                              // itemBuilder: (BuildContext context, int index) {return Image.network("src");  },
                               children: homeOffers,
                             ),
                           ),
@@ -741,6 +748,7 @@ class HomeScreen extends StatelessWidget {
                                     color: HexColor("#1E55A2").withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(25)),
                                 child: SmoothPageIndicator(
+
                                   controller: pageViewController,
                                   count: homeOffers.length,
                                   axisDirection: Axis.horizontal,
@@ -784,26 +792,33 @@ class HomeScreen extends StatelessWidget {
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    BuildMainCategoryList(
+                    buildHomeCategoryList(
                       axis: Axis.horizontal,
-                      allshow_ontap: () {
+                      allShow_OnTap: () {
                         navigateTo(context, MainCategoryScreen());
                       },
                       type: 'التصنيفات',
                       list: mainCategory,
-                      listcount: 3,
+                      listCount: 3,
                     ),
+
                     SizedBox(
                       height: 20,
                     ),
-                    BuildCategoryList(
+
+                    buildHomeProductList(
                         type: 'أفضل العروض',
                         list: CategeoryItemsList,
-                        allshow_ontap: () {}),
+                        allshow_ontap: () {
+                          CacheHelper.removeData(key: "token");
+                          // CacheHelper.removeAllData();
+                          // CacheHelper.removeData(key: "onBoarding");
+                          // CacheHelper.removeData(key: "start");
+                        }),
                     SizedBox(
                       height: 20,
                     ),
-                    BuildCategoryList(
+                    buildHomeProductList(
                         type: 'الأكثر مبيعاً  ',
                         list: CategeoryItemsList,
                         allshow_ontap: () {}),

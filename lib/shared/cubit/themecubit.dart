@@ -26,10 +26,14 @@ class ThemeCubit extends Cubit<ThemeStates> {
     } else {
       isDark = !isDark;
       mode = "Dark Mode";
-      CacheHelper.putBoolean(key: "isDark", value: isDark).then((value) {
+      CacheHelper.saveData(key: "isDark", value:isDark).then((value) {
         emit(ChangeThemeState());
         emit(ChangeTextThemeState());
       });
+      // CacheHelper.putBoolean(key: "isDark", value: isDark).then((value) {
+      //   emit(ChangeThemeState());
+      //   emit(ChangeTextThemeState());
+      // });
     }
   }
 }

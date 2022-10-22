@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/shared/components/components.dart';
+import 'package:shop/shared/components/constant.dart';
+import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
 
 import '../loginScreen/loginScreen.dart';
 
@@ -59,10 +61,14 @@ class _StartPageState extends State<StartPage> {
                 height: 100,
               ),
               // "ابدا"
-              startbutton(
+              startButton(
                   text: "ابدا",
                   ontap: () {
-                    navigateAndFinish(context, LoginScreen());
+                    CacheHelper.saveData(key: "start", value: true).then((value) {
+                      start=CacheHelper.get(key: "start");
+                      navigateAndFinish(context, LoginScreen());
+
+                    });
                   }),
             ],
           ),

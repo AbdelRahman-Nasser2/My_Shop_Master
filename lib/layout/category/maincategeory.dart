@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop/models/categeory_models.dart';
@@ -300,7 +299,7 @@ class MainCategoryScreen extends StatelessWidget {
                       onTap: () {
                         navigateTo(context, null);
                       },
-                      child: Container(
+                      child: SizedBox(
                         height: 500,
                         width: 300,
                         child: Image.asset(
@@ -311,7 +310,7 @@ class MainCategoryScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {},
-                      child: Container(
+                      child: SizedBox(
                         height: 500,
                         width: 150,
                         child: Image.asset(
@@ -322,7 +321,7 @@ class MainCategoryScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {},
-                      child: Container(
+                      child: SizedBox(
                         height: 500,
                         width: 150,
                         child: Image.asset(
@@ -333,7 +332,7 @@ class MainCategoryScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {},
-                      child: Container(
+                      child: SizedBox(
                         height: 500,
                         width: 300,
                         child: Image.asset(
@@ -344,7 +343,7 @@ class MainCategoryScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {},
-                      child: Container(
+                      child: SizedBox(
                         height: 500,
                         width: 150,
                         child: Image.asset(
@@ -355,7 +354,7 @@ class MainCategoryScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {},
-                      child: Container(
+                      child: SizedBox(
                         height: 500,
                         width: 150,
                         child: Image.asset(
@@ -699,9 +698,9 @@ class MainCategoryScreen extends StatelessWidget {
                         physics: BouncingScrollPhysics(),
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        itemBuilder: (context, index) => MaincategoryItem(
+                        itemBuilder: (context, index) => categoryItem(
                             mainCategory[index],
-                            fonttittleSize: 20,
+                            fontTittleSize: 20,
                             height: 180),
                         separatorBuilder: (context, index) => SizedBox(
                               height: 30,

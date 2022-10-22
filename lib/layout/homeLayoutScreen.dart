@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+
 import 'package:hexcolor/hexcolor.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shop/modules/homelayoutscreens/addproduct/addproduct.dart';
@@ -8,6 +9,7 @@ import 'package:shop/modules/homelayoutscreens/favourites/favourits.dart';
 import 'package:shop/modules/homelayoutscreens/home/homeScreen.dart';
 import 'package:shop/modules/homelayoutscreens/notification/notification.dart';
 import 'package:shop/modules/homelayoutscreens/profile/profile.dart';
+
 
 // class HomeLayoutScreen extends StatefulWidget {
 //   const HomeLayoutScreen({Key? key}) : super(key: key);
@@ -25,6 +27,13 @@ import 'package:shop/modules/homelayoutscreens/profile/profile.dart';
 //     return
 //   }
 // }
+
+
+
+
+
+
+
 class HomeLayoutScreen extends StatefulWidget {
   const HomeLayoutScreen({Key? key}) : super(key: key);
 
@@ -174,6 +183,17 @@ class _HomeLayoutScreenState extends State<HomeLayoutScreen>
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 //     appBar: PreferredSize(
 //   preferredSize: Size.zero,
