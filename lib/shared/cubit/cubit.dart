@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:shop/models/homeDataModel.dart';
+import 'package:shop/models/homeModel.dart';
 import 'package:shop/modules/homelayoutscreens/favourites/favourits.dart';
 import 'package:shop/modules/homelayoutscreens/home/homeScreen.dart';
 import 'package:shop/modules/search_screen/search_screen.dart';
@@ -168,16 +168,18 @@ class AppCubit extends Cubit<AppStates> {
 
   //Get Data
 
-HomeDataModel? homeDataModel;
+  HomeModel? homeModel;
+
   void getHomeData() {
+    // print("homeDataModel?.status");
     emit(HomeGetDataLoading());
 
     DioHelper.getData(
       url: HOME,
       token: token,
     ).then((value) {
-      homeDataModel = HomeDataModel.fromJson(value.data);
-      print(homeDataModel?.status);
+      homeModel = HomeModel.fromJson(value.data);
+      print(homeModel?.status);
 
       emit(HomeGetDataSuccess());
     }).catchError((error) {
