@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop/layout/home2.dart';
 import 'package:shop/layout/homeLayoutScreen.dart';
 import 'package:shop/modules/loginScreens/loginScreen/loginScreen.dart';
 import 'package:shop/modules/loginScreens/onboardingscreen/onboardingscreen.dart';
@@ -75,12 +76,12 @@ class MyApp extends StatelessWidget {
         listener: (BuildContext context, AppStates state) {},
         builder: (BuildContext context, AppStates state) {
           AppCubit cubit = AppCubit.get(context);
-//
+
           return MaterialApp(
             theme: lightTheme2,
             debugShowCheckedModeBanner: false,
             // home: Home2(),
-          home: HomeLayoutScreen(),
+          home: startWidget,
           );
 
         },
