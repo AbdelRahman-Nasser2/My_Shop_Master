@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shop/shared/components/constant.dart';
 
 class DioHelper {
   static late Dio dio;
@@ -8,7 +7,7 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: baseUrl,
+        baseUrl: 'https://student.valuxapps.com/api/',
         // https://api.escuelajs.co/api/v1
         receiveDataWhenStatusError: true,
         headers: {
@@ -52,16 +51,16 @@ class DioHelper {
   }) async {
     dio.options.headers = {
       'lang':lang,
-      'Content-Type': 'application/json',
-      'Authorization': token  ,
+      'Authorization': 'Bearer ${token ?? ''}'  ,
+      // 'Content-Type': 'application/json',
 
       // 'Authorization': ' ${token ?? ''}',
     };
 
     try {
       // dio.options.headers = {
-      //   'Authorization': token ,
-      //   'Content-Type': 'application/json',
+      //   'Authorization':'Bearer ${token ?? ''}',
+      //   // 'Content-Type': 'application/json',
       //   'lang':lang,
       //
       // };
