@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:shop/models/HomeDataModel.dart';
+import 'package:shop/models/categoryModel.dart';
+import 'package:shop/models/homemodel.dart';
 import 'package:shop/models/categeory_models.dart';
+import 'package:shop/modules/productdetails/productdetails.dart';
 import 'package:shop/shared/style/colors.dart';
 
 import '../../modules/webview/webview.dart';
@@ -18,7 +20,7 @@ Widget text({
   required TextInputType input,
   required String hint,
   String? label,
- Widget? prefix,
+  Widget? prefix,
   // IconData? suffix,
   bool password = false,
   Function(String)? onchange,
@@ -65,7 +67,9 @@ Widget text({
         //   padding: EdgeInsets.only(right: 10.0),
         //   child: InkWell(onTap: (){}, child: prefix),
         // ),
-        prefix: prefix !=null?InkWell(onTap: prefixPressed, child: prefix):null,
+        prefix: prefix != null
+            ? InkWell(onTap: prefixPressed, child: prefix)
+            : null,
         // labelText: label,
         // labelStyle: const TextStyle(
         //   color: Color.fromRGBO(99, 99, 99, 100),
@@ -180,21 +184,7 @@ Widget searchBar({
       ),
     );
 
-Widget ShoppingCart() => CircleAvatar(
-      radius: 20,
-      backgroundColor: Colors.white,
-      child: IconButton(
-        // iconSize: 20,
-        onPressed: () {},
-        icon: Icon(
-          Icons.shopping_cart,
-          size: 20,
-          color: HexColor("#F99100"),
-        ),
-      ),
-    );
-
-Widget AppBarShape({
+Widget appBarShape({
   required Widget child,
   double height = 150,
   double opacity = 1,
@@ -222,136 +212,171 @@ Widget AppBarShape({
       child: child,
     );
 
-//Category
-
-//Category Items
-
-Widget buildHomeProductItem(CategeoryItemsModel model) => InkWell(
-  onTap: model.onTap,
-  child: Padding(
-    padding: EdgeInsets.symmetric(horizontal: 5),
-    child: Container(
+Widget buildHomeProductItem(
+  context,
+  ProductModel model, {
+  Function()? onTap,
+  Function()? onFavTap,
+  required Widget cartIconAdd,
+}) =>
+    SizedBox(
       width: 135,
-      height: 200,
-      decoration: BoxDecoration(
-        color: Colors.white54,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-              blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(top: 4, right: 2, left: 2),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 110,
-              width: 130,
-              clipBehavior: Clip.antiAlias,
+      height: 210,
+      child: Stack(
+        children: [
+          InkWell(
+            onTap: () {
+              navigateTo(
+                  context,
+                  ProductDetails(
+                      model.name,
+                      model.id,
+                      model.price,
+                      model.oldPrice,
+                      model.discount,
+                      model.inFavorites,
+                      model.inCart,
+                      model.description,
+                      model.images));
+            },
+            child: Container(
+              width: 135,
+              height: 210,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                    image: AssetImage(model.pathImage), fit: BoxFit.cover),
-              ),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 5,
-                    ),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 15,
-                        child: Icon(
-                          Icons.favorite,
-                          color: HexColor("#B8B8B8"),
-                        ),
-                      ),
-                    ),
-                  ),
+                color: Colors.white54,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 2,
+                      blurStyle: BlurStyle.outer,
+                      spreadRadius: 5)
                 ],
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              model.nameProduct,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                InkWell(
-                    onTap: () {},
-                    child: Stack(
+              child: Padding(
+                padding: EdgeInsets.only(top: 4, right: 2, left: 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: 110,
+                      width: 130,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                            image: NetworkImage(model.image),
+                            fit: BoxFit.fitWidth),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      model.name,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      textDirection: TextDirection.ltr,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: defaultcolor,
-                          radius: 17,
-                          child: Icon(
-                            Icons.shopping_cart_sharp,
-                            color: Colors.white,
-                          ),
+                        cartIconAdd,
+                        Spacer(),
+                        Text(
+                          "جنيه",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15, left: 20),
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: CircleAvatar(
-                              backgroundColor: HexColor("#F99100"),
-                              radius: 8,
-                              child: Icon(
-                                Icons.add,
-                                size: 8,
-                                color: Colors.white,
-                              ),
-                            ),
+                        SizedBox(
+                          width: 2,
+                        ),
+                        Text(
+                          model.price.toString(),
+                          style: TextStyle(
+                            color: HexColor("#F99100"),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
                         )
                       ],
-                    )),
-                Spacer(),
-                Text(
-                  "جنيه",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
+                    ),
+                    (model.discount == 0)
+                        ? SizedBox(
+                            height: 0,
+                            width: 0,
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "جنيه",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Text(
+                                  model.oldPrice.toString(),
+                                  style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              ],
+                            ),
+                          ),
+                  ],
                 ),
-                SizedBox(
-                  width: 2,
-                ),
-                Text(
-                  model.price,
-                  style: TextStyle(
-                      color: HexColor("#F99100"),
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
-                )
-              ],
+              ),
             ),
-          ],
-        ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 5,
+              vertical: 5,
+            ),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: InkWell(
+                onTap: onFavTap,
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 15,
+                  child: Icon(
+                    Icons.favorite,
+                    color: (model.inFavorites != false)
+                        ? Colors.red
+                        : HexColor("#B8B8B8"),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-    ),
-  ),
-);
-//Build CategoryList
+    );
 
 Widget buildHomeProductList({
   required String type,
   required Function() allshow_ontap,
   required List list,
+  Function()? onTap,
+  Function()? onFavTap,
+  required Widget cartIconAdd,
 }) =>
     SizedBox(
       width: double.infinity,
@@ -385,12 +410,17 @@ Widget buildHomeProductList({
             ),
           ),
           SizedBox(
-            height: 220,
+            height: 230,
             child: ListView.separated(
                 physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                itemBuilder: (context, index) => buildHomeProductItem(list[index]),
+                itemBuilder: (context, index) => buildHomeProductItem(
+                      context,
+                      list[index],
+                      onFavTap: onFavTap,
+                      cartIconAdd: cartIconAdd,
+                    ),
                 separatorBuilder: (context, index) => SizedBox(
                       width: 30,
                     ),
@@ -420,14 +450,15 @@ Widget buildHomeProductList({
 //HomecategoryItem
 
 Widget categoryItem(
-  CategeoryModel model, {
+  DataModel model, {
   double? width,
   double? height,
-  double fontTittleSize = 14,
+  double fontTittleSize = 18,
+  required Function()? itemOnTab,
 }) =>
     InkWell(
-      onTap: model.onTap,
-      child: Container(
+      onTap: itemOnTab,
+      child: SizedBox(
         height: height,
         width: width,
         // clipBehavior: Clip.antiAlias,
@@ -441,9 +472,12 @@ Widget categoryItem(
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(model.pathImage),
-                ),
+                    fit: BoxFit.cover,
+                    image: NetworkImage(model.image),
+                    filterQuality: FilterQuality.high),
+              ),
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
               ),
             ),
             Align(
@@ -453,11 +487,11 @@ Widget categoryItem(
                   top: 100,
                 ),
                 child: Text(
-                  model.nameType,
+                  model.name,
                   style: TextStyle(
                     fontSize: fontTittleSize,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
               ),
@@ -465,71 +499,6 @@ Widget categoryItem(
           ],
         ),
       ),
-    );
-
-Widget buildHomeCategoryList({
-  required String type,
-  Function()? allShow_OnTap,
-  required List list,
-  required Axis axis,
-  int listCount = 3,
-  double width = 150,
-  double height = 150,
-  double heightList = 150,
-  double sizedBoxWidth = 10,
-  double sizedBoxHeight = 10,
-  bool showTextAll = true,
-}) =>
-    Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            children: [
-              (showTextAll == true)
-                  ? TextButton(
-                      onPressed: allShow_OnTap,
-                      child: Text(
-                        "عرض الكل",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: HexColor("#646464"),
-                        ),
-                      ),
-                    )
-                  : Text(""),
-              Spacer(),
-              Text(
-                type,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          width: double.infinity,
-          height: heightList,
-
-          // padding: EdgeInsets.symmetric(horizontal: 5),
-          child: ListView.separated(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: axis,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            itemBuilder: (context, index) =>
-                categoryItem(list[index], height: height, width: width),
-            separatorBuilder: (context, index) => SizedBox(
-              width: sizedBoxWidth,
-              height: sizedBoxHeight,
-            ),
-            itemCount: listCount,
-          ),
-        ),
-      ],
     );
 
 //Start Button

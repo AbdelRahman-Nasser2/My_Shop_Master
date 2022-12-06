@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shop/modules/homelayoutscreens/addproduct/addproduct.dart';
-import 'package:shop/modules/homelayoutscreens/favourites/favourits.dart';
+import 'package:shop/modules/homelayoutscreens/favourites/favoritesscreen.dart';
 import 'package:shop/modules/homelayoutscreens/home/homeScreen.dart';
-import 'package:shop/modules/homelayoutscreens/notification/notification.dart';
-import 'package:shop/modules/homelayoutscreens/profile/profile.dart';
+import 'package:shop/modules/homelayoutscreens/notification/notificationscreen.dart';
+import 'package:shop/modules/homelayoutscreens/profile/profilescreen.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
 
@@ -23,10 +23,10 @@ class Home2 extends StatelessWidget {
           AppCubit cubit = AppCubit.get(context);
           List<Widget> _buildScreens() {
             return [
-              profileScreen(),
-              notificationScreen(),
+              ProfileScreen(),
+              NotificationScreen(),
               AddProductScreen(),
-              FavouritsScreen(),
+              FavoritesScreen(),
               HomeScreen(),
             ];
           }
@@ -121,19 +121,14 @@ class Home2 extends StatelessWidget {
               curve: Curves.ease,
               duration: Duration(milliseconds: 200),
             ),
-            navBarStyle:
-            NavBarStyle.style15, // Choose the nav bar style with this property.
+            navBarStyle: NavBarStyle
+                .style15, // Choose the nav bar style with this property.
           );
         },
       ),
     );
   }
-
-
-
 }
-
-
 
 class HomeLayoutScreen2 extends StatelessWidget {
   const HomeLayoutScreen2({Key? key}) : super(key: key);
@@ -148,10 +143,10 @@ class HomeLayoutScreen2 extends StatelessWidget {
           AppCubit cubit = AppCubit.get(context);
           List<Widget> _buildScreens() {
             return [
-              profileScreen(),
-              notificationScreen(),
+              ProfileScreen(),
+              NotificationScreen(),
               AddProductScreen(),
-              FavouritsScreen(),
+              FavoritesScreen(),
               HomeScreen(),
             ];
           }
@@ -246,23 +241,14 @@ class HomeLayoutScreen2 extends StatelessWidget {
               curve: Curves.ease,
               duration: Duration(milliseconds: 200),
             ),
-            navBarStyle:
-            NavBarStyle.style15, // Choose the nav bar style with this property.
+            navBarStyle: NavBarStyle
+                .style15, // Choose the nav bar style with this property.
           );
         },
       ),
     );
   }
-
-
-
 }
-
-
-
-
-
-
 
 // Widget buildHomeProductItem(CategeoryItemsModel model) => InkWell(
 //   onTap: model.onTap,
