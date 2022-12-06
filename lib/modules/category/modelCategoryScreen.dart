@@ -1,18 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
 
-class ModleCateegoryScreen extends StatelessWidget {
+class ModelCategoryScreen extends StatelessWidget {
   final String image;
   final String title;
   final List<Widget> children;
 
-  ModleCateegoryScreen(
+  const ModelCategoryScreen(
       {super.key,
       required this.title,
       required this.image,
@@ -86,8 +85,7 @@ class ModleCateegoryScreen extends StatelessWidget {
                       // ),
                       Expanded(
                         child: GridView.custom(
-                          padding:
-                              EdgeInsets.fromLTRB(10, 0, 10, 10),
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
@@ -101,7 +99,11 @@ class ModleCateegoryScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                cubit.NormalAppBar(context, height: 90, opacity: 0.9),
+                cubit.normalAppBar(context,
+                    height: 90,
+                    opacity: 0.9,
+                    addChild: false,
+                    showSearch: false),
               ],
             ),
           );

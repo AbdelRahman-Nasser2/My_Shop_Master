@@ -6,7 +6,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop/layout/home2.dart';
 import 'package:shop/layout/homeLayoutScreen.dart';
 import 'package:shop/modules/loginScreens/loginScreen/loginScreen.dart';
 import 'package:shop/modules/loginScreens/onboardingscreen/onboardingscreen.dart';
@@ -28,46 +27,41 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = new MyHttpOverrides();
   DioHelper.init();
   await CacheHelper.init();
   token = CacheHelper.get(key: "token");
-  onBoarding=CacheHelper.get(key: "onBoarding");
-  start=CacheHelper.get(key: "start");
-  // print(token);
-  // print(onBoarding);
-  // print(start);
+  onBoarding = CacheHelper.get(key: "onBoarding");
+  start = CacheHelper.get(key: "start");
+  print(token);
+  print(onBoarding);
+  print(start);
   Widget widget;
 
   if (token != null) {
     widget = const HomeLayoutScreen();
-  }
-  else {
-    if(onBoarding!=false&&start!=false){
-      if(start!=false){
-        widget=LoginScreen();
-
-      }else{
-        widget=StartPage();
-
+  } else {
+    if (onBoarding != false && start != false) {
+      if (start != false) {
+        widget = LoginScreen();
+      } else {
+        widget = StartPage();
       }
     }
     widget = OnBoardingScreen();
   }
-  runApp( MyApp(
+  runApp(MyApp(
     startWidget: widget,
-
   ));
 }
 
 class MyApp extends StatelessWidget {
   Widget startWidget;
 
-   MyApp({Key? key ,required this.startWidget}) : super(key: key);
+  MyApp({Key? key, required this.startWidget}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -80,10 +74,9 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             theme: lightTheme2,
             debugShowCheckedModeBanner: false,
-            // home: Home2(),
-          home: startWidget,
+            // home: HomeLayoutScreen(),
+            home: startWidget,
           );
-
         },
       ),
     );

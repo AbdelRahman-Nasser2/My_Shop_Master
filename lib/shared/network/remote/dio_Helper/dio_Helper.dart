@@ -45,25 +45,18 @@ class DioHelper {
     required String url,
     Map<String, dynamic>? queryParameters,
     ProgressCallback? onReceiveProgress,
-     String? token,
-    String lang='ar',
-
+    String? token,
+    String lang = 'ar',
   }) async {
     dio.options.headers = {
-      'lang':lang,
-      'Authorization': 'Bearer ${token ?? ''}'  ,
-      // 'Content-Type': 'application/json',
+      'lang': lang,
+      'Content-Type': 'application/json',
+      'Authorization': token,
 
       // 'Authorization': ' ${token ?? ''}',
     };
 
     try {
-      // dio.options.headers = {
-      //   'Authorization':'Bearer ${token ?? ''}',
-      //   // 'Content-Type': 'application/json',
-      //   'lang':lang,
-      //
-      // };
       final Response response = await dio.get(
         url,
         queryParameters: queryParameters,
@@ -75,16 +68,14 @@ class DioHelper {
     }
   }
 
-
-
   static Future<Response> postsData({
     required String url,
     required Map<String, dynamic> data,
-    String lang='ar',
+    String lang = 'ar',
     String? token,
   }) async {
     dio.options.headers = {
-      'lang':lang,
+      'lang': lang,
       'Authorization': 'Bearer ${token ?? ''}',
     };
     try {
@@ -100,9 +91,6 @@ class DioHelper {
       rethrow;
     }
   }
-
-
-
 
   static Future<Response> putData({
     required String url,
@@ -145,7 +133,7 @@ class DioHelper {
   }) async {
     dio.options.headers = {
       'Authorization': 'Bearer $token',
-      'Accept':'application/json',
+      'Accept': 'application/json',
       // 'Authorization': token ,
       'Content-Type': 'application/json',
     };
@@ -183,5 +171,4 @@ class DioHelper {
     //   print("DIO ERROR $error");
     // });
   }
-
 }

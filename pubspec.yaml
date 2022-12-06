@@ -41,17 +41,15 @@ dependencies:
   conditional_builder_null_safety: ^0.0.6
   bloc: ^8.0.3
   flutter_bloc: ^8.0.1
-  sqflite: ^2.0.2
   intl: ^0.17.0
   dio: ^4.0.6
   shared_preferences: ^2.0.13
-  webview_flutter: ^3.0.4
   flutter_svg: ^1.1.0
-  custom_navigation_bar: ^0.8.2
+#  custom_navigation_bar: ^0.8.2
   persistent_bottom_nav_bar: ^4.0.2
   fluttertoast: ^8.0.9
   google_sign_in: ^5.4.1
-
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:

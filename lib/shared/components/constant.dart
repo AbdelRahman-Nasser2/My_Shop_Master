@@ -8,14 +8,14 @@ bool? start;
 
 BouncingScrollPhysics? physics = const BouncingScrollPhysics();
 
-List<CategeoryItemsModel> CategeoryItemsList = [
-  CategeoryItemsModel(
-      "assets/images/products/iphone.png", () {}, "iPhone XS", " 50,30"),
-  CategeoryItemsModel("assets/images/products/mouselogitech.png", () {},
-      "Mouse logitech", " 50,30"),
-  CategeoryItemsModel(
-      "assets/images/products/smartWatch.png", () {}, "Smart Watch ", " 50,30"),
-];
+// List<CategeoryItemsModel> CategeoryItemsList = [
+//   CategeoryItemsModel(
+//       "assets/images/products/iphone.png", () {}, "iPhone XS", " 50,30"),
+//   CategeoryItemsModel("assets/images/products/mouselogitech.png", () {},
+//       "Mouse logitech", " 50,30"),
+//   CategeoryItemsModel(
+//       "assets/images/products/smartWatch.png", () {}, "Smart Watch ", " 50,30"),
+// ];
 
 //Egypt
 

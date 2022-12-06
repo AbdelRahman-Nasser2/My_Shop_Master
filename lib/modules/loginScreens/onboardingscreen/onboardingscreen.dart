@@ -29,7 +29,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     var pageViewController = PageController(initialPage: 0);
-    bool isLast=false;
     List<OnBoardingModel> boarding = [
       OnBoardingModel(
           image: 'assets/images/Online shopping-pana.svg',
@@ -53,19 +52,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: PageView.builder(
                 physics: BouncingScrollPhysics(),
                 itemCount: boarding.length,
-                onPageChanged: (int index){
-                  if(index ==boarding.length -1){
+                onPageChanged: (int index) {
+                  if (index == boarding.length - 1) {
+                  } else {
+                    setState(() {});
 
-                  }else{
-                    setState(() {
-                      isLast=true;
-
-                    });
-
-
-                    setState(() {
-                      isLast=false;
-                    });
+                    setState(() {});
                   }
                 },
                 controller: pageViewController,
@@ -103,11 +95,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   Spacer(),
                   TextButton(
                     onPressed: () {
-                      CacheHelper.saveData(key: "onBoarding", value: true).then((value) {
-                        onBoarding=CacheHelper.get(key: "onBoarding");
-                        if(value==true){
+                      CacheHelper.saveData(key: "onBoarding", value: true)
+                          .then((value) {
+                        onBoarding = CacheHelper.get(key: "onBoarding");
+                        if (value == true) {
                           navigateAndFinish(context, StartPage());
-
                         }
                       });
                     },
