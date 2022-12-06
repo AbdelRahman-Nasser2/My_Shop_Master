@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shop/models/categeory_models.dart';
 
 List<Map> tasks = [];
+String baseUrl= 'https://student.valuxapps.com/api/';
 String? token;
 bool? onBoarding;
 bool? start;
