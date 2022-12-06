@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop/layout/home2.dart';
 import 'package:shop/layout/homeLayoutScreen.dart';
 import 'package:shop/modules/loginScreens/loginScreen/loginScreen.dart';
 import 'package:shop/modules/loginScreens/onboardingscreen/onboardingscreen.dart';
@@ -35,9 +36,9 @@ void main() async{
   token = CacheHelper.get(key: "token");
   onBoarding=CacheHelper.get(key: "onBoarding");
   start=CacheHelper.get(key: "start");
-  print(token);
-  print(onBoarding);
-  print(start);
+  // print(token);
+  // print(onBoarding);
+  // print(start);
   Widget widget;
 
   if (token != null) {
@@ -69,12 +70,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-
-      providers: [
-        BlocProvider(  create: (BuildContext context) => AppCubit(),),
-
-      ],
+    return BlocProvider(
+      create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (BuildContext context, AppStates state) {},
         builder: (BuildContext context, AppStates state) {
