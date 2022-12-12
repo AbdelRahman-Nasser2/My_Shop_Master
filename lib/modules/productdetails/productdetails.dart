@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/models/productdetailsmodel.dart';
+import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/style/colors.dart';
 import '../../shared/cubit/states.dart';
@@ -67,6 +69,7 @@ class ProductDetails extends StatelessWidget {
                   ],
                 ),
                 body: SingleChildScrollView(
+                  physics: physics,
                   child: Column(
                     // mainAxisAlignment: MainAxisAlignment.start,
                     // crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,142 +77,131 @@ class ProductDetails extends StatelessWidget {
                     children: [
                       Stack(
                         children: [
-                          Stack(
-                            children: [
-                              Container(
-                                height: 380,
-                                decoration: BoxDecoration(
-                                  color: Colors.blueAccent.withOpacity(0.1),
-                                  backgroundBlendMode: BlendMode.darken,
-                                ),
-                                // padding: const EdgeInsetsDirectional.only(
-                                //     top: 15, bottom: 15),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                        height: 380,
-                                        width: double.infinity,
-                                        clipBehavior: Clip.antiAlias,
+                          Container(
+                            height: 380,
+                            decoration: BoxDecoration(
+                              color: Colors.blueAccent.withOpacity(0.1),
+                              backgroundBlendMode: BlendMode.darken,
+                            ),
+                            // padding: const EdgeInsetsDirectional.only(
+                            //     top: 15, bottom: 15),
+                            child: Stack(
+                              children: [
+                                Container(
+                                    height: 380,
+                                    width: double.infinity,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blueAccent.withOpacity(0.1),
+                                      backgroundBlendMode: BlendMode.darken,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            color: Colors.grey,
+                                            spreadRadius: 1,
+                                            blurRadius: 5,
+                                            blurStyle: BlurStyle.outer
+                                            // changes position of shadow
+                                            ),
+                                      ],
+                                      // color: Colors.red,
+                                      // borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding:
+                                        EdgeInsetsDirectional.only(top: 20),
+                                    child: CarouselSlider(
+                                      carouselController:
+                                          carouselProductController,
+                                      items: cubit
+                                          .productDetailsModel!.data!.images!
+                                          .map(
+                                            (e) => Image(
+                                              image: NetworkImage(
+                                                e,
+                                              ),
+                                              width: double.infinity,
+                                              fit: BoxFit.fill,
+                                              filterQuality: FilterQuality.high,
+                                              colorBlendMode: BlendMode.darken,
+                                              color: Colors.blueAccent
+                                                  .withOpacity(0.1),
+                                            ),
+                                          )
+                                          .toList(),
+                                      options: CarouselOptions(
+                                          height: double.infinity,
+                                          initialPage: 0,
+                                          clipBehavior: Clip.antiAlias,
+                                          viewportFraction: 1.0,
+                                          enableInfiniteScroll: true,
+                                          enlargeCenterPage: true,
+                                          reverse: false,
+                                          autoPlay: true,
+                                          autoPlayInterval:
+                                              const Duration(seconds: 3),
+                                          autoPlayAnimationDuration:
+                                              const Duration(seconds: 1),
+                                          autoPlayCurve: Curves.fastOutSlowIn,
+                                          scrollDirection: Axis.horizontal,
+                                          onPageChanged: (index, reason) {
+                                            cubit.carouselProductIndexChange(
+                                                index);
+                                          }),
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 15),
                                         decoration: BoxDecoration(
-                                          color: Colors.blueAccent
-                                              .withOpacity(0.1),
-                                          backgroundBlendMode: BlendMode.darken,
-                                          boxShadow: const [
-                                            BoxShadow(
-                                                color: Colors.grey,
-                                                spreadRadius: 1,
-                                                blurRadius: 5,
-                                                blurStyle: BlurStyle.outer
-                                                // changes position of shadow
-                                                ),
-                                          ],
-                                          // color: Colors.red,
-                                          // borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        child: CarouselSlider(
-                                          carouselController:
-                                              carouselProductController,
-                                          items: cubit.productDetailsModel!
+                                            color: HexColor("#406497")
+                                                .withOpacity(0.2),
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: cubit.productDetailsModel!
                                               .data!.images!
-                                              .map(
-                                                (e) => Image(
-                                                  image: NetworkImage(
-                                                    e,
-                                                  ),
-                                                  width: double.infinity,
-                                                  fit: BoxFit.fill,
-                                                  filterQuality:
-                                                      FilterQuality.high,
-                                                  colorBlendMode:
-                                                      BlendMode.darken,
-                                                  color: Colors.blueAccent
-                                                      .withOpacity(0.1),
-                                                ),
-                                              )
-                                              .toList(),
-                                          options: CarouselOptions(
-                                              height: double.infinity,
-                                              initialPage: 0,
-                                              clipBehavior: Clip.antiAlias,
-                                              viewportFraction: 1.0,
-                                              enableInfiniteScroll: true,
-                                              enlargeCenterPage: true,
-                                              reverse: false,
-                                              autoPlay: true,
-                                              autoPlayInterval:
-                                                  const Duration(seconds: 3),
-                                              autoPlayAnimationDuration:
-                                                  const Duration(seconds: 1),
-                                              autoPlayCurve:
-                                                  Curves.fastOutSlowIn,
-                                              scrollDirection: Axis.horizontal,
-                                              onPageChanged: (index, reason) {
-                                                cubit
-                                                    .carouselProductIndexChange(
-                                                        index);
-                                              }),
-                                        )),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 15),
-                                            decoration: BoxDecoration(
-                                                color: HexColor("#406497")
-                                                    .withOpacity(0.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: cubit
-                                                  .productDetailsModel!
-                                                  .data!
-                                                  .images!
-                                                  .asMap()
-                                                  .entries
-                                                  .map((entry) {
-                                                return GestureDetector(
-                                                  onTap: () =>
-                                                      carouselProductController
-                                                          .animateToPage(
-                                                              entry.key),
-                                                  child: Container(
-                                                    width: 6.0,
-                                                    height: 6.0,
-                                                    margin: const EdgeInsets
-                                                            .symmetric(
+                                              .asMap()
+                                              .entries
+                                              .map((entry) {
+                                            return GestureDetector(
+                                              onTap: () =>
+                                                  carouselProductController
+                                                      .animateToPage(entry.key),
+                                              child: Container(
+                                                width: 6.0,
+                                                height: 6.0,
+                                                margin:
+                                                    const EdgeInsets.symmetric(
                                                         vertical: 4.0,
                                                         horizontal: 4.0),
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: (Theme.of(context)
-                                                                  .brightness ==
-                                                              Brightness.dark
-                                                          ? HexColor('#406497')
-                                                          : HexColor('#406497')
-                                                              .withOpacity(
-                                                                  cubit.carouselProductCurrent ==
-                                                                          entry
-                                                                              .key
-                                                                      ? 1
-                                                                      : 0.6)),
-                                                    ),
-                                                  ),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          )),
-                                    ),
-                                  ],
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: (Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.dark
+                                                      ? HexColor('#406497')
+                                                      : HexColor('#406497')
+                                                          .withOpacity(
+                                                              cubit.carouselProductCurrent ==
+                                                                      entry.key
+                                                                  ? 1
+                                                                  : 0.6)),
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      )),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 370),
@@ -228,19 +220,16 @@ class ProductDetails extends StatelessWidget {
                                     horizontal: 17, vertical: 8),
                                 child: Column(
                                   children: [
-                                    Row(
-                                      children: [
-                                        const Spacer(),
-                                        Text(
-                                          cubit
-                                              .productDetailsModel!.data!.name!,
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w900),
-                                          textAlign: TextAlign.end,
-                                        ),
-                                      ],
+                                    Text(
+                                      cubit.productDetailsModel!.data!.name!,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                      textDirection: TextDirection.rtl,
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w900),
                                     ),
                                     Row(
                                       children: [
