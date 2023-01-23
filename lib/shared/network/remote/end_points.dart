@@ -8,3 +8,4 @@ const NOTIFICATIONS = 'notifications';
 const FAVORITES = 'favorites';
 // const LOGIN = 'auth/login';
 const PRODUCt = 'products/';
+const CATEGORYPRODUCTS = 'products?category_id=';

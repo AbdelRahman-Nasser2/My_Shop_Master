@@ -1,8 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
 
@@ -190,7 +189,7 @@ class HomeLayoutScreen extends StatelessWidget {
           AppCubit cubit = AppCubit.get(context);
 
           return ConditionalBuilder(
-            condition: cubit.homeModel != null,
+            condition: cubit.homeModel != null && cubit.categoriesModel != null,
             builder: (BuildContext context) {
               return PersistentTabView(
                 context,

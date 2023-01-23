@@ -35,9 +35,9 @@ void main() async {
   token = CacheHelper.get(key: "token");
   onBoarding = CacheHelper.get(key: "onBoarding");
   start = CacheHelper.get(key: "start");
-  print(token);
-  print(onBoarding);
-  print(start);
+  // print(token);
+  // print(onBoarding);
+  // print(start);
   Widget widget;
 
   if (token != null) {
@@ -74,7 +74,10 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             theme: lightTheme2,
             debugShowCheckedModeBanner: false,
-            // home: HomeLayoutScreen(),
+            // home: CategoryProducts(
+            //   id: 43,
+            //   categoryName: '',
+            // ),
             home: startWidget,
           );
         },

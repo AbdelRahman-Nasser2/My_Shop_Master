@@ -1,11 +1,11 @@
-class FavoritesModel {
+class CategoryProductsModel {
   bool? status;
   Null? message;
   Data? data;
 
-  FavoritesModel({this.status, this.message, this.data});
+  CategoryProductsModel({this.status, this.message, this.data});
 
-  FavoritesModel.fromJson(Map<String, dynamic> json) {
+  CategoryProductsModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
@@ -24,7 +24,7 @@ class FavoritesModel {
 
 class Data {
   int? currentPage;
-  List<FavoritesData>? data;
+  List<ProductsData>? data;
   String? firstPageUrl;
   int? from;
   int? lastPage;
@@ -53,9 +53,9 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     if (json['data'] != null) {
-      data = <FavoritesData>[];
+      data = <ProductsData>[];
       json['data'].forEach((v) {
-        data!.add(FavoritesData.fromJson(v));
+        data?.add(ProductsData.fromJson(v));
       });
     }
     firstPageUrl = json['first_page_url'];
@@ -90,29 +90,7 @@ class Data {
   }
 }
 
-class FavoritesData {
-  int? id;
-  Product? product;
-
-  FavoritesData({this.id, this.product});
-
-  FavoritesData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    product =
-        json['product'] != null ? Product.fromJson(json['product']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    if (product != null) {
-      data['product'] = product!.toJson();
-    }
-    return data;
-  }
-}
-
-class Product {
+class ProductsData {
   int? id;
   dynamic price;
   dynamic oldPrice;
@@ -120,17 +98,23 @@ class Product {
   String? image;
   String? name;
   String? description;
+  List<String>? images;
+  bool? inFavorites;
+  bool? inCart;
 
-  Product(
+  ProductsData(
       {this.id,
       this.price,
       this.oldPrice,
       this.discount,
       this.image,
       this.name,
-      this.description});
+      this.description,
+      this.images,
+      this.inFavorites,
+      this.inCart});
 
-  Product.fromJson(Map<String, dynamic> json) {
+  ProductsData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     price = json['price'];
     oldPrice = json['old_price'];
@@ -138,6 +122,9 @@ class Product {
     image = json['image'];
     name = json['name'];
     description = json['description'];
+    images = json['images'].cast<String>();
+    inFavorites = json['in_favorites'];
+    inCart = json['in_cart'];
   }
 
   Map<String, dynamic> toJson() {
@@ -149,6 +136,9 @@ class Product {
     data['image'] = image;
     data['name'] = name;
     data['description'] = description;
+    data['images'] = images;
+    data['in_favorites'] = inFavorites;
+    data['in_cart'] = inCart;
     return data;
   }
 }

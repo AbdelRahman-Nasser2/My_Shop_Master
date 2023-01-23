@@ -4,8 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:shop/models/CategoryProductsModel.dart';
 import 'package:shop/models/categoryModel.dart';
+import 'package:shop/models/changefavorites.dart';
 import 'package:shop/models/favoritesmodel.dart';
 import 'package:shop/models/homemodel.dart';
 import 'package:shop/models/notificationmodel.dart';
@@ -29,9 +31,7 @@ class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
 
   static AppCubit get(context) => BlocProvider.of(context);
-  // bool aa = ThemeCubit.get(context).isDark;
 
-//part of AnimatedBottomNavigationBar
   var pageViewController = PageController(initialPage: 0);
   int currentIndex = 3;
   // var bottomNavIndex = 2;
@@ -296,8 +296,10 @@ class AppCubit extends Cubit<AppStates> {
       );
 
   Color? fav;
+  bool favt=true;
   void iconChange() {
-    fav = Colors.red;
+favt=!favt;
+fav=favt?Colors.red:Colors.white;
     emit(ChangeFavStateState());
   }
 
@@ -314,7 +316,6 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   //Get Data
-  List? sort;
 
   // void sorted() {
   //   for (int i = 0; i < homeModel!.data.products.length; i++) {
@@ -332,6 +333,9 @@ class AppCubit extends Cubit<AppStates> {
   //
   // }
 
+
+  Map<int,bool> favorites={};
+
   HomeModel? homeModel;
   void getHomeData() {
     // print("homeDataModel?.status");
@@ -342,10 +346,11 @@ class AppCubit extends Cubit<AppStates> {
       token: token,
     ).then((value) async {
       homeModel = HomeModel.fromJson(value.data);
-
-      if (kDebugMode) {
-        print(homeModel?.data.banners[1].image);
-      }
+      homeModel?.data.products.forEach((element)
+      {
+        favorites.addAll({
+          element.id:element.inFavorites});
+      });
 
       emit(HomeGetDataSuccess());
     }).catchError((error) {
@@ -355,7 +360,6 @@ class AppCubit extends Cubit<AppStates> {
 
   CategoriesModel? categoriesModel;
   void getCategoryData() {
-    // print("categeoryModel?.status");
     emit(CategoryDataLoading());
 
     DioHelper.getData(
@@ -369,6 +373,31 @@ class AppCubit extends Cubit<AppStates> {
       emit(CategoryDataError(error));
     });
   }
+
+  CategoryProductsModel? categoryProductsModel;
+  void getCategoryProductsById(int? id) {
+    emit(CategoryProductsGetDataLoading());
+
+    DioHelper.getData(
+      url: '$CATEGORYPRODUCTS$id',
+      token: token,
+    ).then((value) async {
+      categoryProductsModel = CategoryProductsModel.fromJson(value.data);
+      categoryProductsModel?.data!.data!.forEach((element)
+      {
+        favorites.addAll({
+          element.id!:element.inFavorites!});
+      });
+      print(favorites.toString());
+      emit(CategoryProductsGetDataSuccess());
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error);
+      }
+      emit(CategoryProductsGetDataError(error));
+    });
+  }
+
 
   //User Data
   ProfileModel? profileModel;
@@ -396,15 +425,14 @@ class AppCubit extends Cubit<AppStates> {
       token: token,
     ).then((value) {
       notificationModel = NotificationModel.fromJson(value.data);
-      if (kDebugMode) {
-        print(notificationModel!.data!.lastPage);
-        // print(notificationModel!.status);
-      }
       emit(NotificationDataSuccess());
     }).catchError((error) {
       emit(NotificationDataError(error));
     });
   }
+
+
+
 
   FavoritesModel? favoritesModel;
   void getFavoritesData() {
@@ -415,19 +443,53 @@ class AppCubit extends Cubit<AppStates> {
       token: token,
     ).then((value) {
       favoritesModel = FavoritesModel.fromJson(value.data);
+      // favoritesModel?.data!.data!.forEach((element)
+      // {
+      //   favorites.addAll({
+      //     element.id!:element.inFavorites!});
+      // });
       if (kDebugMode) {
-        print('fave ${favoritesModel!.data!.data![1].product!.name!}');
-        // print(notificationModel!.status);
+        print('fave ${favoritesModel!.data!.data![1].product!.id}');
+        print(favoritesModel!.data!.data![1].id);
       }
       emit(FavoritesDataSuccess());
     }).catchError((error) {
+      print(error);
       emit(FavoritesDataError(error));
     });
   }
 
+  ChangeFavoritesModel? changeFavoritesModel;
+
+  void addOrDeleteFavorites({
+    required int id,
+  }) {
+    emit(ChangeFavoritesSuccess());
+    favorites[id] = !favorites[id]!;
+    DioHelper.postsData(
+        url: FAVORITES,
+        token: token,
+        data: {
+      'product_id': id,
+    }).then((value) {
+      changeFavoritesModel=ChangeFavoritesModel.fromJson(value.data);
+      if(!changeFavoritesModel!.status!){
+        favorites[id] = !favorites[id]!;
+
+      }
+
+      emit(AddOrDeleteFavoritesSuccess(changeFavoritesModel));
+    }).catchError((error) {
+      favorites[id] = !favorites[id]!;
+
+      emit(AddOrDeleteFavoritesError(error.toString()));
+    });
+  }
+
+
+
   ProductDetailsModel? productDetailsModel;
   void getProductDataById(int? id) {
-    // print("homeDataModel?.status");
     emit(ProductGetDataLoading());
 
     DioHelper.getData(
@@ -436,13 +498,15 @@ class AppCubit extends Cubit<AppStates> {
     ).then((value) async {
       productDetailsModel = ProductDetailsModel.fromJson(value.data);
 
-      if (kDebugMode) {
-        print(productDetailsModel!.data!.name);
-      }
+      // if (kDebugMode) {
+      //   print(productDetailsModel!.data!.name);
+      // }
 
       emit(ProductGetDataSuccess());
     }).catchError((error) {
       emit(ProductGetDataError(error));
     });
   }
+
+
 }
