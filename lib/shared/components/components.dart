@@ -1,16 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/models/categoryModel.dart';
 import 'package:shop/models/homemodel.dart';
-import 'package:shop/models/categeory_models.dart';
+import 'package:shop/modules/categoryproducts/categoryproducts.dart';
 import 'package:shop/modules/productdetails/productdetails.dart';
-import 'package:shop/shared/style/colors.dart';
-
-import '../../modules/webview/webview.dart';
+import 'package:shop/shared/cubit/cubit.dart';
 
 //Login Screen components
 
@@ -229,15 +226,8 @@ Widget buildHomeProductItem(
               navigateTo(
                   context,
                   ProductDetails(
-                      model.name,
-                      model.id,
-                      model.price,
-                      model.oldPrice,
-                      model.discount,
-                      model.inFavorites,
-                      model.inCart,
-                      model.description,
-                      model.images));
+                    model.id,
+                  ));
             },
             child: Container(
               width: 135,
@@ -266,7 +256,8 @@ Widget buildHomeProductItem(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         image: DecorationImage(
-                            image: NetworkImage(model.image),
+                            image:
+                            NetworkImage(model.image),
                             fit: BoxFit.fitWidth),
                       ),
                     ),
@@ -278,9 +269,9 @@ Widget buildHomeProductItem(
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                      textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.start,
+                      textDirection: TextDirection.rtl,
+                      overflow: TextOverflow.visible,
                     ),
                     SizedBox(
                       height: 5,
@@ -323,7 +314,6 @@ Widget buildHomeProductItem(
                                 Text(
                                   "جنيه",
                                   style: TextStyle(
-                                      decoration: TextDecoration.lineThrough,
                                       color: Colors.grey,
                                       fontSize: 12,
                                       fontWeight: FontWeight.normal),
@@ -352,14 +342,14 @@ Widget buildHomeProductItem(
             child: Align(
               alignment: Alignment.topRight,
               child: InkWell(
-                onTap: onFavTap,
+                onTap:
+                    (){ AppCubit.get(context).addOrDeleteFavorites(id: model.id);},
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 15,
                   child: Icon(
                     Icons.favorite,
-                    color: (model.inFavorites != false)
-                        ? Colors.red
+                    color: (AppCubit.get(context).favorites[model.id]!) ? Colors.red
                         : HexColor("#B8B8B8"),
                   ),
                 ),
@@ -372,14 +362,15 @@ Widget buildHomeProductItem(
 
 Widget buildHomeProductList({
   required String type,
-  required Function() allshow_ontap,
+  required Function() allShow_onTap,
   required List list,
   Function()? onTap,
   Function()? onFavTap,
   required Widget cartIconAdd,
 }) =>
-    SizedBox(
+    Container(
       width: double.infinity,
+      margin: EdgeInsetsDirectional.only(bottom: 20),
       child: Column(
         children: [
           Padding(
@@ -387,7 +378,7 @@ Widget buildHomeProductList({
             child: Row(
               children: [
                 TextButton(
-                  onPressed: allshow_ontap,
+                  onPressed: allShow_onTap,
                   child: Text(
                     "عرض الكل",
                     style: TextStyle(
@@ -450,6 +441,7 @@ Widget buildHomeProductList({
 //HomecategoryItem
 
 Widget categoryItem(
+  context,
   DataModel model, {
   double? width,
   double? height,
@@ -457,7 +449,14 @@ Widget categoryItem(
   required Function()? itemOnTab,
 }) =>
     InkWell(
-      onTap: itemOnTab,
+      onTap: () {
+        navigateTo(
+            context,
+            CategoryProducts(
+              id: model.id,
+              categoryName: model.name,
+            ));
+      },
       child: SizedBox(
         height: height,
         width: width,
@@ -527,147 +526,7 @@ Widget startButton({
       ),
     );
 
-// Widget buildCategorywItemm(
-//   // tittle=list["title"],
-//
-//   list,
-//   context, {
-//   bool color = false,
-//   String? tittle,
-//   ImageProvider? image,
-// }) =>
-//     InkWell(
-//       onTap: () {
-//         navigateTo(context, WebviewScrean(list["url"]));
-//       },
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-//         child: Container(
-//           width: double.infinity,
-//           height: 330,
-//           decoration: BoxDecoration(
-//               // color: Colors.red,
-//               borderRadius: BorderRadius.circular(28),
-// // color:Theme.of(context)?Colors.white :HexColor('333739'),
-// // Colors.white,
-//               boxShadow: [
-//                 BoxShadow(
-//                     blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
-//               ]),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               //image
-//               Container(
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(28),
-//                   image: DecorationImage(
-//                     // title == null ? "jhsdljhg" : title = "${list['content']}",
-//                     image: NetworkImage(
-//                       (list["urlToImage"] == null)
-//                           ? "https://cdn.elwatannews.com/watan/840x473/5956948381439567683.jpg"
-//                           : "${list["urlToImage"]}",
-//                       // "${list["urlToImage"]}",
-//                     ),
-//                     fit: BoxFit.cover,
-//                   ),
-//                 ),
-//                 // width: double.infinity,
-//                 height: 200,
-//               ),
-//
-//               //title
-//
-//               Padding(
-//                 padding: EdgeInsets.only(left: 5),
-//                 child: Text(
-//                   //"title"
-//                   (list["title"] == null) ? "Fayoum News" : "${list["title"]}",
-//                   textDirection: TextDirection.rtl,
-//                   style: Theme.of(context).textTheme.displayMedium,
-//                   maxLines: 1,
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//               ),
-//
-//               //description
-//               //لا لايمكن محاوطة الExpanded ب Padding
-//               Expanded(
-//                 child: Padding(
-//                   padding: EdgeInsets.only(
-//                     left: 5,
-//                   ),
-//                   child: Text(
-//                     (list["description"] == null)
-//                         ? "اخبار الفيوم "
-//                         : "${list["description"]}",
-//                     // "${list['content']}",
-//                     style: Theme.of(context).textTheme.displaySmall,
-//                     textDirection: TextDirection.rtl,
-//
-//                     maxLines: 2,
-//                     overflow: TextOverflow.ellipsis,
-//                   ),
-//                 ),
-//               ),
-//
-//               //Author
-//               Padding(
-//                 padding: EdgeInsets.only(
-//                   left: 5,
-//                 ),
-//                 child: Row(
-//                   children: [
-//                     CircleAvatar(
-//                       radius: 20,
-//                       backgroundImage: NetworkImage(
-//                         (list["urlToImage"] == null)
-//                             ? "https://cdn.elwatannews.com/watan/840x473/5956948381439567683.jpg"
-//                             : "${list["urlToImage"]}",
-//                         // "${list["urlToImage"]}",
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       width: 5,
-//                     ),
-//                     Expanded(
-//                       child: Text(
-//                         (list["author"] == null)
-//                             ? "Fayoum News"
-//                             : "${list["author"]}",
-//                         textDirection: TextDirection.ltr,
-//                         style: Theme.of(context).textTheme.displayMedium,
-//                         maxLines: 1,
-//                         overflow: TextOverflow.ellipsis,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//
-//               //Time & Date
-//               Padding(
-//                 padding: EdgeInsets.only(
-//                   left: 7,
-//                 ),
-//                 child: Text(
-//                   "${list['publishedAt']}",
-//                   textDirection: TextDirection.rtl,
-//                   style: Theme.of(context).textTheme.labelSmall,
-//                   maxLines: 1,
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
 
-//
-
-//Methods
 
 void navigateTo(context, widget) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
@@ -706,6 +565,7 @@ Color chooseToastColor(ToastStates state) {
     case ToastStates.WARNING:
       color = Colors.amber;
       break;
+
   }
   return color;
 }

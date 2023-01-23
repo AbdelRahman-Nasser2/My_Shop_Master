@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
+import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -64,7 +66,12 @@ class ProfileScreen extends StatelessWidget {
                 ProfileItemModel(
                     "تسجيل خروج",
                     SvgPicture.asset('assets/images/icons&logos/logout.svg'),
-                    () => null),
+                    (){
+                      CacheHelper.removeAllData().then((value) {
+
+                      });
+                      // navigateAndFinish(context, OnBoardingScreen());
+                    }),
               ];
               return Scaffold(
                 appBar: PreferredSize(

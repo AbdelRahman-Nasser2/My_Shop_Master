@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, non_constant_identifier_names
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -17,7 +16,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (BuildContext context, AppStates states) {},
+      listener: (BuildContext context, AppStates states) {
+        if(states is AddOrDeleteFavoritesSuccess){
+          if(!states.model!.status!){
+            showToast(state: ToastStates.ERROR,text: states.model!.message!);
+          }else{
+            showToast(state: ToastStates.SUCCESS,text: states.model!.message!);
+
+          }
+        }
+      },
       builder: (BuildContext context, AppStates states) {
         AppCubit cubit = AppCubit.get(context);
         List products = cubit.homeModel!.data.products;
@@ -68,6 +76,21 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                       width: double.infinity,
                                       fit: BoxFit.fill,
+                                      loadingBuilder:  (BuildContext context, Widget child,
+                                          ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Center(
+                                          child: CircularProgressIndicator(
+
+                                            value: loadingProgress.expectedTotalBytes != null
+                                                ? loadingProgress.cumulativeBytesLoaded /
+                                                loadingProgress.expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   )
                                   .toList(),
@@ -156,7 +179,7 @@ class HomeScreen extends StatelessWidget {
                       type: 'أفضل العروض',
                       list: products,
                       cartIconAdd: cubit.cartIconAdd(),
-                      allshow_ontap: () {
+                      allShow_onTap: () {
                         CacheHelper.removeData(key: "token");
                         // CacheHelper.removeAllData();
                         // CacheHelper.removeData(key: "onBoarding");
@@ -168,7 +191,7 @@ class HomeScreen extends StatelessWidget {
                   buildHomeProductList(
                     type: 'الأكثر مبيعاً  ',
                     list: products,
-                    allshow_ontap: () {},
+                    allShow_onTap: () {},
                     cartIconAdd: cubit.cartIconAdd(),
                   ),
                 ],
@@ -179,6 +202,14 @@ class HomeScreen extends StatelessWidget {
       },
     );
   }
+
+
+
+
+
+
+
+
 
   Widget buildHomeCategoryList({
     required String type,
@@ -235,6 +266,7 @@ class HomeScreen extends StatelessWidget {
               scrollDirection: axis,
               padding: EdgeInsets.symmetric(horizontal: 10),
               itemBuilder: (context, index) => categoryItem(
+                context,
                 list[index],
                 height: height,
                 width: width,

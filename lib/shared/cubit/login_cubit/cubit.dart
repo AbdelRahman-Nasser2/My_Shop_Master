@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_print
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -29,7 +28,7 @@ class AuthCubit extends Cubit<AuthStates> {
       'email': email,
       'password': password,
     }).then((value) {
-      print(value.data);
+      // print(value.data);
       emit(LoginSuccessState(loginModel!));
     }).catchError((error) {
       emit(LoginErrorState(error.toString()));

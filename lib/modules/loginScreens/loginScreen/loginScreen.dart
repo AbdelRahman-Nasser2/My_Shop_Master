@@ -237,12 +237,10 @@
 // }
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/layout/homeLayoutScreen.dart';
 import 'package:shop/modules/loginScreens/signup/signup.dart';
@@ -256,28 +254,26 @@ import '../../../shared/components/components.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AuthCubit(),
       child: BlocConsumer<AuthCubit, AuthStates>(
         listener: (context, state) {
-          if(state is LoginSuccessState){
-
-            if(state.loginModel.status == true){
-              CacheHelper.saveData(key: "token", value: state.loginModel.data!.token).then((value) {
-                token=CacheHelper.get(key: "token");
-                showToast(state: ToastStates.SUCCESS,text: state.loginModel.message);
+          if (state is LoginSuccessState) {
+            if (state.loginModel.status == true) {
+              CacheHelper.saveData(
+                      key: "token", value: state.loginModel.data!.token)
+                  .then((value) {
+                token = CacheHelper.get(key: "token");
+                showToast(
+                    state: ToastStates.SUCCESS, text: state.loginModel.message);
                 navigateAndFinish(context, const HomeLayoutScreen());
-              });}
-            else{
+              });
+            } else {
               showToast(
-                  state: ToastStates.ERROR,
-                  text: state.loginModel.message);
+                  state: ToastStates.ERROR, text: state.loginModel.message);
             }
-
-
           }
         },
         builder: (context, state) {
@@ -333,7 +329,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                       Container(
                         // width: 300,
-                        height: 50,
+                        height: 60,
                         width: double.infinity,
 
                         child: text(
@@ -352,8 +348,9 @@ class LoginScreen extends StatelessWidget {
                           hint: "البريد الإلكترونى",
                           label: " البريد الإلكترونى",
                           suffix: SvgPicture.asset(
-                              "assets/images/icons&logos/Mail.svg",
-                          fit: BoxFit.none,),
+                            "assets/images/icons&logos/Mail.svg",
+                            fit: BoxFit.none,
+                          ),
                           prefix: null,
                           // Image.asset("assets/images/icons&logo/Mail.png")
                         ),
@@ -364,21 +361,19 @@ class LoginScreen extends StatelessWidget {
                       Container(
                         // width: 300,
                         width: double.infinity,
-                        height: 50,
+                        height: 60,
                         child: text(
                           controller: passwordController,
                           input: TextInputType.visiblePassword,
-                          validate:(String? value) {
+                          validate: (String? value) {
                             if (value!.isEmpty) {
-                              return "هذا الحقل مطلوب";
+                              return "this field is required";
                             }
                             return null;
-
-
                           },
                           hint: "كلمة المرور",
                           label: " كلمة المرور",
-                          onSubmit:  (value) async {
+                          onSubmit: (value) async {
                             if (formKey.currentState!.validate()) {
                               loginCubit.logIn(context,
                                   email: emailController.text,
@@ -386,15 +381,17 @@ class LoginScreen extends StatelessWidget {
                             }
                           },
                           password: loginCubit.isPassword,
-                          prefixPressed: (){loginCubit.changeEye();},
+                          prefixPressed: () {
+                            loginCubit.changeEye();
+                          },
                           prefix: Padding(
                             padding: EdgeInsets.only(top: 25),
                             child: Icon(loginCubit.prefix),
                           ),
                           suffix: SvgPicture.asset(
-
-                              "assets/images/icons&logos/Lock.svg",
-                          fit: BoxFit.none,),
+                            "assets/images/icons&logos/Lock.svg",
+                            fit: BoxFit.none,
+                          ),
                         ),
                       ),
 
@@ -420,7 +417,6 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
 
-
                       //flutter run -d chrome --web-renderer html
 
                       SizedBox(
@@ -431,7 +427,7 @@ class LoginScreen extends StatelessWidget {
                           condition: state is! LoginLoadingState,
                           builder: (context) => startButton(
                               text: "ابدا",
-                              ontap:  () async {
+                              ontap: () async {
                                 if (formKey.currentState!.validate()) {
                                   loginCubit.logIn(context,
                                       email: emailController.text,

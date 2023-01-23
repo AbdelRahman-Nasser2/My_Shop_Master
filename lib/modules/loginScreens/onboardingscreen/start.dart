@@ -64,10 +64,10 @@ class _StartPageState extends State<StartPage> {
               startButton(
                   text: "ابدا",
                   ontap: () {
-                    CacheHelper.saveData(key: "start", value: true).then((value) {
-                      start=CacheHelper.get(key: "start");
+                    CacheHelper.saveData(key: "start", value: true)
+                        .then((value) {
+                      start = CacheHelper.get(key: "start");
                       navigateAndFinish(context, LoginScreen());
-
                     });
                   }),
             ],

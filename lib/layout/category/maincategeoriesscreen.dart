@@ -52,6 +52,7 @@ class MainCategoryScreen extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     itemBuilder: (context, index) => categoryItem(
+                      context,
                       categories[index],
                       fontTittleSize: 20,
                       height: 180,
