@@ -223,6 +223,7 @@ Widget buildHomeProductItem(
         children: [
           InkWell(
             onTap: () {
+              AppCubit.get(context).getProductDataById(model.id,context);
               navigateTo(
                   context,
                   ProductDetails(
@@ -446,14 +447,15 @@ Widget categoryItem(
   double? width,
   double? height,
   double fontTittleSize = 18,
-  required Function()? itemOnTab,
 }) =>
     InkWell(
       onTap: () {
+        AppCubit.get(context).getCategoryProductsById(model.id);
+
         navigateTo(
             context,
             CategoryProducts(
-              id: model.id,
+              // id: model.id,
               categoryName: model.name,
             ));
       },

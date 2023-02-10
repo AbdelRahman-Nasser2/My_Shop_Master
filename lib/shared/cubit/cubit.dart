@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:shop/models/CategoryProductsModel.dart';
+import 'package:shop/models/cartsModel.dart';
 import 'package:shop/models/categoryModel.dart';
 import 'package:shop/models/changefavorites.dart';
 import 'package:shop/models/favoritesmodel.dart';
@@ -21,7 +22,6 @@ import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/states.dart';
 import 'package:shop/shared/network/remote/end_points.dart';
 import 'package:shop/shared/style/colors.dart';
-
 import '../../models/productdetailsmodel.dart';
 import '../../modules/homelayoutscreens/notification/notificationscreen.dart';
 import '../../modules/homelayoutscreens/profile/profilescreen.dart';
@@ -169,19 +169,81 @@ class AppCubit extends Cubit<AppStates> {
   //       ],
   //     );
 
-  Widget cartsIcon() => CircleAvatar(
-        radius: 20,
-        backgroundColor: Colors.white,
-        child: IconButton(
-          iconSize: 20,
-          onPressed: () {},
-          icon: Icon(
-            Icons.shopping_cart,
-            size: 20,
-            color: HexColor("#F99100"),
+  Widget cartsIcon(context) => InkWell(
+    onTap: (){
+      getCartsData();
+      showDialog(
+          useRootNavigator: false,
+          context: context,
+          builder: (context)=>Center(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 20,vertical: 40),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(28),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                        blurRadius: 2,
+                        blurStyle: BlurStyle.outer,
+                        spreadRadius: 5)
+                  ],
+                ),
+                child: ListView.separated(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    itemBuilder: (context, index) =>Container(
+                      height: 20,
+                   ),
+                    separatorBuilder: (context, index) => SizedBox(
+                     height: 5,
+                    ),
+                    itemCount: cartsDataModel!.data!.cartItems!.length),
+      ),
+            ),
+          ));
+    },
+    child: CircleAvatar(
+      radius: 25,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: Colors.transparent,
+            child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.shopping_cart,
+                    size: 25,
+                    color: HexColor("#F99100"),
+                  ),
+                ),
           ),
-        ),
-      );
+          (cartsDataModel!.data!.cartItems!.isNotEmpty)?
+          Positioned.directional(
+            textDirection: TextDirection.rtl,
+            // start: 20,
+            end: 28,
+            // top: 2,
+            child: CircleAvatar(
+              radius: 10,
+              backgroundColor: Colors.red,
+              child: Text(cartsDataModel!.data!.cartItems!.length.toString()),
+            ),
+          )
+              :SizedBox(
+            height: 0,
+            width: 0,
+          )
+        ],
+      ),
+    ),
+  );
 
   Widget cartIconAdd() => InkWell(
         onTap: () {},
@@ -216,7 +278,7 @@ class AppCubit extends Cubit<AppStates> {
   var searchController = TextEditingController();
 
   Widget normalAppBar(
-    BuildContext context, {
+     context, {
     double height = 150,
     double opacity = 1,
     required bool? showSearch,
@@ -238,7 +300,7 @@ class AppCubit extends Cubit<AppStates> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  cartsIcon(),
+                  cartsIcon(context),
                   SizedBox(
                     width: 10,
                   ),
@@ -388,7 +450,7 @@ fav=favt?Colors.red:Colors.white;
         favorites.addAll({
           element.id!:element.inFavorites!});
       });
-      print(favorites.toString());
+
       emit(CategoryProductsGetDataSuccess());
     }).catchError((error) {
       if (kDebugMode) {
@@ -409,7 +471,7 @@ fav=favt?Colors.red:Colors.white;
       token: token,
     ).then((value) {
       profileModel = ProfileModel.fromJson(value.data);
-
+print(profileModel?.data!.phone);
       emit(UserDataSuccess());
     }).catchError((error) {
       emit(UserDataError(error));
@@ -448,10 +510,10 @@ fav=favt?Colors.red:Colors.white;
       //   favorites.addAll({
       //     element.id!:element.inFavorites!});
       // });
-      if (kDebugMode) {
-        print('fave ${favoritesModel!.data!.data![1].product!.id}');
-        print(favoritesModel!.data!.data![1].id);
-      }
+      // if (kDebugMode) {
+      //   print('fave ${favoritesModel!.data!.data![1].product!.id}');
+      //   print(favoritesModel!.data!.data![1].id);
+      // }
       emit(FavoritesDataSuccess());
     }).catchError((error) {
       print(error);
@@ -476,6 +538,8 @@ fav=favt?Colors.red:Colors.white;
       if(!changeFavoritesModel!.status!){
         favorites[id] = !favorites[id]!;
 
+      }else{
+        getFavoritesData();
       }
 
       emit(AddOrDeleteFavoritesSuccess(changeFavoritesModel));
@@ -487,9 +551,36 @@ fav=favt?Colors.red:Colors.white;
   }
 
 
+  CartsDataModel? cartsDataModel;
+  void getCartsData() {
+    emit(CartsDataLoading());
+
+    DioHelper.getData(
+      url: CARTS,
+      token: token,
+    ).then((value) {
+      cartsDataModel = CartsDataModel.fromJson(value.data);
+
+      // favoritesModel?.data!.data!.forEach((element)
+      // {
+      //   favorites.addAll({
+      //     element.id!:element.inFavorites!});
+      // });
+      // if (kDebugMode) {
+      //   print(cartsDataModel!.status);
+      //   print(cartsDataModel!.data!.cartItems![1].product!.name);
+      // }
+      emit(CartsDataSuccess());
+    }).catchError((error) {
+      print(error);
+
+      emit(CartsDataError(error));
+    });
+  }
+
 
   ProductDetailsModel? productDetailsModel;
-  void getProductDataById(int? id) {
+  void getProductDataById(int? id,context) {
     emit(ProductGetDataLoading());
 
     DioHelper.getData(
@@ -497,7 +588,7 @@ fav=favt?Colors.red:Colors.white;
       token: token,
     ).then((value) async {
       productDetailsModel = ProductDetailsModel.fromJson(value.data);
-
+// navigateTo(context, ProductDetails(id));
       // if (kDebugMode) {
       //   print(productDetailsModel!.data!.name);
       // }

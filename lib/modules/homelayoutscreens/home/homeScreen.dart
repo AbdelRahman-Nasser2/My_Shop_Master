@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/layout/category/maincategeoriesscreen.dart';
-import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
+import 'package:shop/modules/showall/showall.dart';
 import '../../../shared/components/components.dart';
 import '../../../shared/cubit/cubit.dart';
 import '../../../shared/cubit/states.dart';
@@ -21,7 +21,11 @@ class HomeScreen extends StatelessWidget {
           if(!states.model!.status!){
             showToast(state: ToastStates.ERROR,text: states.model!.message!);
           }else{
-            showToast(state: ToastStates.SUCCESS,text: states.model!.message!);
+            if(states.model!.message=='تمت الإضافة بنجاح')
+          {  showToast(state: ToastStates.SUCCESS,text: states.model!.message!);
+          }else{
+              showToast(state: ToastStates.ERROR,text: states.model!.message!);
+            }
 
           }
         }
@@ -166,11 +170,11 @@ class HomeScreen extends StatelessWidget {
                     axis: Axis.horizontal,
                     allShow_OnTap: () {
                       navigateTo(context, MainCategoryScreen());
+
                     },
                     type: 'التصنيفات',
                     list: categories,
                     listCount: 3,
-                    itemOnTab: () {},
                   ),
                   SizedBox(
                     height: 20,
@@ -180,7 +184,8 @@ class HomeScreen extends StatelessWidget {
                       list: products,
                       cartIconAdd: cubit.cartIconAdd(),
                       allShow_onTap: () {
-                        CacheHelper.removeData(key: "token");
+                        navigateTo(context, ShowAllProducts(categoryName: 'أفضل العروض'));
+                        // CacheHelper.removeData(key: "token");
                         // CacheHelper.removeAllData();
                         // CacheHelper.removeData(key: "onBoarding");
                         // CacheHelper.removeData(key: "start");
@@ -189,9 +194,12 @@ class HomeScreen extends StatelessWidget {
                     height: 20,
                   ),
                   buildHomeProductList(
-                    type: 'الأكثر مبيعاً  ',
+                    type: 'الأكثر مبيعاً ',
                     list: products,
-                    allShow_onTap: () {},
+                    allShow_onTap: () {
+                      navigateTo(context, ShowAllProducts(categoryName: 'الأكثر مبيعا'));
+
+                    },
                     cartIconAdd: cubit.cartIconAdd(),
                   ),
                 ],
@@ -223,7 +231,6 @@ class HomeScreen extends StatelessWidget {
     double sizedBoxWidth = 10,
     double sizedBoxHeight = 10,
     bool showTextAll = true,
-    required Function()? itemOnTab,
   }) =>
       Column(
         children: [
@@ -270,7 +277,6 @@ class HomeScreen extends StatelessWidget {
                 list[index],
                 height: height,
                 width: width,
-                itemOnTab: itemOnTab,
               ),
               separatorBuilder: (context, index) => SizedBox(
                 width: sizedBoxWidth,
