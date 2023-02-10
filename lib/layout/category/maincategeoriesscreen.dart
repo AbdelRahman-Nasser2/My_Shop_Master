@@ -56,7 +56,6 @@ class MainCategoryScreen extends StatelessWidget {
                       categories[index],
                       fontTittleSize: 20,
                       height: 180,
-                      itemOnTab: () {},
                     ),
                     separatorBuilder: (context, index) => SizedBox(
                       height: 30,

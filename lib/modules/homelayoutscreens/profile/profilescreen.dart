@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-// ignore_for_file: prefer_const_constructors
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -15,171 +14,168 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getUserData(),
-      child: BlocConsumer<AppCubit, AppStates>(
-        listener: (BuildContext context, AppStates states) {},
-        builder: (BuildContext context, AppStates states) {
-          AppCubit cubit = AppCubit.get(context);
-          return ConditionalBuilder(
-            condition: states is! UserDataLoading,
-            builder: (BuildContext context) {
-              List<ProfileItemModel> profileItems = [
-                ProfileItemModel("بياناتى", Icon(Icons.edit), () => null),
-                ProfileItemModel(
-                    "منتجاتي",
-                    SvgPicture.asset('assets/images/icons&logos/buy.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "بيانات المتجر",
-                    SvgPicture.asset('assets/images/icons&logos/bag.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "طلباتي",
-                    SvgPicture.asset(
-                        'assets/images/icons&logos/ic_shopping_cart.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "إتصل بنا",
-                    SvgPicture.asset('assets/images/icons&logos/multiple.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "خطط الاشتراك",
-                    SvgPicture.asset('assets/images/icons&logos/money.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "سياسة البيع",
-                    SvgPicture.asset('assets/images/icons&logos/privacy.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "أسئلة شائعة",
-                    SvgPicture.asset('assets/images/icons&logos/help.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "تتبع طلبك",
-                    SvgPicture.asset('assets/images/icons&logos/tracking.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "قم بتقييمنا",
-                    SvgPicture.asset('assets/images/icons&logos/like.svg'),
-                    () => null),
-                ProfileItemModel(
-                    "تسجيل خروج",
-                    SvgPicture.asset('assets/images/icons&logos/logout.svg'),
-                    (){
-                      CacheHelper.removeAllData().then((value) {
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (BuildContext context, AppStates states) {},
+      builder: (BuildContext context, AppStates states) {
+        AppCubit cubit = AppCubit.get(context);
+        return ConditionalBuilder(
+          condition: states is! UserDataLoading,
+          builder: (BuildContext context) {
+            List<ProfileItemModel> profileItems = [
+              ProfileItemModel("بياناتى", Icon(Icons.edit), () => null),
+              ProfileItemModel(
+                  "منتجاتي",
+                  SvgPicture.asset('assets/images/icons&logos/buy.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "بيانات المتجر",
+                  SvgPicture.asset('assets/images/icons&logos/bag.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "طلباتي",
+                  SvgPicture.asset(
+                      'assets/images/icons&logos/ic_shopping_cart.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "إتصل بنا",
+                  SvgPicture.asset('assets/images/icons&logos/multiple.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "خطط الاشتراك",
+                  SvgPicture.asset('assets/images/icons&logos/money.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "سياسة البيع",
+                  SvgPicture.asset('assets/images/icons&logos/privacy.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "أسئلة شائعة",
+                  SvgPicture.asset('assets/images/icons&logos/help.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "تتبع طلبك",
+                  SvgPicture.asset('assets/images/icons&logos/tracking.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "قم بتقييمنا",
+                  SvgPicture.asset('assets/images/icons&logos/like.svg'),
+                  () => null),
+              ProfileItemModel(
+                  "تسجيل خروج",
+                  SvgPicture.asset('assets/images/icons&logos/logout.svg'),
+                  (){
+                    CacheHelper.removeAllData().then((value) {
 
-                      });
-                      // navigateAndFinish(context, OnBoardingScreen());
-                    }),
-              ];
-              return Scaffold(
-                appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(390),
-                  child: cubit.normalAppBar(
-                    context,
-                    height: 286,
-                    showSearch: false,
-                    addChild: true,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 140,
-                          height: 140,
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.fromBorderSide(BorderSide(
-                                          color: Colors.white, width: 3))),
-                                  child: CircleAvatar(
-                                    radius: 60,
-                                    backgroundImage: (cubit
-                                                .profileModel!.data!.image ==
-                                            'https://student.valuxapps.com/storage/uploads/users/w4yr38k4bR_1669077970.jpeg')
-                                        ? NetworkImage(
-                                            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png')
-                                        : NetworkImage(
-                                            '${cubit.profileModel!.data!.image}'),
-                                  ),
+                    });
+                    // navigateAndFinish(context, OnBoardingScreen());
+                  }),
+            ];
+            return Scaffold(
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(390),
+                child: cubit.normalAppBar(
+                  context,
+                  height: 300,
+                  showSearch: false,
+                  addChild: true,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 140,
+                        height: 140,
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.fromBorderSide(BorderSide(
+                                        color: Colors.white, width: 3))),
+                                child: CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: (cubit
+                                              .profileModel!.data!.image ==
+                                          'https://student.valuxapps.com/storage/uploads/users/w4yr38k4bR_1669077970.jpeg')
+                                      ? NetworkImage(
+                                          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png')
+                                      : NetworkImage(
+                                          '${cubit.profileModel!.data!.image}'),
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 20,
-                                  child: Icon(
-                                    Icons.edit,
-                                    size: 30,
-                                    color: HexColor('#1E55A2'),
-                                  ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 20,
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 30,
+                                  color: HexColor('#1E55A2'),
                                 ),
-                              )
-                            ],
-                          ),
+                              ),
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          height: 5,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        '${cubit.profileModel!.data!.name}',
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
-                        Text(
-                          '${cubit.profileModel!.data!.name}',
-                          maxLines: 1,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        '${cubit.profileModel!.data!.email}',
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          '${cubit.profileModel!.data!.email}',
-                          maxLines: 1,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 13,
-                          ),
-                        ),
+                      ),
+                    ],
+                  ),
+                  expectSearch: Expanded(
+                    child: Row(
+                      // mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SvgPicture.asset(
+                            'assets/images/icons&logos/chat.svg'),
                       ],
                     ),
-                    expectSearch: Expanded(
-                      child: Row(
-                        // mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SvgPicture.asset(
-                              'assets/images/icons&logos/chat.svg'),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
-                body: ListView.separated(
-                  padding:
-                      EdgeInsets.only(top: 15, right: 5, left: 5, bottom: 10),
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) =>
-                      profileItem(profileItems[index]),
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: 10,
-                  ),
-                  itemCount: profileItems.length,
+              ),
+              body: ListView.separated(
+                padding:
+                    EdgeInsets.only(top: 15, right: 5, left: 5, bottom: 10),
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) =>
+                    profileItem(profileItems[index]),
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 10,
                 ),
-              );
-            },
-            fallback: (BuildContext context) {
-              return Center(child: CircularProgressIndicator());
-            },
-          );
-        },
-      ),
+                itemCount: profileItems.length,
+              ),
+            );
+          },
+          fallback: (BuildContext context) {
+            return Center(child: CircularProgressIndicator());
+          },
+        );
+      },
     );
   }
 

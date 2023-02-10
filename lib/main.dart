@@ -6,7 +6,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop/layout/homeLayoutScreen.dart';
+import 'package:shop/layout/homelayoutscreen.dart';
 import 'package:shop/modules/loginScreens/loginScreen/loginScreen.dart';
 import 'package:shop/modules/loginScreens/onboardingscreen/onboardingscreen.dart';
 import 'package:shop/modules/loginScreens/onboardingscreen/start.dart';
@@ -33,6 +33,7 @@ void main() async {
   DioHelper.init();
   await CacheHelper.init();
   token = CacheHelper.get(key: "token");
+  // CacheHelper.removeAllData();
   onBoarding = CacheHelper.get(key: "onBoarding");
   start = CacheHelper.get(key: "start");
   // print(token);

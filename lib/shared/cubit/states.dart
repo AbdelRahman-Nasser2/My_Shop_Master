@@ -77,6 +77,18 @@ class AddOrDeleteFavoritesError extends AppStates {
   AddOrDeleteFavoritesError(this.error);
 }
 
+
+
+class CartsDataLoading extends AppStates {}
+
+class CartsDataSuccess extends AppStates {}
+
+class CartsDataError extends AppStates {
+  final dynamic error;
+
+  CartsDataError(this.error);
+}
+
 class ProductGetDataLoading extends AppStates {}
 
 class ProductGetDataSuccess extends AppStates {}
@@ -86,6 +98,7 @@ class ProductGetDataError extends AppStates {
 
   ProductGetDataError(this.error);
 }
+
 
 class CategoryProductsGetDataLoading extends AppStates {}
 

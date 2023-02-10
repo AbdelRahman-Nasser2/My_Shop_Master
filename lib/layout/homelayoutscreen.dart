@@ -182,7 +182,10 @@ class HomeLayoutScreen extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => AppCubit()
         ..getHomeData()
-        ..getCategoryData(),
+        ..getCategoryData()
+      ..getFavoritesData()
+      ..getCartsData()
+      ..getUserData(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (BuildContext context, AppStates states) {},
         builder: (BuildContext context, AppStates states) {
@@ -231,7 +234,6 @@ class HomeLayoutScreen extends StatelessWidget {
     );
   }
 
-  @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

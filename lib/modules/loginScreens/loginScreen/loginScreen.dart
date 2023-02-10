@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 // import 'package:flutter/material.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:myschool/layout/homeLayoutScreen.dart';
+// import 'package:myschool/layout/homelayoutscreen.dart';
 // import 'package:myschool/modules/signup/signup.dart';
 // import 'package:myschool/shared/components/components.dart';
 
@@ -242,7 +242,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:shop/layout/homeLayoutScreen.dart';
+import 'package:shop/layout/homelayoutscreen.dart';
 import 'package:shop/modules/loginScreens/signup/signup.dart';
 import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/login_cubit/cubit.dart';

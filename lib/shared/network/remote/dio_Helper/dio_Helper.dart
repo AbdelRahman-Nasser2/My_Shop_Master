@@ -41,6 +41,8 @@ class DioHelper {
   //   );
   // }
 
+
+
   static Future<Response> getData({
     required String url,
     Map<String, dynamic>? queryParameters,
@@ -68,6 +70,8 @@ class DioHelper {
     }
   }
 
+
+
   static Future<Response> postsData({
     required String url,
     required Map<String, dynamic> data,
@@ -81,9 +85,9 @@ class DioHelper {
     };
     try {
       final Response response = await dio.post(url, data: data);
-      if (kDebugMode) {
-        print(response);
-      }
+      // if (kDebugMode) {
+      //   print(response);
+      // }
       return response;
     } on DioError catch (e) {
       if (kDebugMode) {
@@ -92,6 +96,8 @@ class DioHelper {
       rethrow;
     }
   }
+
+
 
   static Future<Response> putData({
     required String url,
@@ -125,6 +131,8 @@ class DioHelper {
     // );
   }
 
+
+
   //This Function That's Used to Update Some Date based on URL(End Points) and Send what's you need to Update as Map.
   static Future<Response> patchData({
     required String url,
@@ -143,6 +151,8 @@ class DioHelper {
       data: data,
     );
   }
+
+
 
   static Future<Response> deleteData({
     required String url,

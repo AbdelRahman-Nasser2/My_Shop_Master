@@ -14,51 +14,48 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getFavoritesData(),
-      child: BlocConsumer<AppCubit, AppStates>(
-        listener: (BuildContext context, AppStates states) {},
-        builder: (BuildContext context, AppStates states) {
-          AppCubit cubit = AppCubit.get(context);
-          return Scaffold(
-              appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(100),
-                child: cubit.normalAppBar(context,
-                    showSearch: true, addChild: false, height: 130),
-              ),
-              body: ConditionalBuilder(
-                condition: states is! FavoritesDataLoading,
-                builder: (BuildContext context) {
-                  return GridView.builder(
-                    physics: physics,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 16),
-                    itemCount: cubit.favoritesModel!.data!.data!.length,
-                    clipBehavior: Clip.antiAlias,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 25,
-                            crossAxisSpacing: 0,
-                        ),
-                    itemBuilder: (context, index) => favoriteItem(context,
-                        cubit.favoritesModel!.data!.data![index],
-                        cubit.cartIconAdd(),
-                      onFavTap: (){
-                        cubit.addOrDeleteFavorites(id: cubit.favoritesModel!.data!.data![index].product!.id!);
-                      }
-                    ),
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (BuildContext context, AppStates states) {},
+      builder: (BuildContext context, AppStates states) {
+        AppCubit cubit = AppCubit.get(context);
+        return Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(100),
+              child: cubit.normalAppBar(context,
+                  showSearch: true, addChild: false, height: 130),
+            ),
+            body: ConditionalBuilder(
+              condition: states is! FavoritesDataLoading,
+              builder: (BuildContext context) {
+                return GridView.builder(
+                  physics: physics,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 24, horizontal: 16),
+                  itemCount: cubit.favoritesModel!.data!.data!.length,
+                  clipBehavior: Clip.antiAlias,
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 25,
+                          crossAxisSpacing: 0,
+                      ),
+                  itemBuilder: (context, index) => favoriteItem(context,
+                      cubit.favoritesModel!.data!.data![index],
+                      cubit.cartIconAdd(),
+                    onFavTap: (){
+                      cubit.addOrDeleteFavorites(id: cubit.favoritesModel!.data!.data![index].product!.id!);
+                    }
+                  ),
 
-                  );
-                },
-                fallback: (BuildContext context) {
-                  return const Center(child: CircularProgressIndicator());
-                },
-              )
-          );
-        },
-      ),
+                );
+              },
+              fallback: (BuildContext context) {
+                return const Center(child: CircularProgressIndicator());
+              },
+            )
+        );
+      },
     );
   }
 
@@ -77,6 +74,7 @@ class FavoritesScreen extends StatelessWidget {
           children: [
             InkWell(
               onTap:  (){
+                AppCubit.get(context).getProductDataById(model.product!.id,context);
                 navigateTo(
                     context,
                     ProductDetails(model.product!.id!)

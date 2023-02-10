@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/models/CategoryProductsModel.dart';
-import 'package:shop/models/productModel.dart';
+import 'package:shop/models/homemodel.dart';
 import 'package:shop/modules/productdetails/productdetails.dart';
 import 'package:shop/shared/components/components.dart';
 import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
 
-class CategoryProducts extends StatelessWidget {
-  // final int id;
+class ShowAllProducts extends StatelessWidget {
   final String categoryName;
 
-  const CategoryProducts(
+  const ShowAllProducts(
       {Key? key,
         // required this.id,
         required this.categoryName})
@@ -33,7 +32,7 @@ class CategoryProducts extends StatelessWidget {
               context,
               showSearch: true,
               addChild: true,
-              height: 140,
+              height: 130,
               child: Text(
                 categoryName,
                 style: const TextStyle(
@@ -47,61 +46,61 @@ class CategoryProducts extends StatelessWidget {
             condition: states is! CategoryProductsGetDataLoading,
             builder: (BuildContext context) {
               return
-              //   GridView.custom(
-              //   physics: physics,
-              //                 shrinkWrap: true,
-              //                 padding: const EdgeInsets.symmetric(
-              //                     vertical: 24, horizontal: 16),
-              //                 clipBehavior: Clip.antiAlias,
-              //   gridDelegate: SliverWovenGridDelegate.count(
-              //     crossAxisCount: 2,
-              //     mainAxisSpacing: 16,
-              //     crossAxisSpacing:0,
-              //     pattern: [
-              //       const WovenGridTile(2/2,crossAxisRatio: 0.9),
-              //       const WovenGridTile(
-              //         5/ 6,
-              //         crossAxisRatio: 0.9,
-              //         // alignment: AlignmentDirectional.centerEnd,
-              //       ),
-              //     ],
-              //   ),
-              //   childrenDelegate: SliverChildBuilderDelegate(
-              //         (context, index) => categoryProductsItem(
-              //     context,
-              //     cubit.categoryProductsModel!.data!.data![index],
-              //
-              //     cubit.cartIconAdd(),
-              //   onFavTap: (){
-              //       cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
-              //   },
-              //   ff:  cubit.categoryProductsModel!.data!.data![index].inFavorites!,
-              // ),
-              //   ),
-              // );
+                //   GridView.custom(
+                //   physics: physics,
+                //                 shrinkWrap: true,
+                //                 padding: const EdgeInsets.symmetric(
+                //                     vertical: 24, horizontal: 16),
+                //                 clipBehavior: Clip.antiAlias,
+                //   gridDelegate: SliverWovenGridDelegate.count(
+                //     crossAxisCount: 2,
+                //     mainAxisSpacing: 16,
+                //     crossAxisSpacing:0,
+                //     pattern: [
+                //       const WovenGridTile(2/2,crossAxisRatio: 0.9),
+                //       const WovenGridTile(
+                //         5/ 6,
+                //         crossAxisRatio: 0.9,
+                //         // alignment: AlignmentDirectional.centerEnd,
+                //       ),
+                //     ],
+                //   ),
+                //   childrenDelegate: SliverChildBuilderDelegate(
+                //         (context, index) => categoryProductsItem(
+                //     context,
+                //     cubit.categoryProductsModel!.data!.data![index],
+                //
+                //     cubit.cartIconAdd(),
+                //   onFavTap: (){
+                //       cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
+                //   },
+                //   ff:  cubit.categoryProductsModel!.data!.data![index].inFavorites!,
+                // ),
+                //   ),
+                // );
 
-                  GridView.builder(
-                    physics: physics,
-                    shrinkWrap: false,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 16),
-                    itemCount: cubit.categoryProductsModel?.data!.data!.length,
-                    gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 25,
-                        crossAxisSpacing: 0)
-                    ,
-                    itemBuilder: (context, index) => categoryProductsItem(
-                        context,
-                        cubit.categoryProductsModel!.data!.data![index]  ,
+                GridView.builder(
+                  physics: physics,
+                  shrinkWrap: false,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 24, horizontal: 16),
+                  itemCount: cubit.homeModel!.data.products.length ,
+                  gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 25,
+                      crossAxisSpacing: 0)
+                  ,
+                  itemBuilder: (context, index) => productsItem(
+                    context,
+                    cubit.homeModel!.data.products[index],
 
-                      cubit.cartIconAdd(),
+                    cubit.cartIconAdd(),
                     onFavTap: (){
-                        cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
+                      cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
                     },
                   ),
-              );
+                );
             },
             fallback: (BuildContext context) {
               return const Center(child: CircularProgressIndicator());
@@ -113,14 +112,14 @@ class CategoryProducts extends StatelessWidget {
     );
   }
 
-  Widget categoryProductsItem(context,
-      ProductsData model,
-    Widget? cartIconAdd, {
-    Function()? onFavTap,
-  }) {
+  Widget productsItem(context,
+      ProductModel model,
+      Widget? cartIconAdd, {
+        Function()? onFavTap,
+      }) {
     return SizedBox(
       width: 130,
-      height: (model.discount!=0)?180:150,
+      // height: 180,
       child: Stack(
         children: [
           InkWell(
@@ -130,7 +129,7 @@ class CategoryProducts extends StatelessWidget {
                   context,
                   ProductDetails(model.id!)
               );
-              },
+            },
             child: Container(
               width: 130,
               // height: 186,
@@ -194,27 +193,27 @@ class CategoryProducts extends StatelessWidget {
                         ],
                       ),
                       if(model.discount != 0)
-                            Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text(
-                            "جنيه",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal),
-                          ),
-                          Text(
-                            model.oldPrice.toString(),
-                            style: const TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ],
-                      ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Text(
+                              "جنيه",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              model.oldPrice.toString(),
+                              style: const TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ],
+                        ),
                     ],
                   )
                 ],

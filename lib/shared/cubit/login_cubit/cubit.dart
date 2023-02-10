@@ -12,7 +12,7 @@ import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart
 import 'package:shop/shared/network/remote/dio_Helper/dio_Helper.dart';
 import 'package:shop/shared/network/remote/end_points.dart';
 
-import '../../../layout/homeLayoutScreen.dart';
+import '../../../layout/homelayoutscreen.dart';
 import '../../components/components.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
@@ -47,11 +47,18 @@ class AuthCubit extends Cubit<AuthStates> {
    }
 
 
-LoginModel?loginModel;
-  void logIn(context, {required String email, required String password}) {
+LoginModel? loginModel;
+  void logIn(
+      context,
+      {required String email, required String password
+      }) {
     emit(LoginLoadingState());
     DioHelper.postsData(
-        url: LOGIN, data: {'email': email, 'password': password}).then((value) {
+        url: LOGIN, data: {
+          'email': email,
+          'password': password
+        }).then(
+            (value) {
       loginModel = LoginModel.fromJson(value.data);
 
 
