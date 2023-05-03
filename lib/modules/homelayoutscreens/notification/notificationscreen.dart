@@ -3,7 +3,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/models/notificationmodel.dart';
 import 'package:shop/shared/cubit/cubit.dart';
@@ -14,40 +13,37 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getNotificationData(),
-      child: BlocConsumer<AppCubit, AppStates>(
-        listener: (BuildContext context, AppStates states) {},
-        builder: (BuildContext context, AppStates states) {
-          AppCubit cubit = AppCubit.get(context);
-          return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(100),
-              child: cubit.normalAppBar(context,
-                  showSearch: true, addChild: false, height: 130),
-            ),
-            body: ConditionalBuilder(
-              condition: states is! NotificationDataLoading,
-              builder: (BuildContext context) {
-                return ListView.separated(
-                  padding:
-                      EdgeInsets.only(top: 15, right: 5, left: 5, bottom: 10),
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) => notificationItem(
-                      cubit.notificationModel!.data!.data![index]),
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: 10,
-                  ),
-                  itemCount: cubit.notificationModel!.data!.data!.length,
-                );
-              },
-              fallback: (BuildContext context) {
-                return Center(child: CircularProgressIndicator());
-              },
-            ),
-          );
-        },
-      ),
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (BuildContext context, AppStates states) {},
+      builder: (BuildContext context, AppStates states) {
+        AppCubit cubit = AppCubit.get(context);
+        return Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(100),
+            child: cubit.normalAppBar(context,
+                showSearch: true, addChild: false, height: 130),
+          ),
+          body: ConditionalBuilder(
+            condition: states is! NotificationDataLoading,
+            builder: (BuildContext context) {
+              return ListView.separated(
+                padding:
+                    EdgeInsets.only(top: 15, right: 5, left: 5, bottom: 10),
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) => notificationItem(
+                    cubit.notificationModel!.data!.data![index]),
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 10,
+                ),
+                itemCount: cubit.notificationModel!.data!.data!.length,
+              );
+            },
+            fallback: (BuildContext context) {
+              return Center(child: CircularProgressIndicator());
+            },
+          ),
+        );
+      },
     );
   }
 

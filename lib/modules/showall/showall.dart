@@ -15,8 +15,8 @@ class ShowAllProducts extends StatelessWidget {
 
   const ShowAllProducts(
       {Key? key,
-        // required this.id,
-        required this.categoryName})
+      // required this.id,
+      required this.categoryName})
       : super(key: key);
 
   @override
@@ -46,89 +46,85 @@ class ShowAllProducts extends StatelessWidget {
             condition: states is! CategoryProductsGetDataLoading,
             builder: (BuildContext context) {
               return
-                //   GridView.custom(
-                //   physics: physics,
-                //                 shrinkWrap: true,
-                //                 padding: const EdgeInsets.symmetric(
-                //                     vertical: 24, horizontal: 16),
-                //                 clipBehavior: Clip.antiAlias,
-                //   gridDelegate: SliverWovenGridDelegate.count(
-                //     crossAxisCount: 2,
-                //     mainAxisSpacing: 16,
-                //     crossAxisSpacing:0,
-                //     pattern: [
-                //       const WovenGridTile(2/2,crossAxisRatio: 0.9),
-                //       const WovenGridTile(
-                //         5/ 6,
-                //         crossAxisRatio: 0.9,
-                //         // alignment: AlignmentDirectional.centerEnd,
-                //       ),
-                //     ],
-                //   ),
-                //   childrenDelegate: SliverChildBuilderDelegate(
-                //         (context, index) => categoryProductsItem(
-                //     context,
-                //     cubit.categoryProductsModel!.data!.data![index],
-                //
-                //     cubit.cartIconAdd(),
-                //   onFavTap: (){
-                //       cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
-                //   },
-                //   ff:  cubit.categoryProductsModel!.data!.data![index].inFavorites!,
-                // ),
-                //   ),
-                // );
+                  //   GridView.custom(
+                  //   physics: physics,
+                  //                 shrinkWrap: true,
+                  //                 padding: const EdgeInsets.symmetric(
+                  //                     vertical: 24, horizontal: 16),
+                  //                 clipBehavior: Clip.antiAlias,
+                  //   gridDelegate: SliverWovenGridDelegate.count(
+                  //     crossAxisCount: 2,
+                  //     mainAxisSpacing: 16,
+                  //     crossAxisSpacing:0,
+                  //     pattern: [
+                  //       const WovenGridTile(2/2,crossAxisRatio: 0.9),
+                  //       const WovenGridTile(
+                  //         5/ 6,
+                  //         crossAxisRatio: 0.9,
+                  //         // alignment: AlignmentDirectional.centerEnd,
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   childrenDelegate: SliverChildBuilderDelegate(
+                  //         (context, index) => categoryProductsItem(
+                  //     context,
+                  //     cubit.categoryProductsModel!.data!.data![index],
+                  //
+                  //     cubit.cartIconAdd(),
+                  //   onFavTap: (){
+                  //       cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
+                  //   },
+                  //   ff:  cubit.categoryProductsModel!.data!.data![index].inFavorites!,
+                  // ),
+                  //   ),
+                  // );
 
-                GridView.builder(
-                  physics: physics,
-                  shrinkWrap: false,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 24, horizontal: 16),
-                  itemCount: cubit.homeModel!.data.products.length ,
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 25,
-                      crossAxisSpacing: 0)
-                  ,
-                  itemBuilder: (context, index) => productsItem(
-                    context,
-                    cubit.homeModel!.data.products[index],
-
-                    cubit.cartIconAdd(),
-                    onFavTap: (){
-                      cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
-                    },
-                  ),
-                );
+                  GridView.builder(
+                physics: physics,
+                shrinkWrap: false,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                itemCount: cubit.homeModel!.data.products.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 25,
+                    crossAxisSpacing: 0),
+                itemBuilder: (context, index) => productsItem(
+                  context,
+                  cubit.homeModel!.data.products[index],
+                  cubit.cartIconAdd(),
+                  onFavTap: () {
+                    cubit.addOrDeleteFavorites(
+                        id: cubit
+                            .categoryProductsModel!.data!.data![index].id!);
+                  },
+                ),
+              );
             },
             fallback: (BuildContext context) {
               return const Center(child: CircularProgressIndicator());
             },
           ),
-
         );
       },
     );
   }
 
-  Widget productsItem(context,
-      ProductModel model,
-      Widget? cartIconAdd, {
-        Function()? onFavTap,
-      }) {
+  Widget productsItem(
+    context,
+    ProductModel model,
+    Widget? cartIconAdd, {
+    Function()? onFavTap,
+  }) {
     return SizedBox(
       width: 130,
       // height: 180,
       child: Stack(
         children: [
           InkWell(
-            onTap:  (){
-              AppCubit.get(context).getProductDataById(model.id,context);
-              navigateTo(
-                  context,
-                  ProductDetails(model.id!)
-              );
+            onTap: () {
+              AppCubit.get(context).getProductDataById(model.id, context);
+              navigateTo(context, ProductDetails(model.id!));
             },
             child: Container(
               width: 130,
@@ -138,7 +134,9 @@ class ShowAllProducts extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: const [
                   BoxShadow(
-                      blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
+                      blurRadius: 2,
+                      blurStyle: BlurStyle.outer,
+                      spreadRadius: 5)
                 ],
               ),
               child: Column(
@@ -150,8 +148,7 @@ class ShowAllProducts extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                          image: NetworkImage(model.image!),
-                          fit: BoxFit.cover),
+                          image: NetworkImage(model.image!), fit: BoxFit.cover),
                     ),
                   ),
                   Column(
@@ -167,7 +164,6 @@ class ShowAllProducts extends StatelessWidget {
                         textDirection: TextDirection.rtl,
                         overflow: TextOverflow.visible,
                       ),
-
                       Row(
                         children: [
                           cartIconAdd!,
@@ -192,7 +188,7 @@ class ShowAllProducts extends StatelessWidget {
                           )
                         ],
                       ),
-                      if(model.discount != 0)
+                      if (model.discount != 0)
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -225,13 +221,16 @@ class ShowAllProducts extends StatelessWidget {
             end: 95,
             top: 10,
             child: InkWell(
-              onTap: (){AppCubit.get(context).addOrDeleteFavorites(id: model.id!);},
-              child:  CircleAvatar(
+              onTap: () {
+                AppCubit.get(context).addOrDeleteFavorites(id: model.id!);
+              },
+              child: CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 15,
                 child: Icon(
                   Icons.favorite,
-                  color:(AppCubit.get(context).favorites[model.id]!) ? Colors.red
+                  color: (AppCubit.get(context).favorites[model.id]!)
+                      ? Colors.red
                       : HexColor("#B8B8B8"),
                 ),
               ),

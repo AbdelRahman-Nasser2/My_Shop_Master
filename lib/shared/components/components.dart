@@ -223,7 +223,7 @@ Widget buildHomeProductItem(
         children: [
           InkWell(
             onTap: () {
-              AppCubit.get(context).getProductDataById(model.id,context);
+              AppCubit.get(context).getProductDataById(model.id, context);
               navigateTo(
                   context,
                   ProductDetails(
@@ -257,8 +257,7 @@ Widget buildHomeProductItem(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         image: DecorationImage(
-                            image:
-                            NetworkImage(model.image),
+                            image: NetworkImage(model.image),
                             fit: BoxFit.fitWidth),
                       ),
                     ),
@@ -343,14 +342,16 @@ Widget buildHomeProductItem(
             child: Align(
               alignment: Alignment.topRight,
               child: InkWell(
-                onTap:
-                    (){ AppCubit.get(context).addOrDeleteFavorites(id: model.id);},
+                onTap: () {
+                  AppCubit.get(context).addOrDeleteFavorites(id: model.id);
+                },
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 15,
                   child: Icon(
                     Icons.favorite,
-                    color: (AppCubit.get(context).favorites[model.id]!) ? Colors.red
+                    color: (AppCubit.get(context).favorites[model.id]!)
+                        ? Colors.red
                         : HexColor("#B8B8B8"),
                   ),
                 ),
@@ -528,8 +529,6 @@ Widget startButton({
       ),
     );
 
-
-
 void navigateTo(context, widget) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
 }
@@ -567,7 +566,6 @@ Color chooseToastColor(ToastStates state) {
     case ToastStates.WARNING:
       color = Colors.amber;
       break;
-
   }
   return color;
 }
