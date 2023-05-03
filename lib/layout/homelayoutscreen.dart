@@ -183,9 +183,10 @@ class HomeLayoutScreen extends StatelessWidget {
       create: (BuildContext context) => AppCubit()
         ..getHomeData()
         ..getCategoryData()
-      ..getFavoritesData()
-      ..getCartsData()
-      ..getUserData(),
+        ..getFavoritesData()
+        ..getCartsData()
+        ..getNotificationData()
+        ..getUserData(),
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (BuildContext context, AppStates states) {},
         builder: (BuildContext context, AppStates states) {

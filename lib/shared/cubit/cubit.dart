@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:shop/models/CategoryProductsModel.dart';
@@ -22,6 +23,7 @@ import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/states.dart';
 import 'package:shop/shared/network/remote/end_points.dart';
 import 'package:shop/shared/style/colors.dart';
+
 import '../../models/productdetailsmodel.dart';
 import '../../modules/homelayoutscreens/notification/notificationscreen.dart';
 import '../../modules/homelayoutscreens/profile/profilescreen.dart';
@@ -170,51 +172,286 @@ class AppCubit extends Cubit<AppStates> {
   //     );
 
   Widget cartsIcon(context) => InkWell(
-    onTap: (){
-      getCartsData();
-      showDialog(
-          useRootNavigator: false,
-          context: context,
-          builder: (context)=>Center(
-            child: Padding(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 20,vertical: 40),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black,
-                        blurRadius: 2,
-                        blurStyle: BlurStyle.outer,
-                        spreadRadius: 5)
-                  ],
-                ),
-                child: ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    itemBuilder: (context, index) =>Container(
-                      height: 20,
-                   ),
-                    separatorBuilder: (context, index) => SizedBox(
-                     height: 5,
+        onTap: () {
+          getCartsData();
+          showDialog(
+              useRootNavigator: false,
+              context: context,
+              builder: (context) => Center(
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: 20, vertical: 40),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black,
+                                blurRadius: 2,
+                                blurStyle: BlurStyle.outer,
+                                spreadRadius: 5)
+                          ],
+                        ),
+                        child: ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            itemBuilder: (context, index) => Card(
+                                  shape: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  shadowColor: HexColor('#000000'),
+                                  color: Colors.white,
+                                  borderOnForeground: true,
+                                  elevation: 20,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 9, left: 9, right: 14, bottom: 18),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                            Icons.close,
+                                            color: HexColor('#1B2538'),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Smart Watch',
+                                                  style: GoogleFonts.lato(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+
+                                                // السعر
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'جنيه',
+                                                      style: GoogleFonts.lato(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      '50.30',
+                                                      style: GoogleFonts.lato(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      'السعر',
+                                                      style: GoogleFonts.lato(
+                                                          fontSize: 16,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                ),
+
+                                                //  الكمية
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      clipBehavior:
+                                                          Clip.antiAlias,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            HexColor('#D2D2D2'),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(28),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius: 15,
+                                                            child:
+                                                                FloatingActionButton(
+                                                              clipBehavior: Clip
+                                                                  .antiAlias,
+                                                              mini: true,
+                                                              backgroundColor:
+                                                                  defaultcolor,
+                                                              onPressed: () {},
+                                                              child: Icon(
+                                                                Icons.add,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 3,
+                                                          ),
+                                                          CircleAvatar(
+                                                            radius: 15,
+                                                            child:
+                                                                FloatingActionButton(
+                                                              clipBehavior: Clip
+                                                                  .antiAlias,
+                                                              mini: true,
+                                                              backgroundColor:
+                                                                  HexColor(
+                                                                      '#406497'),
+                                                              onPressed: () {},
+                                                              child: Icon(
+                                                                Icons.remove,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 3,
+                                                          ),
+                                                          Container(
+                                                            height: 20,
+                                                            width: 30,
+                                                            clipBehavior:
+                                                                Clip.antiAlias,
+                                                            decoration: BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                                border: Border.all(
+                                                                    color: HexColor(
+                                                                        '#707070'))),
+                                                            child: Center(
+                                                              child: Text(
+                                                                '3',
+                                                                style: GoogleFonts.lato(
+                                                                    fontSize:
+                                                                        13,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color:
+                                                                        defaultcolor),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      // flex: 2/,
+                                                      child: Text(
+                                                        'الكمية',
+                                                        style: GoogleFonts.lato(
+                                                            fontSize: 16,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+
+                                                Divider(
+                                                  thickness: 1,
+                                                  height: 14,
+                                                  color: HexColor('#D7DDE1'),
+                                                ),
+
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'جنيه',
+                                                      style: GoogleFonts.lato(
+                                                          fontSize: 16,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      '150,9',
+                                                      style: GoogleFonts.lato(
+                                                          fontSize: 21,
+                                                          color: HexColor(
+                                                              '#F99100'),
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                )
+                                              ]),
+                                        ),
+                                        Expanded(flex: 1, child: Column())
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 5,
+                                ),
+                            itemCount: cartsDataModel!.data!.cartItems!.length),
+                      ),
                     ),
-                    itemCount: cartsDataModel!.data!.cartItems!.length),
-      ),
-            ),
-          ));
-    },
-    child: CircleAvatar(
-      radius: 25,
-      backgroundColor: Colors.transparent,
-      child: Stack(
-        children: [
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: Colors.transparent,
-            child: CircleAvatar(
+                  ));
+        },
+        child: CircleAvatar(
+          radius: 25,
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: [
+              CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.transparent,
+                child: CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.white,
                   child: Icon(
@@ -223,27 +460,28 @@ class AppCubit extends Cubit<AppStates> {
                     color: HexColor("#F99100"),
                   ),
                 ),
+              ),
+              (cartsDataModel!.data!.cartItems!.isNotEmpty)
+                  ? Positioned.directional(
+                      textDirection: TextDirection.rtl,
+                      // start: 20,
+                      end: 28,
+                      // top: 2,
+                      child: CircleAvatar(
+                        radius: 10,
+                        backgroundColor: Colors.red,
+                        child: Text(
+                            cartsDataModel!.data!.cartItems!.length.toString()),
+                      ),
+                    )
+                  : SizedBox(
+                      height: 0,
+                      width: 0,
+                    )
+            ],
           ),
-          (cartsDataModel!.data!.cartItems!.isNotEmpty)?
-          Positioned.directional(
-            textDirection: TextDirection.rtl,
-            // start: 20,
-            end: 28,
-            // top: 2,
-            child: CircleAvatar(
-              radius: 10,
-              backgroundColor: Colors.red,
-              child: Text(cartsDataModel!.data!.cartItems!.length.toString()),
-            ),
-          )
-              :SizedBox(
-            height: 0,
-            width: 0,
-          )
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
   Widget cartIconAdd() => InkWell(
         onTap: () {},
@@ -278,7 +516,7 @@ class AppCubit extends Cubit<AppStates> {
   var searchController = TextEditingController();
 
   Widget normalAppBar(
-     context, {
+    context, {
     double height = 150,
     double opacity = 1,
     required bool? showSearch,
@@ -358,10 +596,10 @@ class AppCubit extends Cubit<AppStates> {
       );
 
   Color? fav;
-  bool favt=true;
+  bool favt = true;
   void iconChange() {
-favt=!favt;
-fav=favt?Colors.red:Colors.white;
+    favt = !favt;
+    fav = favt ? Colors.red : Colors.white;
     emit(ChangeFavStateState());
   }
 
@@ -395,8 +633,7 @@ fav=favt?Colors.red:Colors.white;
   //
   // }
 
-
-  Map<int,bool> favorites={};
+  Map<int, bool> favorites = {};
 
   HomeModel? homeModel;
   void getHomeData() {
@@ -408,10 +645,8 @@ fav=favt?Colors.red:Colors.white;
       token: token,
     ).then((value) async {
       homeModel = HomeModel.fromJson(value.data);
-      homeModel?.data.products.forEach((element)
-      {
-        favorites.addAll({
-          element.id:element.inFavorites});
+      homeModel?.data.products.forEach((element) {
+        favorites.addAll({element.id: element.inFavorites});
       });
 
       emit(HomeGetDataSuccess());
@@ -445,10 +680,8 @@ fav=favt?Colors.red:Colors.white;
       token: token,
     ).then((value) async {
       categoryProductsModel = CategoryProductsModel.fromJson(value.data);
-      categoryProductsModel?.data!.data!.forEach((element)
-      {
-        favorites.addAll({
-          element.id!:element.inFavorites!});
+      categoryProductsModel?.data!.data!.forEach((element) {
+        favorites.addAll({element.id!: element.inFavorites!});
       });
 
       emit(CategoryProductsGetDataSuccess());
@@ -460,7 +693,6 @@ fav=favt?Colors.red:Colors.white;
     });
   }
 
-
   //User Data
   ProfileModel? profileModel;
   void getUserData() {
@@ -471,7 +703,7 @@ fav=favt?Colors.red:Colors.white;
       token: token,
     ).then((value) {
       profileModel = ProfileModel.fromJson(value.data);
-print(profileModel?.data!.phone);
+      // print(profileModel?.data!.phone);
       emit(UserDataSuccess());
     }).catchError((error) {
       emit(UserDataError(error));
@@ -487,14 +719,12 @@ print(profileModel?.data!.phone);
       token: token,
     ).then((value) {
       notificationModel = NotificationModel.fromJson(value.data);
+      print(notificationModel!.data!.firstPageUrl);
       emit(NotificationDataSuccess());
     }).catchError((error) {
       emit(NotificationDataError(error));
     });
   }
-
-
-
 
   FavoritesModel? favoritesModel;
   void getFavoritesData() {
@@ -528,17 +758,13 @@ print(profileModel?.data!.phone);
   }) {
     emit(ChangeFavoritesSuccess());
     favorites[id] = !favorites[id]!;
-    DioHelper.postsData(
-        url: FAVORITES,
-        token: token,
-        data: {
+    DioHelper.postsData(url: FAVORITES, token: token, data: {
       'product_id': id,
     }).then((value) {
-      changeFavoritesModel=ChangeFavoritesModel.fromJson(value.data);
-      if(!changeFavoritesModel!.status!){
+      changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
+      if (!changeFavoritesModel!.status!) {
         favorites[id] = !favorites[id]!;
-
-      }else{
+      } else {
         getFavoritesData();
       }
 
@@ -549,7 +775,6 @@ print(profileModel?.data!.phone);
       emit(AddOrDeleteFavoritesError(error.toString()));
     });
   }
-
 
   CartsDataModel? cartsDataModel;
   void getCartsData() {
@@ -578,9 +803,8 @@ print(profileModel?.data!.phone);
     });
   }
 
-
   ProductDetailsModel? productDetailsModel;
-  void getProductDataById(int? id,context) {
+  void getProductDataById(int? id, context) {
     emit(ProductGetDataLoading());
 
     DioHelper.getData(
@@ -598,6 +822,4 @@ print(profileModel?.data!.phone);
       emit(ProductGetDataError(error));
     });
   }
-
-
 }

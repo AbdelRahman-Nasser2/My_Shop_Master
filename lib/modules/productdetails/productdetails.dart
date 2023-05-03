@@ -37,15 +37,13 @@ class ProductDetails extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.arrow_back_ios,
-                      color: HexColor('#1E55A2'),
+                      color: Colors.black,
                     ),
                   ),
                   actions: [
                     Padding(
                       padding: const EdgeInsetsDirectional.only(end: 10),
-                      child: cubit.cartsIcon(
-                        context
-                      ),
+                      child: cubit.cartsIcon(context),
                     )
                   ],
                 ),
@@ -70,10 +68,8 @@ class ProductDetails extends StatelessWidget {
                                     width: double.infinity,
                                     clipBehavior: Clip.antiAlias,
                                     decoration: BoxDecoration(
-                                      color: Colors.blueAccent
-                                          .withOpacity(0.1),
-                                      backgroundBlendMode:
-                                          BlendMode.darken,
+                                      color: Colors.blueAccent.withOpacity(0.1),
+                                      backgroundBlendMode: BlendMode.darken,
                                       boxShadow: const [
                                         BoxShadow(
                                             color: Colors.grey,
@@ -89,8 +85,8 @@ class ProductDetails extends StatelessWidget {
                                     child: CarouselSlider(
                                       carouselController:
                                           carouselProductController,
-                                      items: cubit.productDetailsModel!
-                                          .data!.images!
+                                      items: cubit
+                                          .productDetailsModel!.data!.images!
                                           .map(
                                             (e) => Image(
                                               image: NetworkImage(
@@ -98,22 +94,28 @@ class ProductDetails extends StatelessWidget {
                                               ),
                                               width: double.infinity,
                                               fit: BoxFit.fill,
-                                              filterQuality:
-                                                  FilterQuality.high,
-                                              colorBlendMode:
-                                                  BlendMode.darken,
+                                              filterQuality: FilterQuality.high,
+                                              colorBlendMode: BlendMode.darken,
                                               color: Colors.blueAccent
                                                   .withOpacity(0.1),
-                                              loadingBuilder: (BuildContext context, Widget child,
-                                                  ImageChunkEvent? loadingProgress) {
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
                                                 if (loadingProgress == null) {
                                                   return child;
                                                 }
                                                 return Center(
-                                                  child: CircularProgressIndicator(
-                                                    value: loadingProgress.expectedTotalBytes != null
-                                                        ? loadingProgress.cumulativeBytesLoaded /
-                                                        loadingProgress.expectedTotalBytes!
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: loadingProgress
+                                                                .expectedTotalBytes !=
+                                                            null
+                                                        ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                            loadingProgress
+                                                                .expectedTotalBytes!
                                                         : null,
                                                   ),
                                                 );
@@ -134,14 +136,11 @@ class ProductDetails extends StatelessWidget {
                                               const Duration(seconds: 3),
                                           autoPlayAnimationDuration:
                                               const Duration(seconds: 1),
-                                          autoPlayCurve:
-                                              Curves.fastOutSlowIn,
-                                          scrollDirection:
-                                              Axis.horizontal,
+                                          autoPlayCurve: Curves.fastOutSlowIn,
+                                          scrollDirection: Axis.horizontal,
                                           onPageChanged: (index, reason) {
-                                            cubit
-                                                .carouselProductIndexChange(
-                                                    index);
+                                            cubit.carouselProductIndexChange(
+                                                index);
                                           }),
                                     )),
                                 Padding(
@@ -149,51 +148,42 @@ class ProductDetails extends StatelessWidget {
                                   child: Align(
                                       alignment: Alignment.bottomCenter,
                                       child: Container(
-                                        margin:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 15),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 15),
                                         decoration: BoxDecoration(
                                             color: HexColor("#406497")
                                                 .withOpacity(0.2),
                                             borderRadius:
-                                                BorderRadius.circular(
-                                                    15)),
-                                        padding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 5),
+                                                BorderRadius.circular(15)),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           mainAxisSize: MainAxisSize.min,
-                                          children: cubit
-                                              .productDetailsModel!
-                                              .data!
-                                              .images!
+                                          children: cubit.productDetailsModel!
+                                              .data!.images!
                                               .asMap()
                                               .entries
                                               .map((entry) {
                                             return GestureDetector(
                                               onTap: () =>
                                                   carouselProductController
-                                                      .animateToPage(
-                                                          entry.key),
+                                                      .animateToPage(entry.key),
                                               child: Container(
                                                 width: 6.0,
                                                 height: 6.0,
-                                                margin: const EdgeInsets
-                                                        .symmetric(
-                                                    vertical: 4.0,
-                                                    horizontal: 4.0),
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4.0,
+                                                        horizontal: 4.0),
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  color: (Theme.of(
-                                                                  context)
+                                                  color: (Theme.of(context)
                                                               .brightness ==
                                                           Brightness.dark
-                                                      ? HexColor(
-                                                          '#406497')
-                                                      : HexColor(
-                                                              '#406497')
+                                                      ? HexColor('#406497')
+                                                      : HexColor('#406497')
                                                           .withOpacity(
                                                               cubit.carouselProductCurrent ==
                                                                       entry.key
@@ -235,8 +225,7 @@ class ProductDetails extends StatelessWidget {
                                     Expanded(
                                       flex: 4,
                                       child: Text(
-                                        cubit.productDetailsModel!.data!
-                                            .name!,
+                                        cubit.productDetailsModel!.data!.name!,
                                         style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 20,
@@ -263,8 +252,7 @@ class ProductDetails extends StatelessWidget {
                                       width: 2,
                                     ),
                                     Text(
-                                      cubit.productDetailsModel!.data!
-                                          .price
+                                      cubit.productDetailsModel!.data!.price
                                           .toString(),
                                       style: TextStyle(
                                         color: HexColor("#F99100"),
@@ -274,9 +262,7 @@ class ProductDetails extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                (cubit.productDetailsModel!.data!
-                                            .discount ==
-                                        0)
+                                (cubit.productDetailsModel!.data!.discount == 0)
                                     ? const SizedBox(
                                         height: 0,
                                         width: 0,
@@ -289,24 +275,22 @@ class ProductDetails extends StatelessWidget {
                                           const Text(
                                             "جنيه",
                                             style: TextStyle(
-                                                decoration: TextDecoration
-                                                    .lineThrough,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
                                                 color: Colors.grey,
                                                 fontSize: 12,
-                                                fontWeight:
-                                                    FontWeight.normal),
+                                                fontWeight: FontWeight.normal),
                                           ),
                                           Text(
-                                            cubit.productDetailsModel!
-                                                .data!.oldPrice
+                                            cubit.productDetailsModel!.data!
+                                                .oldPrice
                                                 .toString(),
                                             style: const TextStyle(
-                                                decoration: TextDecoration
-                                                    .lineThrough,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
                                                 color: Colors.grey,
                                                 fontSize: 12,
-                                                fontWeight:
-                                                    FontWeight.normal),
+                                                fontWeight: FontWeight.normal),
                                           ),
                                         ],
                                       ),
@@ -324,8 +308,7 @@ class ProductDetails extends StatelessWidget {
                                   ],
                                 ),
                                 Text(
-                                  cubit.productDetailsModel!.data!
-                                      .description!,
+                                  cubit.productDetailsModel!.data!.description!,
                                   style: const TextStyle(
                                       color: Colors.grey, fontSize: 12),
                                   textAlign: TextAlign.start,
@@ -344,13 +327,18 @@ class ProductDetails extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             InkWell(
-                              onTap:  (){ AppCubit.get(context).addOrDeleteFavorites(id: cubit.productDetailsModel!.data!.id!);},
+                              onTap: () {
+                                AppCubit.get(context).addOrDeleteFavorites(
+                                    id: cubit.productDetailsModel!.data!.id!);
+                              },
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: 18,
                                 child: Icon(
                                   Icons.favorite,
-                                  color: (AppCubit.get(context).favorites[cubit.productDetailsModel!.data!.id]!) ? Colors.red
+                                  color: (AppCubit.get(context).favorites[
+                                          cubit.productDetailsModel!.data!.id]!)
+                                      ? Colors.red
                                       : HexColor("#B8B8B8"),
                                 ),
                               ),
@@ -363,8 +351,7 @@ class ProductDetails extends StatelessWidget {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: 18,
-                                child: Icon(Icons.share,
-                                    color: defaultcolor),
+                                child: Icon(Icons.share, color: defaultcolor),
                               ),
                             ),
                           ],
