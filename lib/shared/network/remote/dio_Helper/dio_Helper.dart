@@ -41,8 +41,6 @@ class DioHelper {
   //   );
   // }
 
-
-
   static Future<Response> getData({
     required String url,
     Map<String, dynamic>? queryParameters,
@@ -70,8 +68,6 @@ class DioHelper {
     }
   }
 
-
-
   static Future<Response> postsData({
     required String url,
     required Map<String, dynamic> data,
@@ -81,7 +77,7 @@ class DioHelper {
     dio.options.headers = {
       'lang': lang,
       'Content-Type': 'application/json',
-      'Authorization': token  ,
+      'Authorization': token,
     };
     try {
       final Response response = await dio.post(url, data: data);
@@ -97,19 +93,20 @@ class DioHelper {
     }
   }
 
-
-
   static Future<Response> putData({
     required String url,
     required Map<String, dynamic> data,
     String? token,
+    String lang = 'ar',
     //bool files = false,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
       dio.options.headers = {
-        'Authorization': 'Bearer ${token ?? ''}',
+        'lang': lang,
+        'Content-Type': 'application/json',
+        'Authorization': token,
       };
       final Response response = await dio.put(
         url,
@@ -131,20 +128,18 @@ class DioHelper {
     // );
   }
 
-
-
   //This Function That's Used to Update Some Date based on URL(End Points) and Send what's you need to Update as Map.
   static Future<Response> patchData({
     required String url,
     required Map<String, dynamic> data,
     required String token,
+    String lang = 'ar',
     bool files = false,
   }) async {
     dio.options.headers = {
-      'Authorization': 'Bearer $token',
-      'Accept': 'application/json',
-      // 'Authorization': token ,
+      'lang': lang,
       'Content-Type': 'application/json',
+      'Authorization': token,
     };
     return await dio.patch(
       url,
@@ -152,19 +147,17 @@ class DioHelper {
     );
   }
 
-
-
   static Future<Response> deleteData({
     required String url,
     Map<String, dynamic>? data,
     String? token,
-    //String lang = 'en',
+    String lang = 'ar',
   }) async {
     try {
       dio.options.headers = {
-        'Authorization': 'Bearer $token',
-        // 'Authorization': token ,
-        //'Content-Type': 'application/json',
+        'lang': lang,
+        'Content-Type': 'application/json',
+        'Authorization': token,
       };
       final Response response = await dio.delete(
         url,

@@ -9,6 +9,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:shop/models/CategoryProductsModel.dart';
 import 'package:shop/models/cartsModel.dart';
 import 'package:shop/models/categoryModel.dart';
+import 'package:shop/models/changeCartsModel.dart';
 import 'package:shop/models/changefavorites.dart';
 import 'package:shop/models/favoritesmodel.dart';
 import 'package:shop/models/homemodel.dart';
@@ -17,6 +18,7 @@ import 'package:shop/models/profilemodel.dart';
 import 'package:shop/modules/homelayoutscreens/addproduct/addproduct.dart';
 import 'package:shop/modules/homelayoutscreens/favourites/favoritesscreen.dart';
 import 'package:shop/modules/homelayoutscreens/home/homeScreen.dart';
+import 'package:shop/modules/productdetails/productdetails.dart';
 import 'package:shop/modules/search_screen/search_screen.dart';
 import 'package:shop/shared/components/components.dart';
 import 'package:shop/shared/components/constant.dart';
@@ -170,13 +172,64 @@ class AppCubit extends Cubit<AppStates> {
   //         ),
   //       ],
   //     );
+  CartsDataModel? cartsDataModel;
+  void getCartsData() {
+    emit(CartsDataLoading());
 
-  Widget cartsIcon(context) => InkWell(
+    DioHelper.getData(
+      url: CARTS,
+      token: token,
+    ).then((value) {
+      cartsDataModel = CartsDataModel.fromJson(value.data);
+      cartsDataModel?.data!.cartItems!.forEach((element) {
+        carts.addAll({element.id!: element.product!.inCart!});
+      });
+      print(carts);
+      // if (kDebugMode)
+      print(cartsDataModel!.status);
+      //   print(cartsDataModel!.data!.cartItems![1].product!.name);
+      // }
+      emit(CartsDataSuccess());
+    }).catchError((error) {
+      print(error);
+
+      emit(CartsDataError(error));
+    });
+  }
+
+  Map<int, bool> carts = {};
+
+  ChangeCartsModel? changeCartsModel;
+  void deleteCartItem(int? id) {
+    emit(DeleteCartsItemLoading());
+
+    DioHelper.deleteData(
+      url: '$CARTS/ ${id!.toString()}',
+      token: token,
+    ).then((value) {
+      changeCartsModel = ChangeCartsModel.fromJson(value.data);
+
+      if (!changeCartsModel!.status!) {
+        carts[id] = !carts[id]!;
+      } else {
+        getCartsData();
+      }
+      print(changeCartsModel!.message);
+
+      emit(DeleteCartsItemSuccess(changeCartsModel));
+    }).catchError((error) {
+      carts[id] = !carts[id]!;
+
+      emit(DeleteCartsItemError(error.toString()));
+    });
+  }
+
+  Widget cartsIcon(cartContext) => InkWell(
         onTap: () {
           getCartsData();
           showDialog(
               useRootNavigator: false,
-              context: context,
+              context: cartContext,
               builder: (context) => Center(
                     child: Padding(
                       padding: const EdgeInsetsDirectional.symmetric(
@@ -199,242 +252,8 @@ class AppCubit extends Cubit<AppStates> {
                             scrollDirection: Axis.vertical,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 10),
-                            itemBuilder: (context, index) => Card(
-                                  shape: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  shadowColor: HexColor('#000000'),
-                                  color: Colors.white,
-                                  borderOnForeground: true,
-                                  elevation: 20,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 9, left: 9, right: 14, bottom: 18),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(
-                                            Icons.close,
-                                            color: HexColor('#1B2538'),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Smart Watch',
-                                                  style: GoogleFonts.lato(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black),
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-
-                                                // السعر
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'جنيه',
-                                                      style: GoogleFonts.lato(
-                                                          fontSize: 14,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      '50.30',
-                                                      style: GoogleFonts.lato(
-                                                          fontSize: 14,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      'السعر',
-                                                      style: GoogleFonts.lato(
-                                                          fontSize: 16,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-
-                                                //  الكمية
-                                                Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      clipBehavior:
-                                                          Clip.antiAlias,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            HexColor('#D2D2D2'),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(28),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          CircleAvatar(
-                                                            radius: 15,
-                                                            child:
-                                                                FloatingActionButton(
-                                                              clipBehavior: Clip
-                                                                  .antiAlias,
-                                                              mini: true,
-                                                              backgroundColor:
-                                                                  defaultcolor,
-                                                              onPressed: () {},
-                                                              child: Icon(
-                                                                Icons.add,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 3,
-                                                          ),
-                                                          CircleAvatar(
-                                                            radius: 15,
-                                                            child:
-                                                                FloatingActionButton(
-                                                              clipBehavior: Clip
-                                                                  .antiAlias,
-                                                              mini: true,
-                                                              backgroundColor:
-                                                                  HexColor(
-                                                                      '#406497'),
-                                                              onPressed: () {},
-                                                              child: Icon(
-                                                                Icons.remove,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 3,
-                                                          ),
-                                                          Container(
-                                                            height: 20,
-                                                            width: 30,
-                                                            clipBehavior:
-                                                                Clip.antiAlias,
-                                                            decoration: BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
-                                                                border: Border.all(
-                                                                    color: HexColor(
-                                                                        '#707070'))),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '3',
-                                                                style: GoogleFonts.lato(
-                                                                    fontSize:
-                                                                        13,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color:
-                                                                        defaultcolor),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      // flex: 2/,
-                                                      child: Text(
-                                                        'الكمية',
-                                                        style: GoogleFonts.lato(
-                                                            fontSize: 16,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-
-                                                Divider(
-                                                  thickness: 1,
-                                                  height: 14,
-                                                  color: HexColor('#D7DDE1'),
-                                                ),
-
-                                                Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'جنيه',
-                                                      style: GoogleFonts.lato(
-                                                          fontSize: 16,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      '150,9',
-                                                      style: GoogleFonts.lato(
-                                                          fontSize: 21,
-                                                          color: HexColor(
-                                                              '#F99100'),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                )
-                                              ]),
-                                        ),
-                                        Expanded(flex: 1, child: Column())
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                            itemBuilder: (context, index) =>
+                                cartItem(index, cartContext),
                             separatorBuilder: (context, index) => SizedBox(
                                   height: 5,
                                 ),
@@ -479,6 +298,263 @@ class AppCubit extends Cubit<AppStates> {
                       width: 0,
                     )
             ],
+          ),
+        ),
+      );
+
+  Widget cartItem(int index, context) => GestureDetector(
+        onTap: () {
+          getProductDataById(
+              cartsDataModel!.data!.cartItems![index].product!.id!, context);
+          navigateTo(
+              context,
+              ProductDetails(
+                cartsDataModel!.data!.cartItems![index].product!.id!,
+              ));
+        },
+        child: Card(
+          shape: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          shadowColor: HexColor('#000000'),
+          color: Colors.white,
+          borderOnForeground: true,
+          elevation: 20,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(top: 9, left: 9, right: 14, bottom: 18),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    deleteCartItem(cartsDataModel!.data!.cartItems![index].id);
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    color: HexColor('#1B2538'),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        //Name of product item
+                        Text(
+                          cartsDataModel!
+                              .data!.cartItems![index].product!.name!,
+                          maxLines: 1,
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.lato(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+
+                        // Price
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'جنيه',
+                              style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              cartsDataModel!
+                                  .data!.cartItems![index].product!.oldPrice
+                                  .toString(),
+                              style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'السعر',
+                              style: GoogleFonts.lato(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+
+                        //  Quantity
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  color: HexColor('#D2D2D2'),
+                                  borderRadius: BorderRadius.circular(28),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 10,
+                                      child: FloatingActionButton(
+                                        clipBehavior: Clip.antiAlias,
+                                        mini: true,
+                                        backgroundColor: defaultcolor,
+                                        onPressed: () {},
+                                        child: Icon(
+                                          Icons.add,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    CircleAvatar(
+                                      radius: 10,
+                                      child: FloatingActionButton(
+                                        clipBehavior: Clip.antiAlias,
+                                        mini: true,
+                                        backgroundColor: HexColor('#406497'),
+                                        onPressed: () {},
+                                        child: Icon(
+                                          Icons.remove,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 30,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              color: HexColor('#707070'))),
+                                      child: Center(
+                                        child: Text(
+                                          cartsDataModel!
+                                              .data!.cartItems![index].quantity!
+                                              .toString(),
+                                          style: GoogleFonts.lato(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              color: defaultcolor),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                'الكمية',
+                                style: GoogleFonts.lato(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Divider(
+                          thickness: 1,
+                          height: 14,
+                          color: HexColor('#D7DDE1'),
+                        ),
+
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'جنيه',
+                              style: GoogleFonts.lato(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              cartsDataModel!
+                                  .data!.cartItems![index].product!.price!
+                                  .toString(),
+                              style: GoogleFonts.lato(
+                                  fontSize: 21,
+                                  color: HexColor('#F99100'),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )
+                      ]),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          height: 100,
+                          fit: BoxFit.cover,
+                          cartsDataModel!
+                              .data!.cartItems![index].product!.image!,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Visibility(
+                          visible: (cartsDataModel!.data!.cartItems![index]
+                                      .product!.discount ==
+                                  0)
+                              ? false
+                              : true,
+                          child: Text(
+                            '${cartsDataModel!.data!.cartItems![index].product!.discount!.toString()} % خصم ',
+                            style: GoogleFonts.lato(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ))
+              ],
+            ),
           ),
         ),
       );
@@ -647,6 +723,7 @@ class AppCubit extends Cubit<AppStates> {
       homeModel = HomeModel.fromJson(value.data);
       homeModel?.data.products.forEach((element) {
         favorites.addAll({element.id: element.inFavorites});
+        carts.addAll({element.id: element.inCart});
       });
 
       emit(HomeGetDataSuccess());
@@ -682,6 +759,7 @@ class AppCubit extends Cubit<AppStates> {
       categoryProductsModel = CategoryProductsModel.fromJson(value.data);
       categoryProductsModel?.data!.data!.forEach((element) {
         favorites.addAll({element.id!: element.inFavorites!});
+        carts.addAll({element.id!: element.inCart!});
       });
 
       emit(CategoryProductsGetDataSuccess());
@@ -735,19 +813,9 @@ class AppCubit extends Cubit<AppStates> {
       token: token,
     ).then((value) {
       favoritesModel = FavoritesModel.fromJson(value.data);
-      // favoritesModel?.data!.data!.forEach((element)
-      // {
-      //   favorites.addAll({
-      //     element.id!:element.inFavorites!});
-      // });
-      // if (kDebugMode) {
-      //   print('fave ${favoritesModel!.data!.data![1].product!.id}');
-      //   print(favoritesModel!.data!.data![1].id);
-      // }
       emit(FavoritesDataSuccess());
     }).catchError((error) {
-      print(error);
-      emit(FavoritesDataError(error));
+      emit(FavoritesDataError(error.toString()));
     });
   }
 
@@ -773,33 +841,6 @@ class AppCubit extends Cubit<AppStates> {
       favorites[id] = !favorites[id]!;
 
       emit(AddOrDeleteFavoritesError(error.toString()));
-    });
-  }
-
-  CartsDataModel? cartsDataModel;
-  void getCartsData() {
-    emit(CartsDataLoading());
-
-    DioHelper.getData(
-      url: CARTS,
-      token: token,
-    ).then((value) {
-      cartsDataModel = CartsDataModel.fromJson(value.data);
-
-      // favoritesModel?.data!.data!.forEach((element)
-      // {
-      //   favorites.addAll({
-      //     element.id!:element.inFavorites!});
-      // });
-      // if (kDebugMode) {
-      //   print(cartsDataModel!.status);
-      //   print(cartsDataModel!.data!.cartItems![1].product!.name);
-      // }
-      emit(CartsDataSuccess());
-    }).catchError((error) {
-      print(error);
-
-      emit(CartsDataError(error));
     });
   }
 
