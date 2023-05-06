@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/layout/category/maincategeoriesscreen.dart';
 import 'package:shop/modules/showall/showall.dart';
+
 import '../../../shared/components/components.dart';
 import '../../../shared/cubit/cubit.dart';
 import '../../../shared/cubit/states.dart';
@@ -17,16 +18,29 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (BuildContext context, AppStates states) {
-        if(states is AddOrDeleteFavoritesSuccess){
-          if(!states.model!.status!){
-            showToast(state: ToastStates.ERROR,text: states.model!.message!);
-          }else{
-            if(states.model!.message=='تمت الإضافة بنجاح')
-          {  showToast(state: ToastStates.SUCCESS,text: states.model!.message!);
-          }else{
-              showToast(state: ToastStates.ERROR,text: states.model!.message!);
+        if (states is AddOrDeleteFavoritesSuccess) {
+          if (!states.model!.status!) {
+            showToast(state: ToastStates.ERROR, text: states.model!.message!);
+          } else {
+            if (states.model!.message == 'تمت الإضافة بنجاح') {
+              showToast(
+                  state: ToastStates.SUCCESS, text: states.model!.message!);
+            } else {
+              showToast(state: ToastStates.ERROR, text: states.model!.message!);
             }
+          }
+        }
 
+        if (states is DeleteCartsItemSuccess) {
+          if (!states.model!.status!) {
+            showToast(state: ToastStates.ERROR, text: states.model!.message!);
+          } else {
+            if (states.model!.message == 'تمت الإضافة بنجاح') {
+              showToast(
+                  state: ToastStates.SUCCESS, text: states.model!.message!);
+            } else {
+              showToast(state: ToastStates.ERROR, text: states.model!.message!);
+            }
           }
         }
       },
@@ -80,17 +94,21 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                       width: double.infinity,
                                       fit: BoxFit.fill,
-                                      loadingBuilder:  (BuildContext context, Widget child,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
                                           ImageChunkEvent? loadingProgress) {
                                         if (loadingProgress == null) {
                                           return child;
                                         }
                                         return Center(
                                           child: CircularProgressIndicator(
-
-                                            value: loadingProgress.expectedTotalBytes != null
-                                                ? loadingProgress.cumulativeBytesLoaded /
-                                                loadingProgress.expectedTotalBytes!
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
                                                 : null,
                                           ),
                                         );
@@ -170,7 +188,6 @@ class HomeScreen extends StatelessWidget {
                     axis: Axis.horizontal,
                     allShow_OnTap: () {
                       navigateTo(context, MainCategoryScreen());
-
                     },
                     type: 'التصنيفات',
                     list: categories,
@@ -184,7 +201,8 @@ class HomeScreen extends StatelessWidget {
                       list: products,
                       cartIconAdd: cubit.cartIconAdd(),
                       allShow_onTap: () {
-                        navigateTo(context, ShowAllProducts(categoryName: 'أفضل العروض'));
+                        navigateTo(context,
+                            ShowAllProducts(categoryName: 'أفضل العروض'));
                         // CacheHelper.removeData(key: "token");
                         // CacheHelper.removeAllData();
                         // CacheHelper.removeData(key: "onBoarding");
@@ -197,8 +215,8 @@ class HomeScreen extends StatelessWidget {
                     type: 'الأكثر مبيعاً ',
                     list: products,
                     allShow_onTap: () {
-                      navigateTo(context, ShowAllProducts(categoryName: 'الأكثر مبيعا'));
-
+                      navigateTo(context,
+                          ShowAllProducts(categoryName: 'الأكثر مبيعا'));
                     },
                     cartIconAdd: cubit.cartIconAdd(),
                   ),
@@ -210,14 +228,6 @@ class HomeScreen extends StatelessWidget {
       },
     );
   }
-
-
-
-
-
-
-
-
 
   Widget buildHomeCategoryList({
     required String type,

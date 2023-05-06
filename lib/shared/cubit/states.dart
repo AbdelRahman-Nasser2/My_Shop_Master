@@ -1,3 +1,4 @@
+import 'package:shop/models/changeCartsModel.dart';
 import 'package:shop/models/changefavorites.dart';
 
 abstract class AppStates {}
@@ -60,15 +61,12 @@ class FavoritesDataError extends AppStates {
   FavoritesDataError(this.error);
 }
 
-
-class ChangeFavoritesSuccess extends AppStates {
-}
+class ChangeFavoritesSuccess extends AppStates {}
 
 class AddOrDeleteFavoritesSuccess extends AppStates {
   final ChangeFavoritesModel? model;
 
   AddOrDeleteFavoritesSuccess(this.model);
-
 }
 
 class AddOrDeleteFavoritesError extends AppStates {
@@ -76,8 +74,6 @@ class AddOrDeleteFavoritesError extends AppStates {
 
   AddOrDeleteFavoritesError(this.error);
 }
-
-
 
 class CartsDataLoading extends AppStates {}
 
@@ -89,6 +85,20 @@ class CartsDataError extends AppStates {
   CartsDataError(this.error);
 }
 
+class DeleteCartsItemLoading extends AppStates {}
+
+class DeleteCartsItemSuccess extends AppStates {
+  final ChangeCartsModel? model;
+
+  DeleteCartsItemSuccess(this.model);
+}
+
+class DeleteCartsItemError extends AppStates {
+  final dynamic error;
+
+  DeleteCartsItemError(this.error);
+}
+
 class ProductGetDataLoading extends AppStates {}
 
 class ProductGetDataSuccess extends AppStates {}
@@ -98,7 +108,6 @@ class ProductGetDataError extends AppStates {
 
   ProductGetDataError(this.error);
 }
-
 
 class CategoryProductsGetDataLoading extends AppStates {}
 

@@ -33,6 +33,8 @@ void main() async {
   DioHelper.init();
   await CacheHelper.init();
   token = CacheHelper.get(key: "token");
+  // token =
+  //     "bHweRD7nlCcmSshcSqVhnXq2Vzri1aLpq8YCrdNh9OTdAhbryzmsrCYkNftuyxTnUMEHJ9";
   // CacheHelper.removeAllData();
   onBoarding = CacheHelper.get(key: "onBoarding");
   start = CacheHelper.get(key: "start");
