@@ -6,6 +6,7 @@ import 'package:shop/models/favoritesmodel.dart';
 import 'package:shop/modules/productdetails/productdetails.dart';
 import 'package:shop/shared/components/components.dart';
 import 'package:shop/shared/components/constant.dart';
+
 import '../../../shared/cubit/cubit.dart';
 import '../../../shared/cubit/states.dart';
 
@@ -30,168 +31,164 @@ class FavoritesScreen extends StatelessWidget {
                 return GridView.builder(
                   physics: physics,
                   shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 24, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                   itemCount: cubit.favoritesModel!.data!.data!.length,
                   clipBehavior: Clip.antiAlias,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 25,
-                          crossAxisSpacing: 0,
-                      ),
-                  itemBuilder: (context, index) => favoriteItem(context,
-                      cubit.favoritesModel!.data!.data![index],
-                      cubit.cartIconAdd(),
-                    onFavTap: (){
-                      cubit.addOrDeleteFavorites(id: cubit.favoritesModel!.data!.data![index].product!.id!);
-                    }
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 25,
+                    crossAxisSpacing: 0,
                   ),
-
+                  itemBuilder: (context, index) => favoriteItem(
+                      context,
+                      cubit.favoritesModel!.data!.data![index],
+                      cubit.cartIconAdd(
+                          cubit.favoritesModel!.data!.data![index].product!.id),
+                      onFavTap: () {
+                    cubit.addOrDeleteFavorites(
+                        id: cubit
+                            .favoritesModel!.data!.data![index].product!.id!);
+                  }),
                 );
               },
               fallback: (BuildContext context) {
                 return const Center(child: CircularProgressIndicator());
               },
-            )
-        );
+            ));
       },
     );
   }
 
-
-  Widget favoriteItem(context,
+  Widget favoriteItem(
+    context,
     FavoritesData model,
     Widget? cartIconAdd, {
     Function()? onTap,
     Function()? onFavTap,
   }) {
-    return
-      SizedBox(
-        width: 130,
-        // height: 180,
-        child: Stack(
-          children: [
-            InkWell(
-              onTap:  (){
-                AppCubit.get(context).getProductDataById(model.product!.id,context);
-                navigateTo(
-                    context,
-                    ProductDetails(model.product!.id!)
-                );
-              },
-              child: Container(
-                width: 130,
-                // height: 186,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: const [
-                    BoxShadow(
-                        blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 100,
-                      width: 115,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        image: DecorationImage(
-                            image: NetworkImage(model.product!.image!),
-                            fit: BoxFit.cover),
-                      ),
+    return SizedBox(
+      width: 130,
+      // height: 180,
+      child: Stack(
+        children: [
+          InkWell(
+            onTap: () {
+              AppCubit.get(context)
+                  .getProductDataById(model.product!.id, context);
+              navigateTo(context, ProductDetails(model.product!.id!));
+            },
+            child: Container(
+              width: 130,
+              // height: 186,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                      blurRadius: 2,
+                      blurStyle: BlurStyle.outer,
+                      spreadRadius: 5)
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    height: 100,
+                    width: 115,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                          image: NetworkImage(model.product!.image!),
+                          fit: BoxFit.cover),
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          model.product!.name!,
-                          style: const TextStyle(
-                              fontSize: 16,
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        model.product!.name!,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                        maxLines: 1,
+                        textAlign: TextAlign.start,
+                        textDirection: TextDirection.rtl,
+                        overflow: TextOverflow.visible,
+                      ),
+                      Row(
+                        children: [
+                          cartIconAdd!,
+                          const Spacer(),
+                          const Text(
+                            "جنيه",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            model.product!.price!.toString(),
+                            style: TextStyle(
+                              color: HexColor("#F99100"),
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                          maxLines: 1,
-                          textAlign: TextAlign.start,
-                          textDirection: TextDirection.rtl,
-                          overflow: TextOverflow.visible,
-                        ),
-
+                            ),
+                          )
+                        ],
+                      ),
+                      if (model.product!.discount != 0)
                         Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            cartIconAdd!,
-                            const Spacer(),
                             const Text(
                               "جنيه",
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              width: 2,
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
                             ),
                             Text(
-                              model.product!.price!.toString(),
-                              style: TextStyle(
-                                color: HexColor("#F99100"),
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
+                              model.product!.oldPrice.toString(),
+                              style: const TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
+                            ),
                           ],
                         ),
-                        if(model.product!.discount != 0)
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Text(
-                                "جنيه",
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              Text(
-                                model.product!.oldPrice.toString(),
-                                style: const TextStyle(
-                                    decoration: TextDecoration.lineThrough,
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                      ],
-                    )
-                  ],
-                ),
+                    ],
+                  )
+                ],
               ),
             ),
-            Positioned.directional(
-              textDirection: TextDirection.rtl,
-              end: 95,
-              top: 10,
-              child: InkWell(
-                onTap: onFavTap,
-                child:  const CircleAvatar(
-                  backgroundColor: Colors.white,
-
-         radius: 15,
-                  child: Icon(
-                    Icons.favorite,
+          ),
+          Positioned.directional(
+            textDirection: TextDirection.rtl,
+            end: 95,
+            top: 10,
+            child: InkWell(
+              onTap: onFavTap,
+              child: const CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 15,
+                child: Icon(Icons.favorite,
                     color:
-                    // (AppCubit.get(context).favorites[model.product!.id!]!) ?
-                    Colors.red
-                        // : HexColor("#B8B8B8"),
-                  ),
-                ),
+                        // (AppCubit.get(context).favorites[model.product!.id!]!) ?
+                        Colors.red
+                    // : HexColor("#B8B8B8"),
+                    ),
               ),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

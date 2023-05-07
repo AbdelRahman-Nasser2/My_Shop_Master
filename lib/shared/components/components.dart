@@ -214,7 +214,6 @@ Widget buildHomeProductItem(
   ProductModel model, {
   Function()? onTap,
   Function()? onFavTap,
-  required Widget cartIconAdd,
 }) =>
     SizedBox(
       width: 135,
@@ -278,7 +277,7 @@ Widget buildHomeProductItem(
                     ),
                     Row(
                       children: [
-                        cartIconAdd,
+                        AppCubit.get(context).cartIconAdd(model.id),
                         Spacer(),
                         Text(
                           "جنيه",
@@ -300,35 +299,62 @@ Widget buildHomeProductItem(
                         )
                       ],
                     ),
-                    (model.discount == 0)
-                        ? SizedBox(
-                            height: 0,
-                            width: 0,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "جنيه",
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                Text(
-                                  model.oldPrice.toString(),
-                                  style: TextStyle(
-                                      decoration: TextDecoration.lineThrough,
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
+                    Visibility.maintain(
+                      visible: (model.discount == 0) ? false : true,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "جنيه",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
                             ),
-                          ),
+                            Text(
+                              model.oldPrice.toString(),
+                              style: TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // (model.discount == 0)
+                    //     ? SizedBox(
+                    //         height: 0,
+                    //         width: 0,
+                    //       )
+                    //     : Padding(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 2),
+                    //         child: Row(
+                    //           mainAxisSize: MainAxisSize.max,
+                    //           mainAxisAlignment: MainAxisAlignment.end,
+                    //           children: [
+                    //             Text(
+                    //               "جنيه",
+                    //               style: TextStyle(
+                    //                   color: Colors.grey,
+                    //                   fontSize: 12,
+                    //                   fontWeight: FontWeight.normal),
+                    //             ),
+                    //             Text(
+                    //               model.oldPrice.toString(),
+                    //               style: TextStyle(
+                    //                   decoration: TextDecoration.lineThrough,
+                    //                   color: Colors.grey,
+                    //                   fontSize: 12,
+                    //                   fontWeight: FontWeight.normal),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
                   ],
                 ),
               ),
@@ -368,7 +394,6 @@ Widget buildHomeProductList({
   required List list,
   Function()? onTap,
   Function()? onFavTap,
-  required Widget cartIconAdd,
 }) =>
     Container(
       width: double.infinity,
@@ -412,12 +437,12 @@ Widget buildHomeProductList({
                       context,
                       list[index],
                       onFavTap: onFavTap,
-                      cartIconAdd: cartIconAdd,
+                      // cartIconAdd: cartIconAdd,
                     ),
                 separatorBuilder: (context, index) => SizedBox(
                       width: 30,
                     ),
-                itemCount: list.length),
+                itemCount: 6),
           ),
         ],
       ),

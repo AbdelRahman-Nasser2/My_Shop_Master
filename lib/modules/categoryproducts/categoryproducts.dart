@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/models/CategoryProductsModel.dart';
-import 'package:shop/models/productModel.dart';
 import 'package:shop/modules/productdetails/productdetails.dart';
 import 'package:shop/shared/components/components.dart';
 import 'package:shop/shared/components/constant.dart';
@@ -16,8 +15,8 @@ class CategoryProducts extends StatelessWidget {
 
   const CategoryProducts(
       {Key? key,
-        // required this.id,
-        required this.categoryName})
+      // required this.id,
+      required this.categoryName})
       : super(key: key);
 
   @override
@@ -47,90 +46,87 @@ class CategoryProducts extends StatelessWidget {
             condition: states is! CategoryProductsGetDataLoading,
             builder: (BuildContext context) {
               return
-              //   GridView.custom(
-              //   physics: physics,
-              //                 shrinkWrap: true,
-              //                 padding: const EdgeInsets.symmetric(
-              //                     vertical: 24, horizontal: 16),
-              //                 clipBehavior: Clip.antiAlias,
-              //   gridDelegate: SliverWovenGridDelegate.count(
-              //     crossAxisCount: 2,
-              //     mainAxisSpacing: 16,
-              //     crossAxisSpacing:0,
-              //     pattern: [
-              //       const WovenGridTile(2/2,crossAxisRatio: 0.9),
-              //       const WovenGridTile(
-              //         5/ 6,
-              //         crossAxisRatio: 0.9,
-              //         // alignment: AlignmentDirectional.centerEnd,
-              //       ),
-              //     ],
-              //   ),
-              //   childrenDelegate: SliverChildBuilderDelegate(
-              //         (context, index) => categoryProductsItem(
-              //     context,
-              //     cubit.categoryProductsModel!.data!.data![index],
-              //
-              //     cubit.cartIconAdd(),
-              //   onFavTap: (){
-              //       cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
-              //   },
-              //   ff:  cubit.categoryProductsModel!.data!.data![index].inFavorites!,
-              // ),
-              //   ),
-              // );
+                  //   GridView.custom(
+                  //   physics: physics,
+                  //                 shrinkWrap: true,
+                  //                 padding: const EdgeInsets.symmetric(
+                  //                     vertical: 24, horizontal: 16),
+                  //                 clipBehavior: Clip.antiAlias,
+                  //   gridDelegate: SliverWovenGridDelegate.count(
+                  //     crossAxisCount: 2,
+                  //     mainAxisSpacing: 16,
+                  //     crossAxisSpacing:0,
+                  //     pattern: [
+                  //       const WovenGridTile(2/2,crossAxisRatio: 0.9),
+                  //       const WovenGridTile(
+                  //         5/ 6,
+                  //         crossAxisRatio: 0.9,
+                  //         // alignment: AlignmentDirectional.centerEnd,
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   childrenDelegate: SliverChildBuilderDelegate(
+                  //         (context, index) => categoryProductsItem(
+                  //     context,
+                  //     cubit.categoryProductsModel!.data!.data![index],
+                  //
+                  //     cubit.cartIconAdd(),
+                  //   onFavTap: (){
+                  //       cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
+                  //   },
+                  //   ff:  cubit.categoryProductsModel!.data!.data![index].inFavorites!,
+                  // ),
+                  //   ),
+                  // );
 
                   GridView.builder(
-                    physics: physics,
-                    shrinkWrap: false,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 16),
-                    itemCount: cubit.categoryProductsModel?.data!.data!.length,
-                    gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 25,
-                        crossAxisSpacing: 0)
-                    ,
-                    itemBuilder: (context, index) => categoryProductsItem(
-                        context,
-                        cubit.categoryProductsModel!.data!.data![index]  ,
-
-                      cubit.cartIconAdd(),
-                    onFavTap: (){
-                        cubit.addOrDeleteFavorites(id: cubit.categoryProductsModel!.data!.data![index].id!);
-                    },
-                  ),
+                physics: physics,
+                shrinkWrap: false,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                itemCount: cubit.categoryProductsModel?.data!.data!.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 25,
+                    crossAxisSpacing: 0),
+                itemBuilder: (context, index) => categoryProductsItem(
+                  context,
+                  cubit.categoryProductsModel!.data!.data![index],
+                  cubit.cartIconAdd(
+                      cubit.categoryProductsModel!.data!.data![index].id),
+                  onFavTap: () {
+                    cubit.addOrDeleteFavorites(
+                        id: cubit
+                            .categoryProductsModel!.data!.data![index].id!);
+                  },
+                ),
               );
             },
             fallback: (BuildContext context) {
               return const Center(child: CircularProgressIndicator());
             },
           ),
-
         );
       },
     );
   }
 
-  Widget categoryProductsItem(context,
-      ProductsData model,
+  Widget categoryProductsItem(
+    context,
+    ProductsData model,
     Widget? cartIconAdd, {
     Function()? onFavTap,
   }) {
     return SizedBox(
       width: 130,
-      height: (model.discount!=0)?180:150,
+      height: (model.discount != 0) ? 180 : 150,
       child: Stack(
         children: [
           InkWell(
-            onTap:  (){
-              AppCubit.get(context).getProductDataById(model.id,context);
-              navigateTo(
-                  context,
-                  ProductDetails(model.id!)
-              );
-              },
+            onTap: () {
+              AppCubit.get(context).getProductDataById(model.id, context);
+              navigateTo(context, ProductDetails(model.id!));
+            },
             child: Container(
               width: 130,
               // height: 186,
@@ -139,7 +135,9 @@ class CategoryProducts extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: const [
                   BoxShadow(
-                      blurRadius: 2, blurStyle: BlurStyle.outer, spreadRadius: 5)
+                      blurRadius: 2,
+                      blurStyle: BlurStyle.outer,
+                      spreadRadius: 5)
                 ],
               ),
               child: Column(
@@ -151,8 +149,7 @@ class CategoryProducts extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                          image: NetworkImage(model.image!),
-                          fit: BoxFit.cover),
+                          image: NetworkImage(model.image!), fit: BoxFit.cover),
                     ),
                   ),
                   Column(
@@ -168,7 +165,6 @@ class CategoryProducts extends StatelessWidget {
                         textDirection: TextDirection.rtl,
                         overflow: TextOverflow.visible,
                       ),
-
                       Row(
                         children: [
                           cartIconAdd!,
@@ -193,28 +189,28 @@ class CategoryProducts extends StatelessWidget {
                           )
                         ],
                       ),
-                      if(model.discount != 0)
-                            Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text(
-                            "جنيه",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal),
-                          ),
-                          Text(
-                            model.oldPrice.toString(),
-                            style: const TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ],
-                      ),
+                      if (model.discount != 0)
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Text(
+                              "جنيه",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              model.oldPrice.toString(),
+                              style: const TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ],
+                        ),
                     ],
                   )
                 ],
@@ -226,13 +222,16 @@ class CategoryProducts extends StatelessWidget {
             end: 95,
             top: 10,
             child: InkWell(
-              onTap: (){AppCubit.get(context).addOrDeleteFavorites(id: model.id!);},
-              child:  CircleAvatar(
+              onTap: () {
+                AppCubit.get(context).addOrDeleteFavorites(id: model.id!);
+              },
+              child: CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 15,
                 child: Icon(
                   Icons.favorite,
-                  color:(AppCubit.get(context).favorites[model.id]!) ? Colors.red
+                  color: (AppCubit.get(context).favorites[model.id]!)
+                      ? Colors.red
                       : HexColor("#B8B8B8"),
                 ),
               ),

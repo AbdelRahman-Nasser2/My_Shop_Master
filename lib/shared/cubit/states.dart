@@ -99,6 +99,34 @@ class DeleteCartsItemError extends AppStates {
   DeleteCartsItemError(this.error);
 }
 
+class AddOrDeleteCartsItemLoading extends AppStates {}
+
+class AddOrDeleteCartsItemSuccess extends AppStates {
+  final ChangeCartsModel? model;
+
+  AddOrDeleteCartsItemSuccess(this.model);
+}
+
+class AddOrDeleteCartsItemError extends AppStates {
+  final dynamic error;
+
+  AddOrDeleteCartsItemError(this.error);
+}
+
+class UpdateCartsItemLoading extends AppStates {}
+
+class UpdateCartsItemSuccess extends AppStates {
+  final ChangeCartsModel? model;
+
+  UpdateCartsItemSuccess(this.model);
+}
+
+class UpdateCartsItemError extends AppStates {
+  final dynamic error;
+
+  UpdateCartsItemError(this.error);
+}
+
 class ProductGetDataLoading extends AppStates {}
 
 class ProductGetDataSuccess extends AppStates {}
