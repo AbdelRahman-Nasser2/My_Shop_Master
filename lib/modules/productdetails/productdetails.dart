@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/style/colors.dart';
@@ -35,7 +35,7 @@ class ProductDetails extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_back_ios,
                       color: Colors.black,
                     ),
@@ -53,7 +53,7 @@ class ProductDetails extends StatelessWidget {
                       Stack(
                         children: [
                           Container(
-                            height: 380,
+                            height: 300,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: Colors.blueAccent.withOpacity(0.1),
@@ -202,7 +202,7 @@ class ProductDetails extends StatelessWidget {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 370),
+                        padding: const EdgeInsets.only(top: 290),
                         child: Container(
                           width: double.infinity,
                           decoration: const BoxDecoration(
@@ -262,38 +262,38 @@ class ProductDetails extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                (cubit.productDetailsModel!.data!.discount == 0)
-                                    ? const SizedBox(
-                                        height: 0,
-                                        width: 0,
-                                      )
-                                    : Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          const Text(
-                                            "جنيه",
-                                            style: TextStyle(
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                                color: Colors.grey,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                          Text(
-                                            cubit.productDetailsModel!.data!
-                                                .oldPrice
-                                                .toString(),
-                                            style: const TextStyle(
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                                color: Colors.grey,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                        ],
-                                      ),
+                                Visibility(
+                                    visible: (cubit.productDetailsModel!.data!
+                                                .discount ==
+                                            0)
+                                        ? false
+                                        : true,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        const Text(
+                                          "جنيه",
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                        Text(
+                                          cubit.productDetailsModel!.data!
+                                              .oldPrice
+                                              .toString(),
+                                          style: const TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
+                                    )),
                                 Row(
                                   children: const [
                                     Spacer(),
@@ -307,14 +307,16 @@ class ProductDetails extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                Text(
-                                  cubit.productDetailsModel!.data!.description!,
-                                  style: const TextStyle(
-                                      color: Colors.grey, fontSize: 12),
-                                  textAlign: TextAlign.start,
-                                  textDirection: TextDirection.rtl,
+                                TextFieldTapRegion(
+                                  child: Text(
+                                    cubit.productDetailsModel!.data!
+                                        .description!,
+                                    style: const TextStyle(
+                                        color: Colors.grey, fontSize: 12),
+                                    textAlign: TextAlign.start,
+                                    textDirection: TextDirection.rtl,
+                                  ),
                                 ),
-                                Container(),
                               ],
                             ),
                           ),
@@ -322,7 +324,7 @@ class ProductDetails extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.only(
-                            top: 350, start: 36),
+                            top: 270, start: 36),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -351,12 +353,155 @@ class ProductDetails extends StatelessWidget {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: 18,
-                                child: Icon(Icons.share, color: defaultcolor),
+                                child: Icon(Icons.share, color: defaultColor),
                               ),
                             ),
                           ],
                         ),
                       )
+                    ],
+                  ),
+                ),
+                bottomNavigationBar: Container(
+                  height: 150,
+                  padding: const EdgeInsetsDirectional.only(
+                      top: 15, start: 18, end: 18, bottom: 30),
+                  decoration: BoxDecoration(
+                    color: defaultColor,
+                    shape: BoxShape.rectangle,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(28),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 20,
+                                    child: FloatingActionButton(
+                                      clipBehavior: Clip.antiAlias,
+                                      mini: true,
+                                      backgroundColor: defaultColor,
+                                      onPressed: () {},
+                                      child: const Icon(
+                                        Icons.add,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 3,
+                                  ),
+                                  CircleAvatar(
+                                    radius: 20,
+                                    child: FloatingActionButton(
+                                      clipBehavior: Clip.antiAlias,
+                                      mini: true,
+                                      backgroundColor: HexColor('#406497'),
+                                      onPressed: () {},
+                                      child: const Icon(
+                                        Icons.remove,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      height: 37,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                              color: HexColor('#707070'))),
+                                      child: Center(
+                                        child: Text(
+                                          '1',
+                                          style: GoogleFonts.lato(
+                                              fontSize: 26,
+                                              fontWeight: FontWeight.bold,
+                                              color: defaultColor),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Expanded(flex: 1, child: SizedBox()),
+                          Text(
+                            'الكمية',
+                            style: GoogleFonts.lato(
+                              fontSize: 32,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if (cubit.carts[id]! != false) {
+                            print('t');
+                            cubit.updateItemCarts(
+                                id: cubit.carts2[id]!, quantity: 2);
+                          } else {
+                            cubit.addOrDeleteCarts(id: id);
+                            cubit.updateItemCarts(
+                                id: cubit.carts2[id]!, quantity: 2);
+                          }
+                        },
+                        child: Container(
+                          width: 200,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: HexColor("#F99100"),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text(
+                                  'إضافة للسلة',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.white,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

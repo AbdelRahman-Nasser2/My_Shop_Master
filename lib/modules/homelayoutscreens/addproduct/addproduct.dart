@@ -112,7 +112,7 @@ class AddProductScreen extends StatelessWidget {
                                           child: FloatingActionButton(
                                             clipBehavior: Clip.antiAlias,
                                             mini: true,
-                                            backgroundColor: defaultcolor,
+                                            backgroundColor: defaultColor,
                                             onPressed: () {},
                                             child: Icon(
                                               Icons.add,
@@ -156,7 +156,7 @@ class AddProductScreen extends StatelessWidget {
                                               style: GoogleFonts.lato(
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.bold,
-                                                  color: defaultcolor),
+                                                  color: defaultColor),
                                             ),
                                           ),
                                         )
@@ -331,7 +331,7 @@ class AddProductScreen extends StatelessWidget {
                                                               Clip.antiAlias,
                                                           mini: true,
                                                           backgroundColor:
-                                                              defaultcolor,
+                                                              defaultColor,
                                                           onPressed: () {},
                                                           child: Icon(
                                                             Icons.add,
@@ -385,7 +385,7 @@ class AddProductScreen extends StatelessWidget {
                                                                     FontWeight
                                                                         .bold,
                                                                 color:
-                                                                    defaultcolor),
+                                                                    defaultColor),
                                                           ),
                                                         ),
                                                       )

@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:shop/models/CategoryProductsModel.dart';
 import 'package:shop/models/homemodel.dart';
 import 'package:shop/modules/productdetails/productdetails.dart';
 import 'package:shop/shared/components/components.dart';
@@ -92,7 +91,7 @@ class ShowAllProducts extends StatelessWidget {
                 itemBuilder: (context, index) => productsItem(
                   context,
                   cubit.homeModel!.data.products[index],
-                  cubit.cartIconAdd(),
+                  cubit.cartIconAdd(cubit.homeModel!.data.products[index].id),
                   onFavTap: () {
                     cubit.addOrDeleteFavorites(
                         id: cubit

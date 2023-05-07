@@ -43,6 +43,18 @@ class HomeScreen extends StatelessWidget {
             }
           }
         }
+        if (states is AddOrDeleteCartsItemSuccess) {
+          if (!states.model!.status!) {
+            showToast(state: ToastStates.ERROR, text: states.model!.message!);
+          } else {
+            if (states.model!.message == 'تمت الإضافة بنجاح') {
+              showToast(
+                  state: ToastStates.SUCCESS, text: states.model!.message!);
+            } else {
+              showToast(state: ToastStates.ERROR, text: states.model!.message!);
+            }
+          }
+        }
       },
       builder: (BuildContext context, AppStates states) {
         AppCubit cubit = AppCubit.get(context);
@@ -199,7 +211,7 @@ class HomeScreen extends StatelessWidget {
                   buildHomeProductList(
                       type: 'أفضل العروض',
                       list: products,
-                      cartIconAdd: cubit.cartIconAdd(),
+                      // cartIconAdd: cubit.cartIconAdd(AppCubit.get(context).),
                       allShow_onTap: () {
                         navigateTo(context,
                             ShowAllProducts(categoryName: 'أفضل العروض'));
@@ -218,7 +230,7 @@ class HomeScreen extends StatelessWidget {
                       navigateTo(context,
                           ShowAllProducts(categoryName: 'الأكثر مبيعا'));
                     },
-                    cartIconAdd: cubit.cartIconAdd(),
+                    // cartIconAdd: cubit.cartIconAdd(),
                   ),
                 ],
               ),

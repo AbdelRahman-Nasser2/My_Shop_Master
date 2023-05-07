@@ -120,144 +120,92 @@ class AppCubit extends Cubit<AppStates> {
 
   PersistentTabController controller = PersistentTabController(initialIndex: 4);
 
-  // void bottomNav(int index) {
-  //   currentIndex = index;
-  //   emit(AppBottomNavBarState());
-  // }
-  //
-  // Widget navigatBar() => BottomNavigationBar(
-  //       onTap: (index) {
-  //         bottomNav(index);
-  //       },
-  //       currentIndex: currentIndex,
-  //       type: BottomNavigationBarType.fixed,
-  //       selectedItemColor: HexColor("#1E55A2"),
-  //       unselectedItemColor: Colors.black,
-  //       unselectedLabelStyle: TextStyle(
-  //         fontWeight: FontWeight.bold,
-  //         fontSize: 12,
-  //       ),
-  //       selectedLabelStyle: TextStyle(
-  //         fontWeight: FontWeight.bold,
-  //         fontSize: 16,
-  //       ),
-  //       items: [
-  //         BottomNavigationBarItem(
-  //           icon: Icon(
-  //             Icons.person,
-  //             size: 30,
-  //           ),
-  //           label: "الحساب",
-  //         ),
-  //         BottomNavigationBarItem(
-  //           icon: Icon(
-  //             Icons.notifications,
-  //             size: 30,
-  //           ),
-  //           label: "الاشعارات",
-  //         ),
-  //         BottomNavigationBarItem(
-  //           icon: Icon(
-  //             Icons.favorite_outlined,
-  //             size: 30,
-  //           ),
-  //           label: "المفضلة",
-  //         ),
-  //         BottomNavigationBarItem(
-  //           icon: Icon(
-  //             Icons.home,
-  //             size: 30,
-  //           ),
-  //           label: "الرئيسية",
-  //         ),
-  //       ],
-  //     );
-  CartsDataModel? cartsDataModel;
-  void getCartsData() {
-    emit(CartsDataLoading());
-
-    DioHelper.getData(
-      url: CARTS,
-      token: token,
-    ).then((value) {
-      cartsDataModel = CartsDataModel.fromJson(value.data);
-      cartsDataModel?.data!.cartItems!.forEach((element) {
-        carts.addAll({element.id!: element.product!.inCart!});
-      });
-      print(carts);
-      // if (kDebugMode)
-      print(cartsDataModel!.status);
-      //   print(cartsDataModel!.data!.cartItems![1].product!.name);
-      // }
-      emit(CartsDataSuccess());
-    }).catchError((error) {
-      print(error);
-
-      emit(CartsDataError(error));
-    });
-  }
-
-  Map<int, bool> carts = {};
-
-  ChangeCartsModel? changeCartsModel;
-  void deleteCartItem(int? id) {
-    emit(DeleteCartsItemLoading());
-
-    DioHelper.deleteData(
-      url: '$CARTS/ ${id!.toString()}',
-      token: token,
-    ).then((value) {
-      changeCartsModel = ChangeCartsModel.fromJson(value.data);
-
-      if (!changeCartsModel!.status!) {
-        carts[id] = !carts[id]!;
-      } else {
-        getCartsData();
-      }
-      print(changeCartsModel!.message);
-
-      emit(DeleteCartsItemSuccess(changeCartsModel));
-    }).catchError((error) {
-      carts[id] = !carts[id]!;
-
-      emit(DeleteCartsItemError(error.toString()));
-    });
-  }
-
   Widget cartsIcon(cartContext) => InkWell(
         onTap: () {
           getCartsData();
           showDialog(
               useRootNavigator: false,
               context: cartContext,
-              builder: (context) => Center(
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.symmetric(
-                          horizontal: 20, vertical: 40),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(28),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black,
-                                blurRadius: 2,
-                                blurStyle: BlurStyle.outer,
-                                spreadRadius: 5)
-                          ],
-                        ),
-                        child: ListView.separated(
-                            physics: BouncingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            itemBuilder: (context, index) =>
-                                cartItem(index, cartContext),
-                            separatorBuilder: (context, index) => SizedBox(
-                                  height: 5,
+              builder: (context) => Padding(
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        horizontal: 20, vertical: 40),
+                    child: Container(
+                      padding: EdgeInsetsDirectional.only(bottom: 35),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black,
+                              blurRadius: 2,
+                              blurStyle: BlurStyle.outer,
+                              spreadRadius: 5)
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView.separated(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                itemBuilder: (context, index) {
+                                  return cartItem(index, cartContext);
+                                },
+                                separatorBuilder: (context, index) => SizedBox(
+                                      height: 5,
+                                    ),
+                                itemCount:
+                                    cartsDataModel!.data!.cartItems!.length),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Divider(
+                              thickness: 1,
+                              height: 14,
+                              color: HexColor('#D7DDE1'),
+                            ),
+                          ),
+                          Text(
+                            'إجمالي السعر',
+                            style: GoogleFonts.lato(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                color: defaultColor),
+                          ),
+                          Text(
+                            cartsDataModel!.data!.total.toString(),
+                            style: GoogleFonts.lato(
+                                fontSize: 34,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              width: 200,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: HexColor("#F99100"),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Center(
+                                child: Text(
+                                  'متابعة عملية الشراء',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                            itemCount: cartsDataModel!.data!.cartItems!.length),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ));
@@ -418,7 +366,7 @@ class AppCubit extends Cubit<AppStates> {
                                       child: FloatingActionButton(
                                         clipBehavior: Clip.antiAlias,
                                         mini: true,
-                                        backgroundColor: defaultcolor,
+                                        backgroundColor: defaultColor,
                                         onPressed: () {},
                                         child: Icon(
                                           Icons.add,
@@ -465,7 +413,7 @@ class AppCubit extends Cubit<AppStates> {
                                           style: GoogleFonts.lato(
                                               fontSize: 13,
                                               fontWeight: FontWeight.bold,
-                                              color: defaultcolor),
+                                              color: defaultColor),
                                         ),
                                       ),
                                     )
@@ -559,12 +507,14 @@ class AppCubit extends Cubit<AppStates> {
         ),
       );
 
-  Widget cartIconAdd() => InkWell(
-        onTap: () {},
+  Widget cartIconAdd(int? id) => InkWell(
+        onTap: () {
+          addOrDeleteCarts(id: id!);
+        },
         child: Stack(
           children: [
             CircleAvatar(
-              backgroundColor: defaultcolor,
+              backgroundColor: defaultColor,
               radius: 17,
               child: Icon(
                 Icons.shopping_cart_sharp,
@@ -589,6 +539,110 @@ class AppCubit extends Cubit<AppStates> {
           ],
         ),
       );
+
+  Map<int, bool> carts = {};
+  Map<int, int> carts2 = {};
+
+  CartsDataModel? cartsDataModel;
+  void getCartsData() {
+    emit(CartsDataLoading());
+
+    DioHelper.getData(
+      url: CARTS,
+      token: token,
+    ).then((value) {
+      cartsDataModel = CartsDataModel.fromJson(value.data);
+      cartsDataModel?.data!.cartItems!.forEach((element) {
+        // carts.addAll({element.id!: element.product!.inCart!});
+        carts2.addAll({element.product!.id!: element.id!});
+      });
+      // print(carts2);
+      print(carts);
+      // // if (kDebugMode)
+      // print(cartsDataModel!.status);
+      // print(cartsDataModel!.data!.cartItems![1].product!.name);
+      // }
+      emit(CartsDataSuccess());
+    }).catchError((error) {
+      print(error);
+
+      emit(CartsDataError(error));
+    });
+  }
+
+  ChangeCartsModel? changeCartsModel;
+  void deleteCartItem(int? id) {
+    emit(DeleteCartsItemLoading());
+    // carts[id] = !carts[id]!;
+    DioHelper.deleteData(
+      url: '$CARTS/ ${id!}',
+      token: token,
+    ).then((value) {
+      changeCartsModel = ChangeCartsModel.fromJson(value.data);
+      print(carts);
+      if (!changeCartsModel!.status!) {
+        carts[id] = !carts[id]!;
+      } else {
+        getCartsData();
+      }
+      print(changeCartsModel!.message);
+
+      emit(DeleteCartsItemSuccess(changeCartsModel));
+    }).catchError((error) {
+      carts[id] = !carts[id]!;
+
+      emit(DeleteCartsItemError(error.toString()));
+    });
+  }
+
+  ChangeCartsModel? addOrDeleteCartsItem;
+
+  void addOrDeleteCarts({
+    required int id,
+  }) {
+    emit(AddOrDeleteCartsItemLoading());
+    carts[id] = !carts[id]!;
+    DioHelper.postsData(url: CARTS, token: token, data: {
+      'product_id': id,
+    }).then((value) {
+      addOrDeleteCartsItem = ChangeCartsModel.fromJson(value.data);
+      if (!addOrDeleteCartsItem!.status!) {
+        carts[id] = !carts[id]!;
+      } else {
+        getCartsData();
+      }
+
+      emit(AddOrDeleteCartsItemSuccess(addOrDeleteCartsItem));
+    }).catchError((error) {
+      carts[id] = !carts[id]!;
+
+      emit(AddOrDeleteCartsItemError(error.toString()));
+    });
+  }
+
+  ChangeCartsModel? updateItemCart;
+  void updateItemCarts({
+    required int id,
+    required int quantity,
+  }) {
+    emit(UpdateCartsItemLoading());
+
+    DioHelper.putData(url: '$CARTS/ ${id.toString()}', token: token, data: {
+      'quantity': quantity,
+    }).then((value) {
+      updateItemCart = ChangeCartsModel.fromJson(value.data);
+      print(updateItemCart!.message);
+      if (!updateItemCart!.status!) {
+      } else {
+        getCartsData();
+      }
+
+      emit(UpdateCartsItemSuccess(addOrDeleteCartsItem));
+    }).catchError((error) {
+      emit(UpdateCartsItemError(error.toString()));
+    });
+  }
+
   var searchController = TextEditingController();
 
   Widget normalAppBar(
@@ -830,6 +884,7 @@ class AppCubit extends Cubit<AppStates> {
       'product_id': id,
     }).then((value) {
       changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
+      print(favorites);
       if (!changeFavoritesModel!.status!) {
         favorites[id] = !favorites[id]!;
       } else {
