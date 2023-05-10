@@ -88,8 +88,8 @@ class CartsDataError extends AppStates {
 class DeleteCartsItemLoading extends AppStates {}
 
 class DeleteCartsItemSuccess extends AppStates {
-  final ChangeCartsModel? model;
-
+  ChangeCartsModel? model;
+  DeleteCartsItemSuccess.noParms();
   DeleteCartsItemSuccess(this.model);
 }
 
