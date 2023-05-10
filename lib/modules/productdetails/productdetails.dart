@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shop/shared/components/components.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/style/colors.dart';
 
@@ -17,11 +18,24 @@ class ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (BuildContext context, AppStates states) {},
+      listener: (BuildContext context, AppStates states) {
+        if (states is UpdateCartsItemSuccess) {
+          if (!states.model!.status!) {
+            showToast(state: ToastStates.ERROR, text: states.model!.message);
+          } else {
+            if (states.model!.message == 'تم التعديل بنجاح') {
+              showToast(
+                  state: ToastStates.SUCCESS, text: states.model!.message!);
+            } else {
+              showToast(state: ToastStates.ERROR, text: states.model!.message!);
+            }
+          }
+        }
+      },
       builder: (BuildContext context, AppStates states) {
         AppCubit cubit = AppCubit.get(context);
         CarouselController carouselProductController = CarouselController();
-
+        var counter = 1;
         return ConditionalBuilder(
           condition: states is! ProductGetDataLoading,
           builder: (BuildContext context) {
@@ -398,7 +412,9 @@ class ProductDetails extends StatelessWidget {
                                       clipBehavior: Clip.antiAlias,
                                       mini: true,
                                       backgroundColor: defaultColor,
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        cubit.increaseCounter();
+                                      },
                                       child: const Icon(
                                         Icons.add,
                                         size: 30,
@@ -415,7 +431,9 @@ class ProductDetails extends StatelessWidget {
                                       clipBehavior: Clip.antiAlias,
                                       mini: true,
                                       backgroundColor: HexColor('#406497'),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        cubit.decreaseCounter();
+                                      },
                                       child: const Icon(
                                         Icons.remove,
                                         color: Colors.white,
@@ -438,11 +456,14 @@ class ProductDetails extends StatelessWidget {
                                               color: HexColor('#707070'))),
                                       child: Center(
                                         child: Text(
-                                          '1',
+                                          cubit.counter.toString(),
                                           style: GoogleFonts.lato(
-                                              fontSize: 26,
-                                              fontWeight: FontWeight.bold,
-                                              color: defaultColor),
+                                            fontSize: 26,
+                                            fontWeight: FontWeight.bold,
+                                            color: defaultColor,
+                                          ),
+                                          semanticsLabel:
+                                              cubit.counter.toString(),
                                         ),
                                       ),
                                     ),
@@ -463,15 +484,17 @@ class ProductDetails extends StatelessWidget {
                         ],
                       ),
                       InkWell(
-                        onTap: () {
+                        onTap: () async {
                           if (cubit.carts[id]! != false) {
                             print('t');
                             cubit.updateItemCarts(
-                                id: cubit.carts2[id]!, quantity: 2);
+                              id: cubit.carts2[id]!,
+                              quantity: cubit.counter,
+                            );
                           } else {
                             cubit.addOrDeleteCarts(id: id);
-                            cubit.updateItemCarts(
-                                id: cubit.carts2[id]!, quantity: 2);
+                            // cubit.updateItemCarts(
+                            //     id: cubit.carts2[id]!, quantity: 2);
                           }
                         },
                         child: Container(

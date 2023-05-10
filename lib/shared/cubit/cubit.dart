@@ -249,6 +249,7 @@ class AppCubit extends Cubit<AppStates> {
           ),
         ),
       );
+  TextEditingController textController = TextEditingController();
 
   Widget cartItem(int index, context) => GestureDetector(
         onTap: () {
@@ -279,7 +280,13 @@ class AppCubit extends Cubit<AppStates> {
               children: [
                 IconButton(
                   onPressed: () {
-                    deleteCartItem(cartsDataModel!.data!.cartItems![index].id);
+                    deleteCartItem(
+                      id: cartsDataModel!.data!.cartItems![index].id!,
+                    );
+                    carts[
+                        cartsDataModel!
+                            .data!.cartItems![index].product!.id!] = !carts[
+                        cartsDataModel!.data!.cartItems![index].product!.id!]!;
                   },
                   icon: Icon(
                     Icons.close,
@@ -406,7 +413,20 @@ class AppCubit extends Cubit<AppStates> {
                                           border: Border.all(
                                               color: HexColor('#707070'))),
                                       child: Center(
-                                        child: Text(
+                                        child:
+                                            // TextFormField(
+                                            //   // controller: ,
+                                            //   initialValue: cartsDataModel!
+                                            //       .data!.cartItems![index].quantity!
+                                            //       .toString(),
+                                            //   style: GoogleFonts.lato(
+                                            //       fontSize: 13,
+                                            //       fontWeight: FontWeight.bold,
+                                            //       color: defaultColor),
+                                            //   textAlign: TextAlign.center,
+                                            // ),
+
+                                            Text(
                                           cartsDataModel!
                                               .data!.cartItems![index].quantity!
                                               .toString(),
@@ -414,6 +434,9 @@ class AppCubit extends Cubit<AppStates> {
                                               fontSize: 13,
                                               fontWeight: FontWeight.bold,
                                               color: defaultColor),
+                                          semanticsLabel: cartsDataModel!
+                                              .data!.cartItems![index].quantity!
+                                              .toString(),
                                         ),
                                       ),
                                     )
@@ -459,9 +482,7 @@ class AppCubit extends Cubit<AppStates> {
                               width: 10,
                             ),
                             Text(
-                              cartsDataModel!
-                                  .data!.cartItems![index].product!.price!
-                                  .toString(),
+                              ' ${cartsDataModel!.data!.cartItems![index].product!.price! * cartsDataModel!.data!.cartItems![index].quantity}',
                               style: GoogleFonts.lato(
                                   fontSize: 21,
                                   color: HexColor('#F99100'),
@@ -571,14 +592,20 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   ChangeCartsModel? changeCartsModel;
-  void deleteCartItem(int? id) {
+
+  void deleteCartItem({
+    required int id,
+  }) {
     emit(DeleteCartsItemLoading());
     // carts[id] = !carts[id]!;
+
     DioHelper.deleteData(
-      url: '$CARTS/ ${id!}',
+      url: '$CARTS/ ${id.toString()}',
       token: token,
     ).then((value) {
       changeCartsModel = ChangeCartsModel.fromJson(value.data);
+      // getCartsData();
+      // carts[id] = !carts[id]!;
       print(carts);
       if (!changeCartsModel!.status!) {
         carts[id] = !carts[id]!;
@@ -637,10 +664,21 @@ class AppCubit extends Cubit<AppStates> {
         getCartsData();
       }
 
-      emit(UpdateCartsItemSuccess(addOrDeleteCartsItem));
+      emit(UpdateCartsItemSuccess(updateItemCart));
     }).catchError((error) {
       emit(UpdateCartsItemError(error.toString()));
     });
+  }
+
+  var counter = 1;
+  void increaseCounter() {
+    counter++;
+    // return counter;
+  }
+
+  void decreaseCounter() {
+    counter--;
+    // return counter;
   }
 
   var searchController = TextEditingController();
