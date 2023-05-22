@@ -48,6 +48,7 @@ class ProductDetails extends StatelessWidget {
                   leading: IconButton(
                     onPressed: () {
                       Navigator.pop(context);
+                      cubit.counter = 1;
                     },
                     icon: const Icon(
                       Icons.arrow_back_ios,
@@ -308,8 +309,8 @@ class ProductDetails extends StatelessWidget {
                                         ),
                                       ],
                                     )),
-                                Row(
-                                  children: const [
+                                const Row(
+                                  children: [
                                     Spacer(),
                                     Text(
                                       "الوصف",
@@ -503,10 +504,10 @@ class ProductDetails extends StatelessWidget {
                           decoration: BoxDecoration(
                               color: HexColor("#F99100"),
                               borderRadius: BorderRadius.circular(20)),
-                          child: Center(
+                          child: const Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
                                   'إضافة للسلة',
                                   style: TextStyle(

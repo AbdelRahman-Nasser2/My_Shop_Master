@@ -250,8 +250,12 @@ class AppCubit extends Cubit<AppStates> {
         ),
       );
   TextEditingController textController = TextEditingController();
-
-  Widget cartItem(int index, context) => GestureDetector(
+  int? q = 1;
+  Widget cartItem(
+    int index,
+    context,
+  ) =>
+      GestureDetector(
         onTap: () {
           getProductDataById(
               cartsDataModel!.data!.cartItems![index].product!.id!, context);
@@ -374,7 +378,16 @@ class AppCubit extends Cubit<AppStates> {
                                         clipBehavior: Clip.antiAlias,
                                         mini: true,
                                         backgroundColor: defaultColor,
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          updateItemCarts(
+                                              id: cartsDataModel!
+                                                  .data!.cartItems![index].id!,
+                                              quantity: cartsDataModel!
+                                                      .data!
+                                                      .cartItems![index]
+                                                      .quantity! +
+                                                  1);
+                                        },
                                         child: Icon(
                                           Icons.add,
                                           size: 20,
@@ -391,7 +404,25 @@ class AppCubit extends Cubit<AppStates> {
                                         clipBehavior: Clip.antiAlias,
                                         mini: true,
                                         backgroundColor: HexColor('#406497'),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          updateItemCarts(
+                                              id: cartsDataModel!
+                                                  .data!.cartItems![index].id!,
+                                              quantity: (cartsDataModel!
+                                                          .data!
+                                                          .cartItems![index]
+                                                          .quantity ==
+                                                      1)
+                                                  ? cartsDataModel!
+                                                      .data!
+                                                      .cartItems![index]
+                                                      .quantity!
+                                                  : cartsDataModel!
+                                                          .data!
+                                                          .cartItems![index]
+                                                          .quantity! -
+                                                      1);
+                                        },
                                         child: Icon(
                                           Icons.remove,
                                           color: Colors.white,
@@ -414,6 +445,7 @@ class AppCubit extends Cubit<AppStates> {
                                               color: HexColor('#707070'))),
                                       child: Center(
                                         child:
+
                                             // TextFormField(
                                             //   // controller: ,
                                             //   initialValue: cartsDataModel!
@@ -424,6 +456,7 @@ class AppCubit extends Cubit<AppStates> {
                                             //       fontWeight: FontWeight.bold,
                                             //       color: defaultColor),
                                             //   textAlign: TextAlign.center,
+                                            //   buildCounter: counter,
                                             // ),
 
                                             Text(
@@ -677,7 +710,8 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void decreaseCounter() {
-    counter--;
+    (counter == 1) ? counter : counter --;
+    // counter--;
     // return counter;
   }
 
