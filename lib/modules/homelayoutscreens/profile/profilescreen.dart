@@ -4,10 +4,13 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shop/restart.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
 import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
+import 'package:shop/shared/style/colors.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -61,14 +64,97 @@ class ProfileScreen extends StatelessWidget {
                   SvgPicture.asset('assets/images/icons&logos/like.svg'),
                   () => null),
               ProfileItemModel(
-                  "تسجيل خروج",
-                  SvgPicture.asset('assets/images/icons&logos/logout.svg'),
-                  (){
-                    CacheHelper.removeAllData().then((value) {
-
-                    });
-                    // navigateAndFinish(context, OnBoardingScreen());
-                  }),
+                "تسجيل خروج",
+                SvgPicture.asset('assets/images/icons&logos/logout.svg'),
+                () {
+                  showDialog(
+                    context: context,
+                    traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
+                    builder: (context) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 30,
+                          ),
+                          child: Container(
+                            padding:
+                                EdgeInsetsDirectional.symmetric(vertical: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(28),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 1,
+                                    blurStyle: BlurStyle.outer,
+                                    spreadRadius: 3)
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'هل تريد تسجيل الخروج؟',
+                                  style: GoogleFonts.lato(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Row(
+                                    // mainAxisAlignment:
+                                    //     MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: TextButton(
+                                          onPressed: () {
+                                            CacheHelper.removeData(key: 'token')
+                                                .then((value) {
+                                              RestartWidget.restartApp(context);
+                                            });
+                                          },
+                                          child: Text(
+                                            'تسجيل الخروج',
+                                            style: GoogleFonts.lato(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: defaultColor),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            'إلغاء',
+                                            style: GoogleFonts.lato(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: defaultColor),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ];
             return Scaffold(
               appBar: PreferredSize(
@@ -151,8 +237,7 @@ class ProfileScreen extends StatelessWidget {
                       // mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SvgPicture.asset(
-                            'assets/images/icons&logos/chat.svg'),
+                        SvgPicture.asset('assets/images/icons&logos/chat.svg'),
                       ],
                     ),
                   ),
@@ -160,7 +245,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               body: ListView.separated(
                 padding:
-                    EdgeInsets.only(top: 15, right: 5, left: 5, bottom: 10),
+                    EdgeInsets.only(top: 15, right: 5, left: 5, bottom: 20),
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) =>
                     profileItem(profileItems[index]),

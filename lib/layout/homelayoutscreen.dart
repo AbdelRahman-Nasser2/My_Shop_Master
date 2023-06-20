@@ -200,7 +200,7 @@ class HomeLayoutScreen extends StatelessWidget {
                 controller: cubit.controller,
                 screens: cubit.buildScreens(),
                 items: cubit.navBarsItems(),
-                confineInSafeArea: false,
+                confineInSafeArea: true,
                 backgroundColor: Colors.white,
                 handleAndroidBackButtonPress: true,
                 resizeToAvoidBottomInset: true,
@@ -226,8 +226,11 @@ class HomeLayoutScreen extends StatelessWidget {
             },
             fallback: (BuildContext context) {
               return Container(
-                  color: Colors.white,
-                  child: const Center(child: CircularProgressIndicator()));
+                color: Colors.white,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
             },
           );
         },
@@ -236,7 +239,7 @@ class HomeLayoutScreen extends StatelessWidget {
   }
 
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }
 
 //     appBar: PreferredSize(

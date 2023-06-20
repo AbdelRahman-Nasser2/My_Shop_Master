@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_string_interpolations, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: unnecessary_string_interpolations, prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ import 'package:shop/models/favoritesmodel.dart';
 import 'package:shop/models/homemodel.dart';
 import 'package:shop/models/notificationmodel.dart';
 import 'package:shop/models/profilemodel.dart';
+import 'package:shop/modules/completeShopping/completeShopping.dart';
 import 'package:shop/modules/homelayoutscreens/addproduct/addproduct.dart';
 import 'package:shop/modules/homelayoutscreens/favourites/favoritesscreen.dart';
 import 'package:shop/modules/homelayoutscreens/home/homeScreen.dart';
@@ -35,7 +36,7 @@ class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
 
   static AppCubit get(context) => BlocProvider.of(context);
-
+  static Widget? widget;
   var pageViewController = PageController(initialPage: 0);
   int currentIndex = 3;
   // var bottomNavIndex = 2;
@@ -145,66 +146,197 @@ class AppCubit extends Cubit<AppStates> {
                       ),
                       child: Column(
                         children: [
+                          // Padding(
+                          //   padding: const EdgeInsetsDirectional.only(
+                          //       start: 25, end: 25, top: 10, bottom: 8),
+                          //   child: Row(
+                          //     mainAxisSize: MainAxisSize.max,
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       GestureDetector(
+                          //         onTap: () {
+                          //           Navigator.pop(context);
+                          //         },
+                          //         child: Icon(
+                          //           Icons.close,
+                          //           size: 30,
+                          //           color: HexColor('#1B2538'),
+                          //         ),
+                          //       ),
+                          //       Text(
+                          //         'السلة',
+                          //         style: GoogleFonts.lato(
+                          //             fontSize: 20,
+                          //             fontWeight: FontWeight.bold,
+                          //             color: Colors.black),
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 10),
+                            child: Divider(
+                              thickness: 2,
+                              height: 14,
+                              color: HexColor('#D7DDE1'),
+                            ),
+                          ),
                           Expanded(
                             child: ListView.separated(
                                 physics: BouncingScrollPhysics(),
+                                primary: true,
                                 scrollDirection: Axis.vertical,
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
                                 itemBuilder: (context, index) {
-                                  return cartItem(index, cartContext);
+                                  if (index == 0) {
+                                    return Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 25,
+                                          end: 25,
+                                          top: 10,
+                                          bottom: 8),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Icon(
+                                              Icons.close,
+                                              size: 30,
+                                              color: HexColor('#1B2538'),
+                                            ),
+                                          ),
+                                          Text(
+                                            'السلة',
+                                            style: GoogleFonts.lato(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                  if (index ==
+                                      cartsDataModel!.data!.cartItems!.length +
+                                          1) {
+                                    return Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 5),
+                                          child: Divider(
+                                            thickness: 2,
+                                            height: 14,
+                                            color: HexColor('#D7DDE1'),
+                                          ),
+                                        ),
+                                        Text(
+                                          'إجمالي السعر',
+                                          style: GoogleFonts.lato(
+                                              fontSize: 26,
+                                              fontWeight: FontWeight.bold,
+                                              color: defaultColor),
+                                        ),
+                                        Text(
+                                          cartsDataModel!.data!.total
+                                              .toString(),
+                                          style: GoogleFonts.lato(
+                                              fontSize: 34,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            navigateTo(
+                                                context, CompleteShopping());
+                                          },
+                                          child: Container(
+                                            width: 200,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                                color: HexColor("#F99100"),
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            child: Center(
+                                              child: Text(
+                                                'متابعة عملية الشراء',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return cartItem(index - 1, cartContext);
                                 },
                                 separatorBuilder: (context, index) => SizedBox(
                                       height: 5,
                                     ),
                                 itemCount:
-                                    cartsDataModel!.data!.cartItems!.length),
+                                    cartsDataModel!.data!.cartItems!.length +
+                                        2),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Divider(
-                              thickness: 1,
-                              height: 14,
-                              color: HexColor('#D7DDE1'),
-                            ),
-                          ),
-                          Text(
-                            'إجمالي السعر',
-                            style: GoogleFonts.lato(
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                                color: defaultColor),
-                          ),
-                          Text(
-                            cartsDataModel!.data!.total.toString(),
-                            style: GoogleFonts.lato(
-                                fontSize: 34,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              width: 200,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: HexColor("#F99100"),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Center(
-                                child: Text(
-                                  'متابعة عملية الشراء',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(
+                          //       horizontal: 10, vertical: 5),
+                          //   child: Divider(
+                          //     thickness: 2,
+                          //     height: 14,
+                          //     color: HexColor('#D7DDE1'),
+                          //   ),
+                          // ),
+                          // Text(
+                          //   'إجمالي السعر',
+                          //   style: GoogleFonts.lato(
+                          //       fontSize: 26,
+                          //       fontWeight: FontWeight.bold,
+                          //       color: defaultColor),
+                          // ),
+                          // Text(
+                          //   cartsDataModel!.data!.total.toString(),
+                          //   style: GoogleFonts.lato(
+                          //       fontSize: 34,
+                          //       fontWeight: FontWeight.bold,
+                          //       color: Colors.black),
+                          // ),
+                          // SizedBox(
+                          //   height: 20,
+                          // ),
+                          // GestureDetector(
+                          //   onTap: () {},
+                          //   child: Container(
+                          //     width: 200,
+                          //     height: 40,
+                          //     decoration: BoxDecoration(
+                          //         color: HexColor("#F99100"),
+                          //         borderRadius: BorderRadius.circular(20)),
+                          //     child: Center(
+                          //       child: Text(
+                          //         'متابعة عملية الشراء',
+                          //         style: TextStyle(
+                          //           fontWeight: FontWeight.bold,
+                          //           fontSize: 18,
+                          //           color: Colors.white,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -249,8 +381,7 @@ class AppCubit extends Cubit<AppStates> {
           ),
         ),
       );
-  TextEditingController textController = TextEditingController();
-  int? q = 1;
+
   Widget cartItem(
     int index,
     context,
@@ -611,14 +742,16 @@ class AppCubit extends Cubit<AppStates> {
         carts2.addAll({element.product!.id!: element.id!});
       });
       // print(carts2);
-      print(carts);
+      // print(carts);
       // // if (kDebugMode)
       // print(cartsDataModel!.status);
       // print(cartsDataModel!.data!.cartItems![1].product!.name);
       // }
       emit(CartsDataSuccess());
     }).catchError((error) {
-      print(error);
+      if (kDebugMode) {
+        print(error);
+      }
 
       emit(CartsDataError(error));
     });
@@ -639,13 +772,13 @@ class AppCubit extends Cubit<AppStates> {
       changeCartsModel = ChangeCartsModel.fromJson(value.data);
       // getCartsData();
       // carts[id] = !carts[id]!;
-      print(carts);
+      // print(carts);
       if (!changeCartsModel!.status!) {
         carts[id] = !carts[id]!;
       } else {
         getCartsData();
       }
-      print(changeCartsModel!.message);
+      // print(changeCartsModel!.message);
 
       emit(DeleteCartsItemSuccess(changeCartsModel));
     }).catchError((error) {
@@ -691,7 +824,9 @@ class AppCubit extends Cubit<AppStates> {
       'quantity': quantity,
     }).then((value) {
       updateItemCart = ChangeCartsModel.fromJson(value.data);
-      print(updateItemCart!.message);
+      if (kDebugMode) {
+        print(updateItemCart!.message);
+      }
       if (!updateItemCart!.status!) {
       } else {
         getCartsData();
@@ -710,7 +845,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void decreaseCounter() {
-    (counter == 1) ? counter : counter --;
+    (counter == 1) ? counter : counter--;
     // counter--;
     // return counter;
   }
@@ -736,7 +871,7 @@ class AppCubit extends Cubit<AppStates> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -767,18 +902,17 @@ class AppCubit extends Cubit<AppStates> {
                             ),
                           ),
                         )
-                      : expectSearch!
+                      : Expanded(child: expectSearch!)
                 ],
               ),
               SizedBox(
                 height: 10,
               ),
-              addChild == !false
-                  ? child!
-                  : SizedBox(
-                      height: 0,
-                      width: 0,
-                    ),
+              // Visibility(
+              //   visible: addChild!,
+              //   child: child!,
+              // ),
+              addChild == !false ? child! : SizedBox.shrink(),
             ],
           ),
         ),
@@ -923,7 +1057,7 @@ class AppCubit extends Cubit<AppStates> {
       token: token,
     ).then((value) {
       notificationModel = NotificationModel.fromJson(value.data);
-      print(notificationModel!.data!.firstPageUrl);
+      // print(notificationModel!.data!.firstPageUrl);
       emit(NotificationDataSuccess());
     }).catchError((error) {
       emit(NotificationDataError(error));
@@ -956,7 +1090,7 @@ class AppCubit extends Cubit<AppStates> {
       'product_id': id,
     }).then((value) {
       changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
-      print(favorites);
+      // print(favorites);
       if (!changeFavoritesModel!.status!) {
         favorites[id] = !favorites[id]!;
       } else {

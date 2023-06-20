@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,7 +36,6 @@ class ProductDetails extends StatelessWidget {
       builder: (BuildContext context, AppStates states) {
         AppCubit cubit = AppCubit.get(context);
         CarouselController carouselProductController = CarouselController();
-        var counter = 1;
         return ConditionalBuilder(
           condition: states is! ProductGetDataLoading,
           builder: (BuildContext context) {
@@ -487,7 +487,9 @@ class ProductDetails extends StatelessWidget {
                       InkWell(
                         onTap: () async {
                           if (cubit.carts[id]! != false) {
-                            print('t');
+                            if (kDebugMode) {
+                              print('t');
+                            }
                             cubit.updateItemCarts(
                               id: cubit.carts2[id]!,
                               quantity: cubit.counter,
