@@ -189,6 +189,7 @@ Widget appBarShape({
     Container(
       width: double.infinity,
       height: height,
+      clipBehavior: Clip.antiAlias,
       padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: HexColor("#1E55A2").withOpacity(opacity),

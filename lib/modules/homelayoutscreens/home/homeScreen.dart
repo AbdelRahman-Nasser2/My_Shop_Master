@@ -137,7 +137,7 @@ class HomeScreen extends StatelessWidget {
                                   enlargeCenterPage: true,
                                   reverse: false,
                                   autoPlay: true,
-                                  autoPlayInterval: Duration(seconds: 3),
+                                  autoPlayInterval: Duration(minutes: 1),
                                   autoPlayAnimationDuration:
                                       Duration(seconds: 1),
                                   autoPlayCurve: Curves.fastOutSlowIn,

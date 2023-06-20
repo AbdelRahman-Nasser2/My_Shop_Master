@@ -10,6 +10,7 @@ import 'package:shop/layout/homelayoutscreen.dart';
 import 'package:shop/modules/loginScreens/loginScreen/loginScreen.dart';
 import 'package:shop/modules/loginScreens/onboardingscreen/onboardingscreen.dart';
 import 'package:shop/modules/loginScreens/onboardingscreen/start.dart';
+import 'package:shop/restart.dart';
 import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
@@ -33,9 +34,7 @@ void main() async {
   DioHelper.init();
   await CacheHelper.init();
   token = CacheHelper.get(key: "token");
-  // token =
-  //     "bHweRD7nlCcmSshcSqVhnXq2Vzri1aLpq8YCrdNh9OTdAhbryzmsrCYkNftuyxTnUMEHJ9";
-  // CacheHelper.removeAllData();
+
   onBoarding = CacheHelper.get(key: "onBoarding");
   start = CacheHelper.get(key: "start");
   // print(token);
@@ -52,12 +51,20 @@ void main() async {
       } else {
         widget = StartPage();
       }
+    } else {
+      widget = OnBoardingScreen();
     }
-    widget = OnBoardingScreen();
   }
-  runApp(MyApp(
-    startWidget: widget,
-  ));
+  runApp(
+    RestartWidget(
+      child: MyApp(
+        startWidget: widget,
+      ),
+    ),
+    //     MyApp(
+    //   startWidget: widget,
+    // )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -70,10 +77,15 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
-        listener: (BuildContext context, AppStates state) {},
+        listener: (BuildContext context, AppStates state) {
+          if (token != null) {
+            startWidget = startWidget;
+          } else {
+            startWidget = LoginScreen();
+          }
+        },
         builder: (BuildContext context, AppStates state) {
           AppCubit cubit = AppCubit.get(context);
-
           return MaterialApp(
             theme: lightTheme2,
             debugShowCheckedModeBanner: false,
