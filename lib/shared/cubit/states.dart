@@ -1,5 +1,6 @@
 import 'package:shop/models/changeCartsModel.dart';
 import 'package:shop/models/changefavorites.dart';
+import 'package:shop/modules/completeShopping/visaPayment.dart';
 
 abstract class AppStates {}
 
@@ -51,6 +52,8 @@ class NotificationDataError extends AppStates {
   NotificationDataError(this.error);
 }
 
+//Favourites
+
 class FavoritesDataLoading extends AppStates {}
 
 class FavoritesDataSuccess extends AppStates {}
@@ -75,6 +78,7 @@ class AddOrDeleteFavoritesError extends AppStates {
   AddOrDeleteFavoritesError(this.error);
 }
 
+//Carts
 class CartsDataLoading extends AppStates {}
 
 class CartsDataSuccess extends AppStates {}
@@ -127,6 +131,36 @@ class UpdateCartsItemError extends AppStates {
   UpdateCartsItemError(this.error);
 }
 
+//Orders
+
+class GetOrdersLoading extends AppStates {}
+
+class GetOrdersDataSuccess extends AppStates {}
+
+class GetOrdersDataError extends AppStates {
+  final dynamic error;
+
+  GetOrdersDataError(this.error);
+}
+
+class AddOrdersLoading extends AppStates {}
+
+class AddOrdersSuccess extends AppStates {
+  final AddOrderModel addOrderModel;
+  AddOrdersSuccess(this.addOrderModel);
+}
+
+class AddOrdersError extends AppStates {
+  final dynamic error;
+
+  AddOrdersError(this.error);
+}
+
+class ChangePaymentMethod1 extends AppStates {}
+
+class ChangePaymentMethod2 extends AppStates {}
+
+//Product
 class ProductGetDataLoading extends AppStates {}
 
 class ProductGetDataSuccess extends AppStates {}
@@ -177,3 +211,7 @@ class AppGetSearchErrorState extends AppStates {
 
   AppGetSearchErrorState(this.error);
 }
+
+class CVVSwitchSave extends AppStates {}
+
+class CVVSwitchUnSave extends AppStates {}

@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_string_interpolations, prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_function_literals_in_foreach_calls
+// ignore_for_file: unnecessary_string_interpolations, prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_function_literals_in_foreach_calls, non_constant_identifier_names
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,10 @@ import 'package:shop/models/changefavorites.dart';
 import 'package:shop/models/favoritesmodel.dart';
 import 'package:shop/models/homemodel.dart';
 import 'package:shop/models/notificationmodel.dart';
+import 'package:shop/models/ordersModel.dart';
 import 'package:shop/models/profilemodel.dart';
 import 'package:shop/modules/completeShopping/completeShopping.dart';
+import 'package:shop/modules/completeShopping/visaPayment.dart';
 import 'package:shop/modules/homelayoutscreens/addproduct/addproduct.dart';
 import 'package:shop/modules/homelayoutscreens/favourites/favoritesscreen.dart';
 import 'package:shop/modules/homelayoutscreens/home/homeScreen.dart';
@@ -39,20 +41,6 @@ class AppCubit extends Cubit<AppStates> {
   static Widget? widget;
   var pageViewController = PageController(initialPage: 0);
   int currentIndex = 3;
-  // var bottomNavIndex = 2;
-  // final controller = ScrollController();
-  //
-  // late Animation<double> animation;
-  //
-  // late CurvedAnimation curve;
-  // var navigation = GlobalKey();
-  //
-  // final iconList = <IconData>[
-  //   Icons.menu_outlined,
-  //   Icons.search_rounded,
-  //   Icons.notifications,
-  //   Icons.person_outline,
-  // ];
 
   List<Widget> buildScreens() {
     return [
@@ -120,6 +108,18 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   PersistentTabController controller = PersistentTabController(initialIndex: 4);
+
+  bool isSwitched = true;
+
+  void toggleSwitch(bool value) {
+    if (isSwitched == false) {
+      isSwitched = true;
+      emit(CVVSwitchSave());
+    } else {
+      isSwitched = false;
+      emit(CVVSwitchUnSave());
+    }
+  }
 
   Widget cartsIcon(cartContext) => InkWell(
         onTap: () {
@@ -257,8 +257,13 @@ class AppCubit extends Cubit<AppStates> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            navigateTo(
-                                                context, CompleteShopping());
+                                            if (cartsDataModel!
+                                                .data!.cartItems!.isNotEmpty) {
+                                              navigateTo(
+                                                  context, CompleteShopping());
+                                            } else {
+                                              return;
+                                            }
                                           },
                                           child: Container(
                                             width: 200,
@@ -838,6 +843,65 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  //Orders
+  OrdersModel? ordersModel;
+  void getOrders() {
+    emit(GetOrdersLoading());
+
+    DioHelper.getData(
+      url: ORDERS,
+      token: token,
+    ).then((value) {
+      ordersModel = OrdersModel.fromJson(value.data);
+
+      emit(GetOrdersDataSuccess());
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error);
+      }
+
+      emit(GetOrdersDataError(error));
+    });
+  }
+
+  AddOrderModel? addOrderModel;
+  void addOrder({
+    required int address_id,
+    required int payment_method,
+    required bool use_points,
+  }) {
+    emit(AddOrdersLoading());
+
+    DioHelper.postsData(url: ORDERS, token: token, data: {
+      'address_id': address_id,
+      'payment_method': payment_method,
+      'use_points': use_points
+    }).then((value) {
+      addOrderModel = AddOrderModel.fromJson(value.data);
+      print(value);
+      getCartsData();
+      // addOrDeleteCartsItem = ChangeCartsModel.fromJson(value.data);
+      // if (!addOrDeleteCartsItem!.status!) {
+      // } else {}
+
+      emit(AddOrdersSuccess(addOrderModel!));
+    }).catchError((error) {
+      emit(AddOrdersError(error.toString()));
+    });
+  }
+
+  int? paymentMethod;
+  void changePaymentMethod1() {
+    paymentMethod = 1;
+    emit(ChangePaymentMethod1());
+  }
+
+  void changePaymentMethod2() {
+    paymentMethod = 2;
+    emit(ChangePaymentMethod2());
+  }
+
+  //
   var counter = 1;
   void increaseCounter() {
     counter++;
@@ -932,10 +996,10 @@ class AppCubit extends Cubit<AppStates> {
       );
 
   Color? fav;
-  bool favt = true;
+  bool fav1 = true;
   void iconChange() {
-    favt = !favt;
-    fav = favt ? Colors.red : Colors.white;
+    fav1 = !fav1;
+    fav = fav1 ? Colors.red : Colors.white;
     emit(ChangeFavStateState());
   }
 
@@ -1033,6 +1097,7 @@ class AppCubit extends Cubit<AppStates> {
 
   //User Data
   ProfileModel? profileModel;
+
   void getUserData() {
     emit(UserDataLoading());
 
@@ -1041,10 +1106,13 @@ class AppCubit extends Cubit<AppStates> {
       token: token,
     ).then((value) {
       profileModel = ProfileModel.fromJson(value.data);
-      // print(profileModel?.data!.phone);
+      print(profileModel?.data!.token);
+      print('succ');
+      // print(value);
       emit(UserDataSuccess());
     }).catchError((error) {
       emit(UserDataError(error));
+      print(error.toString());
     });
   }
 
