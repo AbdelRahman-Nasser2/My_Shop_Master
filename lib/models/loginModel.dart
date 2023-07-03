@@ -29,18 +29,18 @@ class Data {
   String? phone;
   String? image;
   int? points;
-  int? credit;
+  double? credit;
   String? token;
 
   Data(
       {this.id,
-        this.name,
-        this.email,
-        this.phone,
-        this.image,
-        this.points,
-        this.credit,
-        this.token});
+      this.name,
+      this.email,
+      this.phone,
+      this.image,
+      this.points,
+      this.credit,
+      this.token});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];

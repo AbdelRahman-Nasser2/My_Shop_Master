@@ -37,8 +37,9 @@ class ProfileScreen extends StatelessWidget {
               ProfileItemModel(
                   "طلباتي",
                   SvgPicture.asset(
-                      'assets/images/icons&logos/ic_shopping_cart.svg'),
-                  () => null),
+                      'assets/images/icons&logos/ic_shopping_cart.svg'), () {
+                cubit.getOrders();
+              }),
               ProfileItemModel(
                   "إتصل بنا",
                   SvgPicture.asset('assets/images/icons&logos/multiple.svg'),
@@ -176,9 +177,14 @@ class ProfileScreen extends StatelessWidget {
                               alignment: Alignment.center,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(BorderSide(
-                                        color: Colors.white, width: 3))),
+                                  shape: BoxShape.circle,
+                                  border: Border.fromBorderSide(
+                                    BorderSide(
+                                      color: Colors.white,
+                                      width: 3,
+                                    ),
+                                  ),
+                                ),
                                 child: CircleAvatar(
                                   radius: 60,
                                   backgroundImage: (cubit
@@ -232,14 +238,11 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  expectSearch: Expanded(
-                    child: Row(
-                      // mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SvgPicture.asset('assets/images/icons&logos/chat.svg'),
-                      ],
-                    ),
+                  expectSearch: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SvgPicture.asset('assets/images/icons&logos/chat.svg'),
+                    ],
                   ),
                 ),
               ),
@@ -305,6 +308,5 @@ class ProfileItemModel {
   String? title;
   Widget? icon;
   Function()? onTap;
-
   ProfileItemModel(this.title, this.icon, this.onTap);
 }
