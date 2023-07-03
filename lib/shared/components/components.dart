@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, constant_identifier_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -300,7 +300,7 @@ Widget buildHomeProductItem(
                         )
                       ],
                     ),
-                    Visibility.maintain(
+                    Visibility(
                       visible: (model.discount == 0) ? false : true,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -327,35 +327,6 @@ Widget buildHomeProductItem(
                         ),
                       ),
                     ),
-                    // (model.discount == 0)
-                    //     ? SizedBox(
-                    //         height: 0,
-                    //         width: 0,
-                    //       )
-                    //     : Padding(
-                    //         padding: const EdgeInsets.symmetric(horizontal: 2),
-                    //         child: Row(
-                    //           mainAxisSize: MainAxisSize.max,
-                    //           mainAxisAlignment: MainAxisAlignment.end,
-                    //           children: [
-                    //             Text(
-                    //               "جنيه",
-                    //               style: TextStyle(
-                    //                   color: Colors.grey,
-                    //                   fontSize: 12,
-                    //                   fontWeight: FontWeight.normal),
-                    //             ),
-                    //             Text(
-                    //               model.oldPrice.toString(),
-                    //               style: TextStyle(
-                    //                   decoration: TextDecoration.lineThrough,
-                    //                   color: Colors.grey,
-                    //                   fontSize: 12,
-                    //                   fontWeight: FontWeight.normal),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
                   ],
                 ),
               ),
@@ -448,25 +419,6 @@ Widget buildHomeProductList({
         ],
       ),
     );
-
-//CategoryList
-
-// Widget buildCategoryList(context, {required list, String? tittle}) =>
-//     ListView.separated(
-//       physics: BouncingScrollPhysics(),
-//       scrollDirection: Axis.vertical,
-//       itemBuilder: (
-//         context,
-//         index,
-//       ) =>
-//           buildCategoryItem(),
-//       separatorBuilder: (context, index) => SizedBox(
-//         height: 3,
-//       ),
-//       itemCount: list.length,
-//     );
-
-//HomecategoryItem
 
 Widget categoryItem(
   context,

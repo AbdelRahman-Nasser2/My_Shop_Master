@@ -194,7 +194,7 @@ class CompleteShopping extends StatelessWidget {
                                 width: 14,
                               ),
                               Text(
-                                '${cubit.cartsDataModel!.data!.total! + transport}',
+                                '${cubit.cartsDataModel!.data!.total!}',
                                 style: GoogleFonts.lato(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 21,
