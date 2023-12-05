@@ -1,4 +1,3 @@
-
 // ignore_for_file: prefer_void_to_null
 
 import 'package:shop/models/productModel.dart';
@@ -29,8 +28,8 @@ class CartsDataModel {
 
 class Data {
   List<CartItems>? cartItems;
-  int? subTotal;
-  int? total;
+  num? subTotal;
+  num? total;
 
   Data({this.cartItems, this.subTotal, this.total});
 
@@ -67,7 +66,7 @@ class CartItems {
     id = json['id'];
     quantity = json['quantity'];
     product =
-    json['product'] != null ? ProductModel.fromJson(json['product']) : null;
+        json['product'] != null ? ProductModel.fromJson(json['product']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -80,4 +79,3 @@ class CartItems {
     return data;
   }
 }
-

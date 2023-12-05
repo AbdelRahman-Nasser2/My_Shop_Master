@@ -6,11 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:shop/restart.dart';
+import 'package:shop/modules/loginScreens/loginScreen/loginScreen.dart';
+import 'package:shop/modules/myapp/myapp.dart';
+import 'package:shop/shared/components/components.dart';
+import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/cubit.dart';
+import 'package:shop/shared/cubit/login_cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
 import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
 import 'package:shop/shared/style/colors.dart';
+import 'package:shop/shared/style/styles.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -114,10 +119,16 @@ class ProfileScreen extends StatelessWidget {
                                       Expanded(
                                         flex: 1,
                                         child: TextButton(
-                                          onPressed: () {
-                                            CacheHelper.removeData(key: 'token')
+                                          onPressed: () async {
+                                            AuthCubit().logOut(token: token);
+                                            await CacheHelper.removeData(
+                                                    key: 'token')
                                                 .then((value) {
-                                              RestartWidget.restartApp(context);
+                                              navigateAndFinish(
+                                                  context,
+                                                  MyShop(
+                                                    startWidget: LoginScreen(),
+                                                  ));
                                             });
                                           },
                                           child: Text(
@@ -274,7 +285,7 @@ class ProfileScreen extends StatelessWidget {
         height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 1)],
+          boxShadow: [shadow()],
           color: Colors.white,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.horizontal(

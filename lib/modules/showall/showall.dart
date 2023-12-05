@@ -123,7 +123,7 @@ class ShowAllProducts extends StatelessWidget {
           InkWell(
             onTap: () {
               AppCubit.get(context).getProductDataById(model.id, context);
-              navigateTo(context, ProductDetails(model.id!));
+              navigateTo(context, ProductDetails(model.id));
             },
             child: Container(
               width: 130,
@@ -147,13 +147,13 @@ class ShowAllProducts extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                          image: NetworkImage(model.image!), fit: BoxFit.cover),
+                          image: NetworkImage(model.image), fit: BoxFit.cover),
                     ),
                   ),
                   Column(
                     children: [
                       Text(
-                        model.name!,
+                        model.name,
                         style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -178,7 +178,7 @@ class ShowAllProducts extends StatelessWidget {
                             width: 2,
                           ),
                           Text(
-                            model.price!.toString(),
+                            model.price.toString(),
                             style: TextStyle(
                               color: HexColor("#F99100"),
                               fontSize: 14,
@@ -221,7 +221,7 @@ class ShowAllProducts extends StatelessWidget {
             top: 10,
             child: InkWell(
               onTap: () {
-                AppCubit.get(context).addOrDeleteFavorites(id: model.id!);
+                AppCubit.get(context).addOrDeleteFavorites(id: model.id);
               },
               child: CircleAvatar(
                 backgroundColor: Colors.white,

@@ -28,6 +28,7 @@ import 'package:shop/shared/components/constant.dart';
 import 'package:shop/shared/cubit/states.dart';
 import 'package:shop/shared/network/remote/end_points.dart';
 import 'package:shop/shared/style/colors.dart';
+import 'package:shop/shared/style/styles.dart';
 
 import '../../models/productdetailsmodel.dart';
 import '../../modules/homelayoutscreens/notification/notificationscreen.dart';
@@ -131,17 +132,19 @@ class AppCubit extends Cubit<AppStates> {
                     padding: const EdgeInsetsDirectional.symmetric(
                         horizontal: 20, vertical: 40),
                     child: Container(
+                      clipBehavior: Clip.antiAlias,
                       padding: EdgeInsetsDirectional.only(bottom: 35),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: [
-                          BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 2,
-                              blurStyle: BlurStyle.outer,
-                              spreadRadius: 5)
+                          shadow(),
+                          // BoxShadow(
+                          //     color: Colors.black,
+                          //     blurRadius: 2,
+                          //     blurStyle: BlurStyle.outer,
+                          //     spreadRadius: 5)
                         ],
                       ),
                       child: Column(
@@ -173,15 +176,7 @@ class AppCubit extends Cubit<AppStates> {
                           //     ],
                           //   ),
                           // ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.symmetric(
-                                horizontal: 10),
-                            child: Divider(
-                              thickness: 2,
-                              height: 14,
-                              color: HexColor('#D7DDE1'),
-                            ),
-                          ),
+
                           Expanded(
                             child: ListView.separated(
                                 physics: BouncingScrollPhysics(),
@@ -365,6 +360,22 @@ class AppCubit extends Cubit<AppStates> {
                   ),
                 ),
               ),
+              Visibility(
+                  visible: (cartsDataModel!.data!.cartItems!.isNotEmpty)
+                      ? true
+                      : false,
+                  child: Positioned.directional(
+                    textDirection: TextDirection.rtl,
+                    // start: 20,
+                    end: 28,
+                    // top: 2,
+                    child: CircleAvatar(
+                      radius: 10,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                          cartsDataModel!.data!.cartItems!.length.toString()),
+                    ),
+                  )),
               (cartsDataModel!.data!.cartItems!.isNotEmpty)
                   ? Positioned.directional(
                       textDirection: TextDirection.rtl,
@@ -378,10 +389,7 @@ class AppCubit extends Cubit<AppStates> {
                             cartsDataModel!.data!.cartItems!.length.toString()),
                       ),
                     )
-                  : SizedBox(
-                      height: 0,
-                      width: 0,
-                    )
+                  : SizedBox.shrink()
             ],
           ),
         ),
@@ -515,14 +523,19 @@ class AppCubit extends Cubit<AppStates> {
                                         mini: true,
                                         backgroundColor: defaultColor,
                                         onPressed: () {
-                                          updateItemCarts(
+                                          addCart(
+                                              index: index,
                                               id: cartsDataModel!
-                                                  .data!.cartItems![index].id!,
-                                              quantity: cartsDataModel!
-                                                      .data!
-                                                      .cartItems![index]
-                                                      .quantity! +
-                                                  1);
+                                                  .data!.cartItems![index].id!);
+
+                                          // updateItemCarts(
+                                          //     id: cartsDataModel!
+                                          //         .data!.cartItems![index].id!,
+                                          //     quantity: cartsDataModel!
+                                          //             .data!
+                                          //             .cartItems![index]
+                                          //             .quantity! +
+                                          //         1);
                                         },
                                         child: Icon(
                                           Icons.add,
@@ -541,23 +554,39 @@ class AppCubit extends Cubit<AppStates> {
                                         mini: true,
                                         backgroundColor: HexColor('#406497'),
                                         onPressed: () {
-                                          updateItemCarts(
-                                              id: cartsDataModel!
-                                                  .data!.cartItems![index].id!,
-                                              quantity: (cartsDataModel!
-                                                          .data!
-                                                          .cartItems![index]
-                                                          .quantity ==
-                                                      1)
-                                                  ? cartsDataModel!
-                                                      .data!
-                                                      .cartItems![index]
-                                                      .quantity!
-                                                  : cartsDataModel!
-                                                          .data!
-                                                          .cartItems![index]
-                                                          .quantity! -
-                                                      1);
+                                          if (cartsDataModel!.data!
+                                                  .cartItems![index].quantity !=
+                                              0) {
+                                            minCart(
+                                                index: index,
+                                                id: cartsDataModel!.data!
+                                                    .cartItems![index].id!);
+                                          }
+
+                                          // cartsDataModel!.data!
+                                          //         .cartItems![index].quantity! -
+                                          //     1;
+                                          // print(cartsDataModel!.data!
+                                          //         .cartItems![index].quantity! -
+                                          //     1);
+                                          //
+                                          // updateItemCarts(
+                                          //     id: cartsDataModel!
+                                          //         .data!.cartItems![index].id!,
+                                          //     quantity: (cartsDataModel!
+                                          //                 .data!
+                                          //                 .cartItems![index]
+                                          //                 .quantity ==
+                                          //             1)
+                                          //         ? cartsDataModel!
+                                          //             .data!
+                                          //             .cartItems![index]
+                                          //             .quantity!
+                                          //         : cartsDataModel!
+                                          //                 .data!
+                                          //                 .cartItems![index]
+                                          //                 .quantity! -
+                                          //             1);
                                         },
                                         child: Icon(
                                           Icons.remove,
@@ -734,6 +763,7 @@ class AppCubit extends Cubit<AppStates> {
   Map<int, int> carts2 = {};
 
   CartsDataModel? cartsDataModel;
+
   void getCartsData() {
     emit(CartsDataLoading());
 
@@ -819,6 +849,31 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   ChangeCartsModel? updateItemCart;
+
+  void minCart({
+    required int index,
+    required int id,
+  }) {
+    cartsDataModel!.data!.cartItems![index].quantity =
+        cartsDataModel!.data!.cartItems![index].quantity! - 1;
+    updateItemCarts(
+        id: id, quantity: cartsDataModel!.data!.cartItems![index].quantity!);
+
+    emit(MiniCarts());
+  }
+
+  void addCart({
+    required int index,
+    required int id,
+  }) {
+    cartsDataModel!.data!.cartItems![index].quantity =
+        (cartsDataModel!.data!.cartItems![index].quantity! + 1);
+    updateItemCarts(
+        id: id, quantity: cartsDataModel!.data!.cartItems![index].quantity!);
+
+    emit(AddCarts());
+  }
+
   void updateItemCarts({
     required int id,
     required int quantity,

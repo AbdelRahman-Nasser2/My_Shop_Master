@@ -3,12 +3,7 @@ import 'package:shop/models/signUpModel.dart';
 
 abstract class AuthStates {}
 
-
-
 class ChangeEyePassword extends AuthStates {}
-
-
-
 
 class LoginInitialState extends AuthStates {}
 
@@ -40,3 +35,12 @@ class SignUpErrorState extends AuthStates {
   SignUpErrorState(this.error);
 }
 
+class LogOutLoadingState extends AuthStates {}
+
+class LogOutSuccessState extends AuthStates {}
+
+class LogOutErrorState extends AuthStates {
+  dynamic error;
+
+  LogOutErrorState(this.error);
+}

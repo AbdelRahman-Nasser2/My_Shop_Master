@@ -7,12 +7,9 @@ import 'package:hexcolor/hexcolor.dart';
 ThemeData darkTheme = ThemeData(
   indicatorColor: HexColor("333739"),
 
-  bottomAppBarColor: HexColor("333739"),
-
   // COLOR: HexColor("333739"),
   // primaryColor: HexColor("333739"),
   colorSchemeSeed: HexColor("333739"),
-  backgroundColor: HexColor("333739"),
   scaffoldBackgroundColor: HexColor("333739"),
   appBarTheme: AppBarTheme(
       iconTheme: IconThemeData(color: Colors.white),
@@ -56,12 +53,12 @@ ThemeData darkTheme = ThemeData(
       color: Colors.blueGrey,
     ),
   ),
+  // colorScheme: ColorScheme(background: HexColor("333739")), bottomAppBarTheme: BottomAppBarTheme(color: HexColor("333739")),
 );
 
 ThemeData lightTheme = ThemeData(
   indicatorColor: Colors.white,
   primaryColorLight: Colors.black,
-  bottomAppBarColor: Colors.white,
   scaffoldBackgroundColor: Colors.white,
   appBarTheme: AppBarTheme(
       iconTheme: IconThemeData(color: Colors.black),
@@ -105,6 +102,7 @@ ThemeData lightTheme = ThemeData(
       color: Colors.blueGrey,
     ),
   ),
+  bottomAppBarTheme: BottomAppBarTheme(color: Colors.white),
 );
 
 ThemeData lightTheme2 = ThemeData(

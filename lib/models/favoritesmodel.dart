@@ -1,6 +1,6 @@
 class FavoritesModel {
   bool? status;
-  Null? message;
+  dynamic message;
   Data? data;
 
   FavoritesModel({this.status, this.message, this.data});
@@ -29,10 +29,10 @@ class Data {
   int? from;
   int? lastPage;
   String? lastPageUrl;
-  Null? nextPageUrl;
+  dynamic nextPageUrl;
   String? path;
   int? perPage;
-  Null? prevPageUrl;
+  dynamic prevPageUrl;
   int? to;
   int? total;
 

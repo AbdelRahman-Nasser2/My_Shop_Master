@@ -1,6 +1,6 @@
 class ProductDetailsModel {
   bool? status;
-  Null? message;
+  dynamic message;
   Data? data;
 
   ProductDetailsModel({this.status, this.message, this.data});

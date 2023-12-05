@@ -28,28 +28,33 @@ class FavoritesScreen extends StatelessWidget {
             body: ConditionalBuilder(
               condition: states is! FavoritesDataLoading,
               builder: (BuildContext context) {
-                return GridView.builder(
-                  physics: physics,
-                  shrinkWrap: true,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                  itemCount: cubit.favoritesModel!.data!.data!.length,
-                  clipBehavior: Clip.antiAlias,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 25,
-                    crossAxisSpacing: 0,
+                return Center(
+                  child: GridView.builder(
+                    physics: physics,
+                    shrinkWrap: true,
+                    padding: const EdgeInsetsDirectional.symmetric(
+                        horizontal: 16, vertical: 24),
+                    // padding: const EdgeInsets.only(
+                    //     top: 24, bottom: 24, right: 16, left: 30),
+                    itemCount: cubit.favoritesModel!.data!.data!.length,
+                    clipBehavior: Clip.antiAlias,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisExtent: 220,
+                            mainAxisSpacing: 40,
+                            crossAxisSpacing: 40,
+                            childAspectRatio: 1),
+                    itemBuilder: (context, index) => favoriteItem(
+                        context,
+                        cubit.favoritesModel!.data!.data![index],
+                        cubit.cartIconAdd(cubit.favoritesModel!.data!
+                            .data![index].product!.id), onFavTap: () {
+                      cubit.addOrDeleteFavorites(
+                          id: cubit
+                              .favoritesModel!.data!.data![index].product!.id!);
+                    }),
                   ),
-                  itemBuilder: (context, index) => favoriteItem(
-                      context,
-                      cubit.favoritesModel!.data!.data![index],
-                      cubit.cartIconAdd(
-                          cubit.favoritesModel!.data!.data![index].product!.id),
-                      onFavTap: () {
-                    cubit.addOrDeleteFavorites(
-                        id: cubit
-                            .favoritesModel!.data!.data![index].product!.id!);
-                  }),
                 );
               },
               fallback: (BuildContext context) {
@@ -68,8 +73,8 @@ class FavoritesScreen extends StatelessWidget {
     Function()? onFavTap,
   }) {
     return SizedBox(
-      width: 130,
-      // height: 180,
+      // width: 130,
+      // height: 150,
       child: Stack(
         children: [
           InkWell(
@@ -79,12 +84,11 @@ class FavoritesScreen extends StatelessWidget {
               navigateTo(context, ProductDetails(model.product!.id!));
             },
             child: Container(
-              width: 130,
               // height: 186,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
                       blurRadius: 2,
                       blurStyle: BlurStyle.outer,
@@ -94,8 +98,9 @@ class FavoritesScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    height: 100,
-                    width: 115,
+                    height: 130,
+                    width: double.infinity,
+                    padding: const EdgeInsetsDirectional.all(8),
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -141,8 +146,9 @@ class FavoritesScreen extends StatelessWidget {
                           )
                         ],
                       ),
-                      if (model.product!.discount != 0)
-                        Row(
+                      Visibility(
+                        visible: model.product!.discount != 0 ? true : false,
+                        child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -163,27 +169,29 @@ class FavoritesScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
                     ],
                   )
                 ],
               ),
             ),
           ),
-          Positioned.directional(
-            textDirection: TextDirection.rtl,
-            end: 95,
-            top: 10,
-            child: InkWell(
-              onTap: onFavTap,
-              child: const CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 15,
-                child: Icon(Icons.favorite,
-                    color:
-                        // (AppCubit.get(context).favorites[model.product!.id!]!) ?
-                        Colors.red
-                    // : HexColor("#B8B8B8"),
-                    ),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(top: 10, end: 10),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: InkWell(
+                onTap: onFavTap,
+                child: const CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 15,
+                  child: Icon(Icons.favorite,
+                      color:
+                          // (AppCubit.get(context).favorites[model.product!.id!]!) ?
+                          Colors.red
+                      // : HexColor("#B8B8B8"),
+                      ),
+                ),
               ),
             ),
           ),
