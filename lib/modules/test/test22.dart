@@ -49,7 +49,7 @@ import 'package:flutter/material.dart';
 // )
 
 class AddRecordScreen extends StatefulWidget {
-  AddRecordScreen({Key? key}) : super(key: key);
+  const AddRecordScreen({Key? key}) : super(key: key);
 
   @override
   State<AddRecordScreen> createState() => _AddRecordScreenState();
@@ -92,7 +92,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
           child: Column(children: [
             Row(
               children: [
-                Container(
+                SizedBox(
                   width: 100,
                   child: TextFormField(
                     controller: dateController,
@@ -110,7 +110,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
             ),
             Row(
               children: [
-                Container(
+                SizedBox(
                   width: 100,
                   child: TextFormField(
                     controller: timeController,
@@ -127,8 +127,8 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
             const SizedBox(
               height: 18.0,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
             ),
             const SizedBox(
               height: 18.0,
@@ -150,7 +150,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * .6,
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(10),

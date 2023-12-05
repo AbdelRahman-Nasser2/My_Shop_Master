@@ -23,11 +23,11 @@ class Home2 extends StatelessWidget {
           AppCubit cubit = AppCubit.get(context);
           List<Widget> _buildScreens() {
             return [
-              ProfileScreen(),
-              NotificationScreen(),
-              AddProductScreen(),
-              FavoritesScreen(),
-              HomeScreen(),
+              const ProfileScreen(),
+              const NotificationScreen(),
+              const AddProductScreen(),
+              const FavoritesScreen(),
+              const HomeScreen(),
             ];
           }
 
@@ -143,11 +143,11 @@ class HomeLayoutScreen2 extends StatelessWidget {
           AppCubit cubit = AppCubit.get(context);
           List<Widget> _buildScreens() {
             return [
-              ProfileScreen(),
-              NotificationScreen(),
-              AddProductScreen(),
-              FavoritesScreen(),
-              HomeScreen(),
+              const ProfileScreen(),
+              const NotificationScreen(),
+              const AddProductScreen(),
+              const FavoritesScreen(),
+              const HomeScreen(),
             ];
           }
 

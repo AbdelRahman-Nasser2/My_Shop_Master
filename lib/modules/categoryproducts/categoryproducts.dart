@@ -10,13 +10,9 @@ import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
 
 class CategoryProducts extends StatelessWidget {
-  // final int id;
   final String categoryName;
 
-  const CategoryProducts(
-      {Key? key,
-      // required this.id,
-      required this.categoryName})
+  const CategoryProducts({Key? key, required this.categoryName})
       : super(key: key);
 
   @override
@@ -79,26 +75,31 @@ class CategoryProducts extends StatelessWidget {
                   //   ),
                   // );
 
-                  GridView.builder(
-                physics: physics,
-                shrinkWrap: false,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                itemCount: cubit.categoryProductsModel?.data!.data!.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 25,
-                    crossAxisSpacing: 0),
-                itemBuilder: (context, index) => categoryProductsItem(
-                  context,
-                  cubit.categoryProductsModel!.data!.data![index],
-                  cubit.cartIconAdd(
-                      cubit.categoryProductsModel!.data!.data![index].id),
-                  onFavTap: () {
-                    cubit.addOrDeleteFavorites(
-                        id: cubit
-                            .categoryProductsModel!.data!.data![index].id!);
-                  },
+                  Center(
+                child: GridView.builder(
+                  physics: physics,
+                  shrinkWrap: true,
+                  padding: const EdgeInsetsDirectional.symmetric(
+                      horizontal: 16, vertical: 24),
+                  clipBehavior: Clip.antiAlias,
+                  itemCount: cubit.categoryProductsModel?.data!.data!.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisExtent: 220,
+                      mainAxisSpacing: 40,
+                      crossAxisSpacing: 40,
+                      childAspectRatio: 1),
+                  itemBuilder: (context, index) => categoryProductsItem(
+                    context,
+                    cubit.categoryProductsModel!.data!.data![index],
+                    cubit.cartIconAdd(
+                        cubit.categoryProductsModel!.data!.data![index].id),
+                    onFavTap: () {
+                      cubit.addOrDeleteFavorites(
+                          id: cubit
+                              .categoryProductsModel!.data!.data![index].id!);
+                    },
+                  ),
                 ),
               );
             },
@@ -118,7 +119,6 @@ class CategoryProducts extends StatelessWidget {
     Function()? onFavTap,
   }) {
     return SizedBox(
-      width: 130,
       height: (model.discount != 0) ? 180 : 150,
       child: Stack(
         children: [
@@ -128,7 +128,6 @@ class CategoryProducts extends StatelessWidget {
               navigateTo(context, ProductDetails(model.id!));
             },
             child: Container(
-              width: 130,
               // height: 186,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
@@ -143,8 +142,9 @@ class CategoryProducts extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    height: 100,
-                    width: 115,
+                    height: 130,
+                    width: double.infinity,
+                    padding: const EdgeInsetsDirectional.all(8),
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -217,22 +217,23 @@ class CategoryProducts extends StatelessWidget {
               ),
             ),
           ),
-          Positioned.directional(
-            textDirection: TextDirection.rtl,
-            end: 95,
-            top: 10,
-            child: InkWell(
-              onTap: () {
-                AppCubit.get(context).addOrDeleteFavorites(id: model.id!);
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 15,
-                child: Icon(
-                  Icons.favorite,
-                  color: (AppCubit.get(context).favorites[model.id]!)
-                      ? Colors.red
-                      : HexColor("#B8B8B8"),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(top: 10, end: 10),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: InkWell(
+                onTap: () {
+                  AppCubit.get(context).addOrDeleteFavorites(id: model.id!);
+                },
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 15,
+                  child: Icon(
+                    Icons.favorite,
+                    color: (AppCubit.get(context).favorites[model.id]!)
+                        ? Colors.red
+                        : HexColor("#B8B8B8"),
+                  ),
                 ),
               ),
             ),

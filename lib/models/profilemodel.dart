@@ -1,6 +1,6 @@
 class ProfileModel {
   bool? status;
-  Null? message;
+  dynamic message;
   Data? data;
 
   ProfileModel({this.status, this.message, this.data});

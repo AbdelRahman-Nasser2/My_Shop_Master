@@ -119,6 +119,10 @@ class AddOrDeleteCartsItemError extends AppStates {
 
 class UpdateCartsItemLoading extends AppStates {}
 
+class MiniCarts extends AppStates {}
+
+class AddCarts extends AppStates {}
+
 class UpdateCartsItemSuccess extends AppStates {
   final ChangeCartsModel? model;
 

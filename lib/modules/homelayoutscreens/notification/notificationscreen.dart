@@ -7,6 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/models/notificationmodel.dart';
 import 'package:shop/shared/cubit/cubit.dart';
 import 'package:shop/shared/cubit/states.dart';
+import 'package:shop/shared/style/styles.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class NotificationScreen extends StatelessWidget {
         height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 1)],
+          boxShadow: [shadow()],
           color: Colors.white,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.horizontal(

@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shop/models/loginModel.dart';
+import 'package:shop/models/logoutmodel.dart';
 import 'package:shop/models/signUpModel.dart';
 import 'package:shop/shared/cubit/login_cubit/states.dart';
 import 'package:shop/shared/network/local/sharedpreference/sharedpreference.dart';
@@ -35,35 +35,26 @@ class AuthCubit extends Cubit<AuthStates> {
     });
   }
 
+  var loginFormKey = GlobalKey<FormState>();
+  var loginEmailController = TextEditingController();
+  var loginPasswordController = TextEditingController();
 
+  IconData prefix = Icons.visibility_outlined;
+  bool isPassword = false;
+  void changeEye() {
+    isPassword = !isPassword;
+    prefix = (isPassword)
+        ? prefix = Icons.visibility_outlined
+        : Icons.visibility_off_outlined;
+    emit(ChangeEyePassword());
+  }
 
-  IconData prefix=Icons.visibility_outlined;
-  bool isPassword=true;
-   void changeEye(){
-
-     isPassword=!isPassword;
-     prefix=isPassword? prefix=Icons.visibility_outlined:Icons.visibility_off_outlined;
-     emit(ChangeEyePassword());
-   }
-
-
-LoginModel? loginModel;
-  void logIn(
-      context,
-      {required String email, required String password
-      }) {
+  LoginModel? loginModel;
+  void logIn(context, {required String email, required String password}) {
     emit(LoginLoadingState());
     DioHelper.postsData(
-        url: LOGIN, data: {
-          'email': email,
-          'password': password
-        }).then(
-            (value) {
+        url: LOGIN, data: {'email': email, 'password': password}).then((value) {
       loginModel = LoginModel.fromJson(value.data);
-
-
-
-
       emit(LoginSuccessState(loginModel!));
     }).catchError((error) {
       if (error is DioError) {
@@ -79,10 +70,35 @@ LoginModel? loginModel;
     });
   }
 
+  LogOutModel? logOutModel;
+  void logOut({required token}) {
+    emit(LogOutLoadingState());
+    DioHelper.postsData(
+      url: LOGOUT,
+      token: token,
+      data: {},
+    ).then((value) {
+      logOutModel = LogOutModel.fromJson(value.data);
+      print(logOutModel!.message!);
+      emit(LogOutSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToast(
+            state: ToastStates.ERROR,
+            text: error.response!.data!['message'].toString());
+      }
+
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      emit(LogOutErrorState(error.toString()));
+    });
+  }
 
   // SignUpModel signUpModel;
-  SignUpModel ?signUpModel;
-  void signUP(context,{
+  SignUpModel? signUpModel;
+  void signUP(
+    context, {
     required String name,
     required String phone,
     required String email,
@@ -97,8 +113,9 @@ LoginModel? loginModel;
     }).then((value) {
       // print(value.data);
       signUpModel = SignUpModel.fromJson(value.data);
-      if(signUpModel?.status == true){navigateAndFinish(context, const HomeLayoutScreen());}
-
+      if (signUpModel?.status == true) {
+        navigateAndFinish(context, const HomeLayoutScreen());
+      }
 
       CacheHelper.saveData(key: "token", value: signUpModel?.data!.token);
 
@@ -124,8 +141,4 @@ LoginModel? loginModel;
       emit(SignUpErrorState(error.toString()));
     });
   }
-
-
-
-
 }
